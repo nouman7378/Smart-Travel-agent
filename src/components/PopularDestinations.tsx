@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getPlaceholderImage } from '@/utils/imagePlaceholder';
 
 interface Destination {
   id: number;
@@ -28,7 +29,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 1,
       name: 'Hunza',
       country: 'Pakistan',
-      image: 'https://images.unsplash.com/photo-1588417109557-2dd9eef003b2?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1588417109557-2dd9eef003b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 120,
       currency: 'USD',
       description: 'Heaven on Earth with stunning mountain views',
@@ -39,7 +40,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 2,
       name: 'Skardu',
       country: 'Pakistan',
-      image: 'https://images.unsplash.com/photo-1599733875147-259887f4603e?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1599733875147-259887f4603e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 150,
       currency: 'USD',
       description: 'Gateway to the world highest peaks',
@@ -50,7 +51,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 3,
       name: 'Swat',
       country: 'Pakistan',
-      image: 'https://images.unsplash.com/photo-1629365638310-85c13aa4ffd4?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1629365638310-85c13aa4ffd4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 90,
       currency: 'USD',
       description: 'The Switzerland of Pakistan',
@@ -61,7 +62,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 4,
       name: 'Lahore',
       country: 'Pakistan',
-      image: 'https://images.unsplash.com/photo-1598864204883-362aac8c5a49?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1598864204883-362aac8c5a49?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 80,
       currency: 'USD',
       description: 'City of gardens and rich Mughal heritage',
@@ -72,7 +73,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 5,
       name: 'Murree',
       country: 'Pakistan',
-      image: 'https://images.unsplash.com/photo-1578664785546-73ce78d71b9d?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1578664785546-73ce78d71b9d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 70,
       currency: 'USD',
       description: 'Popular hill station near Islamabad',
@@ -83,7 +84,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 6,
       name: 'Karachi',
       country: 'Pakistan',
-      image: 'https://images.unsplash.com/photo-1593081891731-fdaab2e7f6aa?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1593081891731-fdaab2e7f6aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 100,
       currency: 'USD',
       description: 'City of lights and economic hub',
@@ -95,7 +96,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 7,
       name: 'Paris',
       country: 'France',
-      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 450,
       currency: 'USD',
       description: 'The City of Light',
@@ -106,7 +107,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 8,
       name: 'Tokyo',
       country: 'Japan',
-      image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 680,
       currency: 'USD',
       description: 'Modern meets traditional',
@@ -117,7 +118,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 9,
       name: 'Dubai',
       country: 'UAE',
-      image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 550,
       currency: 'USD',
       description: 'Luxury and innovation',
@@ -128,7 +129,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 10,
       name: 'Bali',
       country: 'Indonesia',
-      image: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 380,
       currency: 'USD',
       description: 'Tropical paradise',
@@ -139,7 +140,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 11,
       name: 'London',
       country: 'UK',
-      image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 490,
       currency: 'USD',
       description: 'Historic and vibrant',
@@ -150,7 +151,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
       id: 12,
       name: 'New York',
       country: 'USA',
-      image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       price: 520,
       currency: 'USD',
       description: 'The Big Apple',
@@ -410,6 +411,19 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
 // Destination Card Component - Featured Hotels Style
 const DestinationCard: React.FC<{ destination: Destination }> = ({ destination }) => {
   const navigate = useNavigate();
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  const handleImageError = () => {
+    setImageError(true);
+    setImageLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  const imageSrc = imageError ? getPlaceholderImage('destination') : destination.image;
 
   return (
     <motion.div 
@@ -418,13 +432,21 @@ const DestinationCard: React.FC<{ destination: Destination }> = ({ destination }
       onClick={() => navigate(`/search/hotels?destination=${destination.name}`)}
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-hidden bg-gray-200">
+        {imageLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+          </div>
+        )}
         <motion.img
-          src={destination.image}
+          src={imageSrc}
           alt={destination.name}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
+          onError={handleImageError}
+          onLoad={handleImageLoad}
+          loading="lazy"
         />
         
         {/* Type Badge */}
