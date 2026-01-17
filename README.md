@@ -444,6 +444,51 @@ This project is created for educational purposes as part of a Final Year Project
 
 ---
 
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+The project is configured for easy deployment on Vercel:
+
+1. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
+
+2. **Deploy on Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Vercel will auto-detect Vite configuration
+   - Click "Deploy"
+
+3. **Automatic Configuration**:
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Framework Preset: Vite
+   - Install Command: `npm install`
+
+The `vercel.json` file is already configured with:
+- ✅ SPA routing (all routes redirect to index.html)
+- ✅ Build optimization
+- ✅ Framework detection
+
+### Build Output
+
+The production build creates optimized chunks:
+- `react-vendor.js` - React, React DOM, React Router
+- `animation-vendor.js` - Framer Motion
+- `index.js` - Application code
+- `index.css` - All styles
+
+### Environment Variables
+
+If needed, add environment variables in Vercel dashboard:
+- `VITE_API_URL` - API base URL (if using backend)
+
+---
+
 ## 📞 Support
 
 For support, email support@travelhub.com or visit our [Support Page](/support).
