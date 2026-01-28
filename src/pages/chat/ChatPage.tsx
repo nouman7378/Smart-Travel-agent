@@ -1,38 +1,41 @@
 /**
  * ChatPage Component
  * 
- * Main chat interface with message bubbles, text input, send button,
- * multimedia support, typing indicators, and quick reply buttons.
- * Part of the AI Travel Chatbot application.
+ * AI Travel Assistant with intelligent conversation flow, context retention,
+ * and personalized travel recommendations.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import MessageBubble, { Message } from '../../components/chat/MessageBubble';
 import ChatInput from '../../components/chat/ChatInput';
 import QuickReplies from '../../components/chat/QuickReplies';
 import TypingIndicator from '../../components/chat/TypingIndicator';
+import SuggestedPrompts from '../../components/chat/SuggestedPrompts';
 import PageLayout from '../../components/PageLayout';
+import { chatService, ConversationContext } from '../../services/chatService';
 
 const ChatPage: React.FC = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hello! I\'m your AI travel assistant. How can I help you plan your trip today?',
+      content: "👋 Hi! I'm your TravelHub AI Assistant.\n\nI'm here to help you plan the perfect trip! Tell me:\n• Your budget range\n• Travel dates or duration\n• Preferred destination (or type: beach, city, mountain, etc.)\n• Number of travelers\n\nAnd I'll provide personalized recommendations just for you! ✈️",
       isBot: true,
       timestamp: new Date(),
       messageType: 'text',
       quickReplies: [
+        'Plan a trip',
+        'Budget travel',
         'Top destinations',
-        'Flight search',
-        'Budget trips',
-        'Create itinerary',
+        'Find packages',
       ],
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [currentQuickReplies, setCurrentQuickReplies] = useState<string[]>([]);
+  const [conversationContext, setConversationContext] = useState<ConversationContext>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -42,6 +45,20 @@ const ChatPage: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
+
+  // Load conversation context on mount
+  useEffect(() => {
+    const savedContext = localStorage.getItem('travelhub_chat_context');
+    if (savedContext) {
+      try {
+        const context = JSON.parse(savedContext);
+        setConversationContext(context);
+        chatService.getContext(); // Restore context in service
+      } catch (error) {
+        console.error('Error loading chat context:', error);
+      }
+    }
+  }, []);
 
   const handleSendMessage = async (
     content: string,
@@ -62,26 +79,52 @@ const ChatPage: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Simulate typing delay for better UX
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      // Simulate realistic typing delay
+      const typingDelay = Math.min(800 + Math.random() * 400, 1500);
+      await new Promise((resolve) => setTimeout(resolve, typingDelay));
 
-      // Mock response for frontend-only functionality
-      const mockResponses: { [key: string]: string } = {
-        'top destinations': 'Here are some popular destinations: Paris, Tokyo, New York, London, and Dubai. Which one interests you?',
-        'flight search': 'I can help you search for flights! Please use the flights page to search for available flights.',
-        'budget trips': 'Great! I can help you find budget-friendly options. Check out our deals page for special offers.',
-        'create itinerary': 'I can help you create an itinerary! Visit the itinerary builder page to get started.',
-      };
+      // Process message with AI service
+      const response = await chatService.processMessage(content);
 
-      const lowerContent = content.toLowerCase();
-      let responseContent = 'I\'m here to help you plan your trip! How can I assist you today?';
-      let quickReplies = ['Top destinations', 'Flight search', 'Budget trips', 'Create itinerary'];
+      // Update conversation context
+      setConversationContext(response.context);
 
-      // Check for keywords in user message
-      for (const [key, value] of Object.entries(mockResponses)) {
-        if (lowerContent.includes(key)) {
-          responseContent = value;
-          break;
+      // Save context to localStorage
+      localStorage.setItem('travelhub_chat_context', JSON.stringify(response.context));
+
+      // Build bot response message
+      let responseContent = response.message;
+
+      // Add recommendations if available
+      if (response.recommendations && response.recommendations.items.length > 0) {
+        responseContent += '\n\n';
+        responseContent += '**💡 Recommendations:**\n';
+        response.recommendations.items.forEach((item, idx) => {
+          if (response.recommendations?.type === 'package') {
+            responseContent += `${idx + 1}. ${item.name} - $${item.price} (${item.duration} days)\n`;
+          }
+        });
+      }
+
+      // Add context summary if we have partial info
+      if (response.needsFollowUp && Object.keys(response.context).length > 0) {
+        const contextSummary: string[] = [];
+        if (response.context.budget) {
+          contextSummary.push(`💰 Budget: $${response.context.budget.min || 0}${response.context.budget.max ? ` - $${response.context.budget.max}` : '+'}`);
+        }
+        if (response.context.destination) {
+          contextSummary.push(`📍 Destination: ${response.context.destination.name || response.context.destination.type || 'Not specified'}`);
+        }
+        if (response.context.travelers) {
+          contextSummary.push(`👥 Travelers: ${response.context.travelers.total || response.context.travelers.adults || 'Not specified'}`);
+        }
+        if (response.context.dates?.duration) {
+          contextSummary.push(`📅 Duration: ${response.context.dates.duration} days`);
+        }
+
+        if (contextSummary.length > 0) {
+          responseContent += '\n\n**What I know so far:**\n';
+          responseContent += contextSummary.join('\n');
         }
       }
 
@@ -91,22 +134,22 @@ const ChatPage: React.FC = () => {
         isBot: true,
         timestamp: new Date(),
         messageType: 'text',
-        quickReplies: quickReplies,
+        quickReplies: response.quickReplies,
       };
 
       setMessages((prev) => [...prev, botMessage]);
-      setCurrentQuickReplies(botMessage.quickReplies || []);
+      setCurrentQuickReplies(response.quickReplies || []);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error processing message:', error);
       
-      // Fallback mock response
+      // Fallback response
       const fallbackResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: `I understand you want help with: ${content}. How can I assist you further?`,
+        content: "I apologize, but I'm having trouble processing that right now. Could you rephrase your question? I'm here to help you with:\n\n• Trip planning\n• Destination recommendations\n• Budget travel options\n• Package suggestions\n• Booking guidance",
         isBot: true,
         timestamp: new Date(),
         messageType: 'text',
-        quickReplies: ['Top destinations', 'Flight search', 'Budget trips', 'Create itinerary'],
+        quickReplies: ['Plan a trip', 'Budget travel', 'Top destinations', 'Help'],
       };
       setMessages((prev) => [...prev, fallbackResponse]);
       setCurrentQuickReplies(fallbackResponse.quickReplies || []);
@@ -124,7 +167,6 @@ const ChatPage: React.FC = () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-          // Reverse geocoding would be done on backend
           const locationMessage: Message = {
             id: Date.now().toString(),
             content: 'My location',
@@ -138,8 +180,7 @@ const ChatPage: React.FC = () => {
             },
           };
           setMessages((prev) => [...prev, locationMessage]);
-          // Send location to backend
-          handleSendMessage(`Location: ${latitude}, ${longitude}`, 'location');
+          handleSendMessage(`I'm located at ${latitude}, ${longitude}. Can you suggest nearby destinations?`, 'location');
         },
         (error) => {
           console.error('Error getting location:', error);
@@ -149,16 +190,48 @@ const ChatPage: React.FC = () => {
     }
   };
 
+  const handleResetConversation = () => {
+    // Reset without confirmation for smoother UX
+    chatService.resetContext();
+    setConversationContext({});
+    localStorage.removeItem('travelhub_chat_context');
+    setMessages([
+      {
+        id: '1',
+        content: "👋 Hi! I'm your TravelHub AI Assistant.\n\nI'm here to help you plan the perfect trip! Tell me:\n• Your budget range\n• Travel dates or duration\n• Preferred destination (or type: beach, city, mountain, etc.)\n• Number of travelers\n\nAnd I'll provide personalized recommendations just for you! ✈️",
+        isBot: true,
+        timestamp: new Date(),
+        messageType: 'text',
+        quickReplies: [
+          'Plan a trip',
+          'Budget travel',
+          'Top destinations',
+          'Find packages',
+        ],
+      },
+    ]);
+    setCurrentQuickReplies([]);
+    // Scroll to top smoothly
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleSuggestedPrompt = (prompt: string) => {
+    // Auto-trigger the chat with the suggested prompt
+    handleSendMessage(prompt, 'text');
+  };
+
   return (
-    <PageLayout>
+    <PageLayout skipHeaderFooter={true}>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50">
         <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="bg-white rounded-t-xl shadow-lg border-b-2 border-blue-100 p-5 sm:p-6 mb-2">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-md">
+          <div className="bg-white rounded-t-xl shadow-lg border-b-2 border-blue-100 p-4 sm:p-5 lg:p-6 mb-2">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-md flex-shrink-0">
                 <svg
-                  className="w-6 h-6 sm:w-7 sm:h-7 text-white"
+                  className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -171,16 +244,36 @@ const ChatPage: React.FC = () => {
                   />
                 </svg>
               </div>
-              <div className="flex-1">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-800 tracking-tight">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 tracking-tight truncate">
                   AI Travel Assistant
                 </h1>
-                <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                  Online • Ready to help
+                <p className="text-xs sm:text-sm text-gray-500 flex items-center gap-2 mt-1">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse flex-shrink-0"></span>
+                  <span className="truncate">Online • Ready to help</span>
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
+                <button
+                  onClick={handleResetConversation}
+                  className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-1.5"
+                  title="Start New Conversation"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                  <span className="hidden sm:inline">Reset</span>
+                </button>
                 <button
                   onClick={() => navigate('/chat/history')}
                   className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -201,9 +294,9 @@ const ChatPage: React.FC = () => {
                   </svg>
                 </button>
                 <button
-                  onClick={() => navigate('/chat/quick-actions')}
+                  onClick={() => navigate('/packages')}
                   className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  title="Quick Actions"
+                  title="Browse Packages"
                 >
                   <svg
                     className="w-5 h-5"
@@ -215,7 +308,7 @@ const ChatPage: React.FC = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                     />
                   </svg>
                 </button>
@@ -224,7 +317,7 @@ const ChatPage: React.FC = () => {
           </div>
 
           {/* Messages Container */}
-          <div className="bg-white rounded-b-xl shadow-lg min-h-[500px] max-h-[600px] sm:max-h-[700px] overflow-y-auto p-4 sm:p-6 space-y-4">
+          <div className="bg-white rounded-b-xl shadow-lg min-h-[400px] sm:min-h-[500px] max-h-[500px] sm:max-h-[600px] lg:max-h-[700px] overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
@@ -239,6 +332,16 @@ const ChatPage: React.FC = () => {
               />
             )}
 
+            {/* Suggested Prompts - Show when chat is empty (only onboarding message) */}
+            {messages.length === 1 && !isTyping && (
+              <SuggestedPrompts
+                onPromptClick={handleSuggestedPrompt}
+                disabled={isTyping}
+                showWhenEmpty={true}
+                isChatEmpty={messages.length === 1}
+              />
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 
@@ -247,7 +350,7 @@ const ChatPage: React.FC = () => {
             onSendMessage={handleSendMessage}
             onSendLocation={handleLocationShare}
             disabled={isTyping}
-            placeholder="Ask about destinations, flights, hotels, or create an itinerary..."
+            placeholder="Ask about destinations, budget trips, packages, or travel planning..."
           />
         </div>
       </div>
@@ -256,4 +359,3 @@ const ChatPage: React.FC = () => {
 };
 
 export default ChatPage;
-

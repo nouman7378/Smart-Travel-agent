@@ -53,8 +53,8 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
       { name: 'Hotels', href: '/hotels' },
       { name: 'Cars', href: '/cars' },
       { name: 'Packages', href: '/packages' },
-      { name: 'Vacation Rentals', href: '/vacation-rentals' },
-      { name: 'Things To Do', href: '/things-to-do' },
+      { name: 'Deals', href: '/deals' },
+      { name: 'Itinerary Builder', href: '/itinerary/builder' },
     ],
     Explore: [
       { name: 'France Travel Guide', href: '/explore/france-travel-guide' },
@@ -258,9 +258,9 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
         {/* Newsletter Section */}
         <div className="border-t border-gray-200 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             <div className="lg:col-span-2">
-              <h3 className="font-semibold text-gray-900 mb-2 text-lg">WANT MORE UPDATES?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">WANT MORE UPDATES?</h3>
               <p className="text-gray-600 text-sm mb-4">
                 Subscribe to our newsletter to get updates about new tours, travel tips, top destinations and more!
               </p>
@@ -285,7 +285,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                     required
                   />
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <input
                     type="email"
                     placeholder="Email"
@@ -296,7 +296,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                   />
                   <button
                     type="submit"
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium text-sm whitespace-nowrap"
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 sm:px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium text-sm whitespace-nowrap"
                   >
                     Subscribe
                   </button>
@@ -307,21 +307,21 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-200 py-8">
+        <div className="border-t border-gray-200 py-6 sm:py-8">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             {/* Copyright & Links */}
-            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-500">
-              <div className="text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs sm:text-sm text-gray-500 text-center sm:text-left">
+              <div>
                 © 2024 TravelHub. All Rights Reserved.
               </div>
             </div>
 
             {/* Language & Currency */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <select 
                 value={selectedLanguage}
                 onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="bg-white border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="bg-white border border-gray-300 rounded-lg px-2 sm:px-3 py-1.5 sm:py-1 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
                 <option value="EN">English</option>
                 <option value="UR">Urdu</option>
@@ -332,7 +332,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               <select 
                 value={selectedCurrency}
                 onChange={(e) => setSelectedCurrency(e.target.value)}
-                className="bg-white border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="bg-white border border-gray-300 rounded-lg px-2 sm:px-3 py-1.5 sm:py-1 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
                 <option value="USD">USD</option>
                 <option value="PKR">PKR</option>

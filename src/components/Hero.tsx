@@ -95,11 +95,11 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
               <span className="text-sm font-medium text-white/90">AI-Powered Travel Planning</span>
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
               Explore The
-              <span className="block mt-2">World</span>
+              <span className="block mt-1 sm:mt-2">World</span>
             </h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 max-w-2xl mx-auto leading-relaxed px-4">
               Smart travel planning with AI-powered itineraries, real-time deals, and seamless bookings
             </p>
           </div>
@@ -138,56 +138,56 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
             </div>
 
             {/* Search Form */}
-            <form onSubmit={handleSubmit} className="p-8">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-6 lg:p-8">
               {activeTab === 'flights' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
                   <div className="lg:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-3">From</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">From</label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">📍</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">📍</span>
                       <input
                         type="text"
                         name="from"
                         value={formData.from}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
                       />
                     </div>
                   </div>
                   <div className="lg:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-3">To</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">To</label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">🎯</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🎯</span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-2 lg:col-span-1">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-2 lg:col-span-1">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">Departure</label>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Departure</label>
                       <input
                         type="date"
                         name="checkIn"
                         value={formData.checkIn}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">Return</label>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Return</label>
                       <input
                         type="date"
                         name="checkOut"
                         value={formData.checkOut}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                       />
                     </div>
                   </div>
@@ -195,48 +195,48 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
               )}
 
               {activeTab === 'hotels' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Destination</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Destination</label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">🏨</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🏨</span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="City, hotel, or landmark"
-                        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Check-in</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Check-in</label>
                     <input
                       type="date"
                       name="checkIn"
                       value={formData.checkIn}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Check-out</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Check-out</label>
                     <input
                       type="date"
                       name="checkOut"
                       value={formData.checkOut}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Rooms & Guests</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Rooms & Guests</label>
                     <select
                       name="rooms"
                       value={formData.rooms}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 shadow-lg"
                     >
                       {[1, 2, 3, 4, 5].map((num) => (
                         <option key={num} value={num}>
@@ -249,100 +249,100 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
               )}
 
               {activeTab === 'cars' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Pick-up</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Pick-up</label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">🚗</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🚗</span>
                       <input
                         type="text"
                         name="from"
                         value={formData.from}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Drop-off</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Drop-off</label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">📍</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">📍</span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">From</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">From</label>
                     <input
                       type="date"
                       name="checkIn"
                       value={formData.checkIn}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">To</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">To</label>
                     <input
                       type="date"
                       name="checkOut"
                       value={formData.checkOut}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                     />
                   </div>
                 </div>
               )}
 
               {activeTab === 'packages' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Destination</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Destination</label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">🌍</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🌍</span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="Where do you want to go?"
-                        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Travel Dates</label>
-                    <div className="grid grid-cols-2 gap-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Travel Dates</label>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
                       <input
                         type="date"
                         name="checkIn"
                         value={formData.checkIn}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                       />
                       <input
                         type="date"
                         name="checkOut"
                         value={formData.checkOut}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">Travelers</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Travelers</label>
                     <select
                       name="passengers"
                       value={formData.passengers}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-4 bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 shadow-lg"
                     >
                       {[1, 2, 3, 4, 5, 6].map((num) => (
                         <option key={num} value={num}>
@@ -362,7 +362,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                     type="submit"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-12 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-3 group min-w-[200px]"
+                    className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 group"
                   >
                     <span className="text-base">Search</span>
                     <motion.span 
@@ -381,7 +381,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                     type="button"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-6 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 border border-green-400/30"
+                    className="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 border border-green-400/30 text-sm sm:text-base"
                   >
                     <motion.span
                       animate={{ rotate: [0, 10, -10, 0] }}

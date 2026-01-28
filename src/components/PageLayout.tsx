@@ -1,8 +1,9 @@
 /**
  * PageLayout Component
  * 
- * This component is part of the Expedia.fr Footer Pages replication for our FYP.
- * Reusable layout wrapper for footer pages with Header and Footer.
+ * Reusable layout wrapper for pages.
+ * When skipHeaderFooter is true, only renders content (for pages already inside LayoutWrapper).
+ * When false, renders full layout with Header and Footer (for standalone pages).
  */
 
 import React from 'react';
@@ -15,9 +16,25 @@ interface PageLayoutProps {
   children: React.ReactNode;
   className?: string;
   useNewFooter?: boolean;
+  skipHeaderFooter?: boolean; // Skip Header/Footer when already provided by LayoutWrapper
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ children, className = '', useNewFooter = false }) => {
+const PageLayout: React.FC<PageLayoutProps> = ({ 
+  children, 
+  className = '', 
+  useNewFooter = false,
+  skipHeaderFooter = false 
+}) => {
+  // If skipHeaderFooter is true, only render content (for pages inside LayoutWrapper)
+  if (skipHeaderFooter) {
+    return (
+      <AnimatedPage>
+        <div className={className}>{children}</div>
+      </AnimatedPage>
+    );
+  }
+
+  // Full layout with Header and Footer (for standalone pages)
   return (
     <AnimatedPage>
       <div className="min-h-screen bg-gray-50 flex flex-col">

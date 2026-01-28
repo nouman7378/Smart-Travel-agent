@@ -105,6 +105,13 @@ import ChatAnalytics from './pages/admin/ChatAnalytics';
 import UserQueryTrends from './pages/admin/UserQueryTrends';
 import ModelPerformance from './pages/admin/ModelPerformance';
 import TrainingDataManager from './pages/admin/TrainingDataManager';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import UserManagement from './pages/admin/UserManagement';
+import PackagesManagement from './pages/admin/PackagesManagement';
+import BookingManagement from './pages/admin/BookingManagement';
+import PaymentsRevenue from './pages/admin/PaymentsRevenue';
+import ReportsAnalytics from './pages/admin/ReportsAnalytics';
+import Settings from './pages/admin/Settings';
 
 // Booking Pages
 import BookingDemoPage from './pages/booking/BookingDemoPage';
@@ -225,15 +232,6 @@ const App: React.FC = () => {
               <Route path="/packages-suggestions" element={<PackageSuggestionsPage />} />
               <Route path="/packages/suggestions" element={<PackageSuggestionsPage />} />
 
-          {/* Admin Dashboard Pages */}
-              <Route path="/admin/analytics" element={<ChatAnalytics />} />
-              <Route path="/admin/query-trends" element={<UserQueryTrends />} />
-              <Route path="/admin/trends" element={<UserQueryTrends />} />
-              <Route path="/admin/model-performance" element={<ModelPerformance />} />
-              <Route path="/admin/performance" element={<ModelPerformance />} />
-              <Route path="/admin/training-data" element={<TrainingDataManager />} />
-              <Route path="/admin/training" element={<TrainingDataManager />} />
-
           {/* Payment & Community Pages */}
               <Route path="/payment/demo" element={<PaymentGatewayDemoPage />} />
               <Route path="/community" element={<CommunityPage />} />
@@ -241,6 +239,23 @@ const App: React.FC = () => {
               {/* 404 - Redirect to home */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
+
+          {/* Admin Dashboard Pages - Outside LayoutWrapper */}
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<UserManagement />} />
+              <Route path="/admin/packages" element={<PackagesManagement />} />
+              <Route path="/admin/bookings" element={<BookingManagement />} />
+              <Route path="/admin/payments" element={<PaymentsRevenue />} />
+              <Route path="/admin/reports" element={<ReportsAnalytics />} />
+              <Route path="/admin/settings" element={<Settings />} />
+              {/* Legacy admin routes */}
+              <Route path="/admin/analytics" element={<ChatAnalytics />} />
+              <Route path="/admin/query-trends" element={<UserQueryTrends />} />
+              <Route path="/admin/trends" element={<UserQueryTrends />} />
+              <Route path="/admin/model-performance" element={<ModelPerformance />} />
+              <Route path="/admin/performance" element={<ModelPerformance />} />
+              <Route path="/admin/training-data" element={<TrainingDataManager />} />
+              <Route path="/admin/training" element={<TrainingDataManager />} />
           </Routes>
         </Router>
       </AuthProvider>

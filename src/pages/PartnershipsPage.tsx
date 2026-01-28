@@ -16,7 +16,7 @@ import JoinCTA from '../components/partnerships/JoinCTA';
 
 const PartnershipsPage: React.FC = () => {
   return (
-    <PageLayout>
+    <PageLayout skipHeaderFooter={true}>
       <div className="min-h-screen bg-white">
         {/* 1. Hero Section */}
         <PartnershipsHero />

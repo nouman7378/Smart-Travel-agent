@@ -105,7 +105,7 @@ const CommunityPage: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <PageLayout skipHeaderFooter={true}>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50 py-8 sm:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}

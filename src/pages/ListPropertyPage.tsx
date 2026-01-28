@@ -18,7 +18,7 @@ import CallToAction from '../components/listYourProperty/CallToAction';
 
 const ListPropertyPage: React.FC = () => {
   return (
-    <PageLayout>
+    <PageLayout skipHeaderFooter={true}>
       <div className="min-h-screen bg-white">
         {/* 1. Hero Section */}
         <Hero />

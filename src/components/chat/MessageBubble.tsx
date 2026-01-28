@@ -27,6 +27,71 @@ interface MessageBubbleProps {
   message: Message;
 }
 
+/**
+ * Format message content with support for markdown-like formatting
+ */
+const formatMessageContent = (content: string, isBot: boolean): React.ReactNode => {
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  
+  lines.forEach((line, lineIndex) => {
+    // Handle bold text (**text**)
+    const parts: React.ReactNode[] = [];
+    let currentIndex = 0;
+    const boldRegex = /\*\*(.*?)\*\*/g;
+    let match;
+    let lastIndex = 0;
+    
+    while ((match = boldRegex.exec(line)) !== null) {
+      // Add text before bold
+      if (match.index > lastIndex) {
+        parts.push(line.substring(lastIndex, match.index));
+      }
+      // Add bold text
+      parts.push(
+        <strong key={`bold-${match.index}`} className={isBot ? 'text-blue-700 font-semibold' : 'text-white font-semibold'}>
+          {match[1]}
+        </strong>
+      );
+      lastIndex = match.index + match[0].length;
+    }
+    
+    // Add remaining text
+    if (lastIndex < line.length) {
+      parts.push(line.substring(lastIndex));
+    }
+    
+    // Handle bullet points
+    if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
+      elements.push(
+        <div key={lineIndex} className="flex items-start gap-2 my-1">
+          <span className={isBot ? 'text-blue-600' : 'text-blue-200'}>•</span>
+          <span>{parts.length > 0 ? parts : line}</span>
+        </div>
+      );
+    } else if (line.trim().startsWith('**') && line.trim().endsWith('**')) {
+      // Section header
+      elements.push(
+        <div key={lineIndex} className={`font-semibold mt-3 mb-1 ${isBot ? 'text-blue-700' : 'text-white'}`}>
+          {line.replace(/\*\*/g, '')}
+        </div>
+      );
+    } else if (line.trim() === '') {
+      // Empty line
+      elements.push(<br key={lineIndex} />);
+    } else {
+      // Regular line
+      elements.push(
+        <div key={lineIndex} className="my-1">
+          {parts.length > 0 ? parts : line}
+        </div>
+      );
+    }
+  });
+  
+  return <>{elements}</>;
+};
+
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   const isBot = message.isBot;
 
@@ -46,9 +111,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
       >
         {/* Message Content */}
         {message.messageType === 'text' && (
-          <p className="text-sm md:text-base whitespace-pre-wrap break-words">
-            {message.content}
-          </p>
+          <div className="text-sm md:text-base whitespace-pre-wrap break-words">
+            {formatMessageContent(message.content, isBot)}
+          </div>
         )}
 
         {message.messageType === 'image' && message.imageUrl && (

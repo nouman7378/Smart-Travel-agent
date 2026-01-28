@@ -10,7 +10,7 @@ import PageLayout from '../../components/PageLayout';
 
 const DestinationsPage: React.FC = () => {
   return (
-    <PageLayout useNewFooter={true}>
+    <PageLayout skipHeaderFooter={true} useNewFooter={true}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

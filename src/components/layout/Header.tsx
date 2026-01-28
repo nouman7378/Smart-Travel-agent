@@ -66,10 +66,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   <span className="text-white font-bold text-lg">T</span>
                 </div>
                 <div>
-                  <span className="text-2xl font-bold text-gray-800">
+                  <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">
                     Travel<span className="text-blue-600">Hub</span>
                   </span>
-                  <div className="h-1 w-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mt-1"></div>
+                  <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mt-0.5 sm:mt-1"></div>
                 </div>
               </div>
             </Link>

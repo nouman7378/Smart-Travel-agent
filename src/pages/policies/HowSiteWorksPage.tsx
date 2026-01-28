@@ -33,7 +33,7 @@ const HowSiteWorksPage: React.FC = () => {
   ];
 
   return (
-    <PageLayout>
+    <PageLayout skipHeaderFooter={true}>
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 text-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

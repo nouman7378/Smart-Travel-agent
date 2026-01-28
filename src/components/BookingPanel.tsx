@@ -95,11 +95,11 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-4 ${className}`}>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Book your stay</h2>
+    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 sticky top-4 ${className}`}>
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Book your stay</h2>
 
       {/* Check-in / Check-out */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Check-in</label>
           <input
@@ -125,7 +125,7 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
       {/* Guests */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">Guests</label>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs text-gray-600 mb-1">Adults</label>
             <select

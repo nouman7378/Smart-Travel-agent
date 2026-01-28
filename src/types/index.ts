@@ -1,5 +1,6 @@
 // Central export point for all types
 
+export * from './admin';
 export * from './auth';
 export * from './booking';
 export * from './cars';

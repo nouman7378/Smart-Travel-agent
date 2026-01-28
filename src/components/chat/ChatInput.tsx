@@ -233,26 +233,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
           </motion.button>
         </div>
 
-        {/* Quick Suggestions */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap gap-2 mt-3 justify-center"
-        >
-          {['Best hotels in Paris', 'Flight deals', 'Travel tips', 'Weather'].map((suggestion) => (
-            <motion.button
-              key={suggestion}
-              type="button"
-              onClick={() => setMessage(suggestion)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-3 py-1.5 text-xs text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-200"
-            >
-              {suggestion}
-            </motion.button>
-          ))}
-        </motion.div>
       </form>
 
       {/* Hidden file input */}
