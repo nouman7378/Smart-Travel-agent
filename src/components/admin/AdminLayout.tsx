@@ -220,12 +220,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                       <span className="text-white font-semibold text-sm">
-                        {user?.name?.charAt(0).toUpperCase() || 'A'}
+                        {user?.full_name?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || 'A'}
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-800 truncate">
-                        {user?.name || 'Admin'}
+                        {user?.full_name || user?.username || 'Admin'}
                       </p>
                       <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                     </div>

@@ -34,11 +34,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'login' }) => {
   const handleLogin = async (data: LoginData) => {
     try {
       setError('');
-      await login(data.email, data.password);
-      // Redirect to home or previous page
-      navigate('/');
+      const user = await login(data.username, data.password);
+      navigate(user?.is_staff ? '/admin' : '/');
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
       console.error('Login error:', err);
     }
   };
@@ -46,11 +45,16 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'login' }) => {
   const handleSignUp = async (data: SignUpData) => {
     try {
       setError('');
-      await signup(data.email, data.password, data.name);
-      // Redirect to home after successful signup
+      await signup({
+        full_name: data.full_name,
+        email: data.email,
+        password: data.password,
+        confirm_password: data.confirm_password,
+        terms_accepted: data.terms_accepted,
+      });
       navigate('/');
     } catch (err) {
-      setError('Sign up failed. Please try again.');
+      setError(err instanceof Error ? err.message : 'Sign up failed. Please try again.');
       console.error('Sign up error:', err);
     }
   };

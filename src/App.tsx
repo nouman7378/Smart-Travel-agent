@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import LayoutWrapper from './components/layout/LayoutWrapper';
+import AdminRoute from './components/AdminRoute';
 
 // Main Pages
 import HomePage from './pages/HomePage';
@@ -240,22 +241,23 @@ const App: React.FC = () => {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
 
-          {/* Admin Dashboard Pages - Outside LayoutWrapper */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/users" element={<UserManagement />} />
-              <Route path="/admin/packages" element={<PackagesManagement />} />
-              <Route path="/admin/bookings" element={<BookingManagement />} />
-              <Route path="/admin/payments" element={<PaymentsRevenue />} />
-              <Route path="/admin/reports" element={<ReportsAnalytics />} />
-              <Route path="/admin/settings" element={<Settings />} />
-              {/* Legacy admin routes */}
-              <Route path="/admin/analytics" element={<ChatAnalytics />} />
-              <Route path="/admin/query-trends" element={<UserQueryTrends />} />
-              <Route path="/admin/trends" element={<UserQueryTrends />} />
-              <Route path="/admin/model-performance" element={<ModelPerformance />} />
-              <Route path="/admin/performance" element={<ModelPerformance />} />
-              <Route path="/admin/training-data" element={<TrainingDataManager />} />
-              <Route path="/admin/training" element={<TrainingDataManager />} />
+          {/* Admin Dashboard – only for superadmin/staff (is_staff) */}
+              <Route path="/admin" element={<AdminRoute />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="users" element={<UserManagement />} />
+                <Route path="packages" element={<PackagesManagement />} />
+                <Route path="bookings" element={<BookingManagement />} />
+                <Route path="payments" element={<PaymentsRevenue />} />
+                <Route path="reports" element={<ReportsAnalytics />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="analytics" element={<ChatAnalytics />} />
+                <Route path="query-trends" element={<UserQueryTrends />} />
+                <Route path="trends" element={<UserQueryTrends />} />
+                <Route path="model-performance" element={<ModelPerformance />} />
+                <Route path="performance" element={<ModelPerformance />} />
+                <Route path="training-data" element={<TrainingDataManager />} />
+                <Route path="training" element={<TrainingDataManager />} />
+              </Route>
           </Routes>
         </Router>
       </AuthProvider>

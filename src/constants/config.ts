@@ -1,13 +1,18 @@
 // Application configuration constants
 
+import { API_BASE_URL } from '../config/env.config';
+
 export const APP_CONFIG = {
   APP_NAME: 'TravelHub',
   APP_DESCRIPTION: 'Modern, professional travel booking platform',
   VERSION: '1.0.0',
+
+  // API Configuration (from env.config)
+  API_BASE_URL,
   
-  // API Configuration (if needed in future)
-  API_BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
-  
+  // Auth – superadmin email treated as staff when backend does not return is_staff
+  SUPERADMIN_EMAIL: 'superadmin@admin.com',
+
   // Local Storage Keys
   STORAGE_KEYS: {
     AUTH_TOKEN: 'travelhub_token',

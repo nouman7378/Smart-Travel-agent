@@ -1,14 +1,8 @@
 /**
  * SignUpForm Component
- * 
- * This component is part of the Expedia.fr Login / Sign-Up Page replication for our FYP.
- * Each component is modular and reusable.
- * 
- * Features:
- * - Name, Email, Password inputs
- * - Confirm Password
- * - Submit button
- * - Form validations
+ *
+ * Sign-up form wired to backend API (POST /api/signup/).
+ * Full name, email (used as login username), password, confirm password, terms accepted.
  */
 
 import React, { useState } from 'react';
@@ -19,18 +13,20 @@ interface SignUpFormProps {
 }
 
 export interface SignUpData {
-  name: string;
+  full_name: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirm_password: string;
+  terms_accepted: boolean;
 }
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => {
   const [formData, setFormData] = useState<SignUpData>({
-    name: '',
+    full_name: '',
     email: '',
     password: '',
-    confirmPassword: '',
+    confirm_password: '',
+    terms_accepted: false,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof SignUpData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,34 +34,32 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof SignUpData, string>> = {};
 
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+    if (!formData.full_name.trim()) {
+      newErrors.full_name = 'Full name is required';
     }
 
-    // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email address is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Password must contain uppercase, lowercase, and number';
+      newErrors.password = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
     }
 
-    // Confirm Password validation
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+    if (!formData.confirm_password) {
+      newErrors.confirm_password = 'Confirm password is required';
+    } else if (formData.password !== formData.confirm_password) {
+      newErrors.confirm_password = 'Password and confirm password do not match';
+    }
+
+    if (!formData.terms_accepted) {
+      newErrors.terms_accepted = 'You must agree to the Terms and Conditions and Privacy Policy';
     }
 
     setErrors(newErrors);
@@ -89,7 +83,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
     }
   };
 
-  const handleChange = (field: keyof SignUpData, value: string) => {
+  const handleChange = (field: keyof SignUpData, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
@@ -100,27 +94,28 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
   return (
     <form onSubmit={handleSubmit} className={className}>
       <div className="space-y-5">
-        {/* Name Field */}
+        {/* Full Name Field */}
         <div>
-          <label htmlFor="signup-name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="signup-full-name" className="block text-sm font-medium text-gray-700 mb-2">
             Full Name
           </label>
           <input
-            id="signup-name"
+            id="signup-full-name"
             type="text"
-            value={formData.name}
-            onChange={(e) => handleChange('name', e.target.value)}
+            autoComplete="name"
+            value={formData.full_name}
+            onChange={(e) => handleChange('full_name', e.target.value)}
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.name ? 'border-red-500' : 'border-gray-300'
+              errors.full_name ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="Enter your full name"
           />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+          {errors.full_name && (
+            <p className="mt-1 text-sm text-red-600">{errors.full_name}</p>
           )}
         </div>
 
-        {/* Email Field */}
+        {/* Email Field (used as login username) */}
         <div>
           <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-2">
             Email Address
@@ -128,6 +123,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
           <input
             id="signup-email"
             type="email"
+            autoComplete="email"
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
@@ -138,6 +134,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
           {errors.email && (
             <p className="mt-1 text-sm text-red-600">{errors.email}</p>
           )}
+          <p className="mt-1 text-xs text-gray-500">You will use this email to sign in</p>
         </div>
 
         {/* Password Field */}
@@ -148,6 +145,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
           <input
             id="signup-password"
             type="password"
+            autoComplete="new-password"
             value={formData.password}
             onChange={(e) => handleChange('password', e.target.value)}
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
@@ -159,7 +157,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
             <p className="mt-1 text-sm text-red-600">{errors.password}</p>
           )}
           <p className="mt-1 text-xs text-gray-500">
-            Must be at least 8 characters with uppercase, lowercase, and number
+            At least 8 characters with one uppercase, one lowercase, and one number
           </p>
         </div>
 
@@ -174,15 +172,16 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
           <input
             id="signup-confirm-password"
             type="password"
-            value={formData.confirmPassword}
-            onChange={(e) => handleChange('confirmPassword', e.target.value)}
+            autoComplete="new-password"
+            value={formData.confirm_password}
+            onChange={(e) => handleChange('confirm_password', e.target.value)}
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+              errors.confirm_password ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="Confirm your password"
           />
-          {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+          {errors.confirm_password && (
+            <p className="mt-1 text-sm text-red-600">{errors.confirm_password}</p>
           )}
         </div>
 
@@ -191,8 +190,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
           <input
             type="checkbox"
             id="terms"
+            checked={formData.terms_accepted}
+            onChange={(e) => handleChange('terms_accepted', e.target.checked)}
             className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-            required
           />
           <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
             I agree to the{' '}
@@ -205,6 +205,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
             </a>
           </label>
         </div>
+        {errors.terms_accepted && (
+          <p className="mt-1 text-sm text-red-600">{errors.terms_accepted}</p>
+        )}
 
         {/* Submit Button */}
         <button

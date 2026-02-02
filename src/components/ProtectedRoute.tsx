@@ -1,8 +1,9 @@
 /**
  * ProtectedRoute Component
- * 
- * Public route wrapper - all pages are now publicly accessible
- * Authentication is optional and does not block access
+ *
+ * Public route wrapper – all pages are now publicly accessible.
+ * Authentication is optional and does not block access.
+ * For admin-only routes, use AdminRoute (checks is_staff).
  */
 
 import React from 'react';

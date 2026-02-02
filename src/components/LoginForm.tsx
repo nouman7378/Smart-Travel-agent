@@ -1,15 +1,8 @@
 /**
  * LoginForm Component
- * 
- * This component is part of the Expedia.fr Login / Sign-Up Page replication for our FYP.
- * Each component is modular and reusable.
- * 
- * Features:
- * - Email / Password inputs
- * - "Remember Me" checkbox
- * - Submit button
- * - Forgot password link
- * - Form validations
+ *
+ * Login form wired to backend API (POST /api/login/).
+ * Features: email + password, Remember Me, Forgot password link, validation.
  */
 
 import React, { useState } from 'react';
@@ -20,14 +13,14 @@ interface LoginFormProps {
 }
 
 export interface LoginData {
-  email: string;
+  username: string;
   password: string;
   rememberMe: boolean;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
   const [formData, setFormData] = useState<LoginData>({
-    email: '',
+    username: '',
     password: '',
     rememberMe: false,
   });
@@ -37,14 +30,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof LoginData, string>> = {};
 
-    // Email validation
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+    if (!formData.username.trim()) {
+      newErrors.username = 'Email is required';
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
@@ -83,23 +72,24 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
   return (
     <form onSubmit={handleSubmit} className={className}>
       <div className="space-y-5">
-        {/* Email Field */}
+        {/* Email Field (sent as username to API) */}
         <div>
           <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email Address
+            Email
           </label>
           <input
             id="login-email"
             type="email"
-            value={formData.email}
-            onChange={(e) => handleChange('email', e.target.value)}
+            autoComplete="email"
+            value={formData.username}
+            onChange={(e) => handleChange('username', e.target.value)}
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
+              errors.username ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="Enter your email"
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+          {errors.username && (
+            <p className="mt-1 text-sm text-red-600">{errors.username}</p>
           )}
         </div>
 
@@ -111,6 +101,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
           <input
             id="login-password"
             type="password"
+            autoComplete="current-password"
             value={formData.password}
             onChange={(e) => handleChange('password', e.target.value)}
             className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
