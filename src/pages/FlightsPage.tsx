@@ -9,12 +9,15 @@ import { motion } from 'framer-motion';
 import FlightSearchBar from '../components/flights/FlightSearchBar';
 import FlightFilters from '../components/flights/FlightFilters';
 import FlightResults from '../components/flights/FlightResults';
-import { dummyFlights, Flight } from '../data/flightData';
+import { searchFlights, extractAirportCode, formatDate, Flight } from '../services/flightService';
 
 const FlightsPage: React.FC = () => {
-  const [flights] = useState<Flight[]>(dummyFlights);
-  const [filteredFlights, setFilteredFlights] = useState<Flight[]>(dummyFlights);
+  const [flights, setFlights] = useState<Flight[]>([]);
+  const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useState<any>(null);
 
   const popularDestinations = [
     { name: 'Paris', code: 'CDG', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=300&q=80' },
@@ -25,37 +28,58 @@ const FlightsPage: React.FC = () => {
     { name: 'Barcelone', code: 'BCN', image: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=300&q=80' },
   ];
 
-  const handleSearch = (searchData: any) => {
-    // In a real app, this would make an API call
-    console.log('Search data:', searchData);
-    setShowResults(true);
-    // Filter flights based on search criteria
-    let filtered = [...flights];
+  const handleSearch = async (searchData: any) => {
+    setIsLoading(true);
+    setError(null);
+    setSearchParams(searchData);
     
-    if (searchData.from) {
-      filtered = filtered.filter(f => 
-        f.departure.airport.toLowerCase().includes(searchData.from.toLowerCase()) ||
-        f.departure.code.toLowerCase().includes(searchData.from.toLowerCase())
-      );
+    try {
+      // Use IATA codes directly from the selected cities
+      const fromCode = searchData.fromIataCode;
+      const toCode = searchData.toIataCode;
+      const formattedDate = formatDate(searchData.departDate);
+      
+      if (!fromCode || !toCode || !formattedDate) {
+        setError('Please select valid departure and destination airports from the dropdown.');
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await searchFlights({
+        departure_airport_code: fromCode,
+        destination_airport_code: toCode,
+        travel_date: formattedDate,
+        number_of_passengers: searchData.passengers || 1,
+      });
+
+      if (response.success && response.flights) {
+        setFlights(response.flights);
+        setFilteredFlights(response.flights);
+        setShowResults(true);
+      } else {
+        setError(response.message || 'No flights found for the selected criteria.');
+        setFlights([]);
+        setFilteredFlights([]);
+        setShowResults(true);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred while searching for flights.');
+      setFlights([]);
+      setFilteredFlights([]);
+      setShowResults(true);
+    } finally {
+      setIsLoading(false);
     }
-    
-    if (searchData.to) {
-      filtered = filtered.filter(f => 
-        f.arrival.airport.toLowerCase().includes(searchData.to.toLowerCase()) ||
-        f.arrival.code.toLowerCase().includes(searchData.to.toLowerCase())
-      );
-    }
-    
-    setFilteredFlights(filtered);
   };
 
   const handleFilterChange = (filters: any) => {
     let filtered = [...flights];
     
-    // Price filter
-    filtered = filtered.filter(f => 
-      f.price >= filters.priceRange[0] && f.price <= filters.priceRange[1]
-    );
+    // Price filter (price is a string, convert to number)
+    filtered = filtered.filter(f => {
+      const priceNum = parseFloat(f.price);
+      return priceNum >= filters.priceRange[0] && priceNum <= filters.priceRange[1];
+    });
     
     // Stops filter
     if (filters.stops.length > 0) {
@@ -75,17 +99,7 @@ const FlightsPage: React.FC = () => {
     
     // Airline filter
     if (filters.airlines.length > 0) {
-      filtered = filtered.filter(f => filters.airlines.includes(f.airline));
-    }
-    
-    // Refundable filter
-    if (filters.refundable) {
-      filtered = filtered.filter(f => f.refundable);
-    }
-    
-    // Flexible filter
-    if (filters.flexible) {
-      filtered = filtered.filter(f => f.flexible);
+      filtered = filtered.filter(f => filters.airlines.includes(f.airline_name));
     }
     
     setFilteredFlights(filtered);
@@ -95,11 +109,11 @@ const FlightsPage: React.FC = () => {
     const sorted = [...filteredFlights].sort((a, b) => {
       switch (sortBy) {
         case 'price':
-          return a.price - b.price;
+          return parseFloat(a.price) - parseFloat(b.price);
         case 'duration':
           return parseInt(a.duration.replace('h', '').replace('m', '')) - parseInt(b.duration.replace('h', '').replace('m', ''));
         case 'departure':
-          return a.departure.time.localeCompare(b.departure.time);
+          return a.departure_time.localeCompare(b.departure_time);
         default:
           return 0;
       }
@@ -173,8 +187,44 @@ const FlightsPage: React.FC = () => {
         </section>
       )}
 
+      {/* Loading State */}
+      {isLoading && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mb-4"></div>
+              <p className="text-lg text-gray-600">Searching for the best flights...</p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Error State */}
+      {error && !isLoading && (
+        <section className="py-8 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl shadow-md p-12 text-center">
+              <div className="text-6xl mb-4">😕</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Oops!</h3>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={() => {
+                  setError(null);
+                  if (searchParams) {
+                    handleSearch(searchParams);
+                  }
+                }}
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-300"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Results Section */}
-      {showResults && (
+      {showResults && !isLoading && !error && (
         <section className="py-8 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

@@ -6,29 +6,7 @@
 
 import React, { useState } from 'react';
 import FlightCard from './FlightCard';
-
-interface Flight {
-  id: string;
-  airline: string;
-  airlineLogo?: string;
-  departure: {
-    airport: string;
-    code: string;
-    time: string;
-    date: string;
-  };
-  arrival: {
-    airport: string;
-    code: string;
-    time: string;
-    date: string;
-  };
-  duration: string;
-  stops: number;
-  price: number;
-  refundable?: boolean;
-  flexible?: boolean;
-}
+import type { Flight } from '../../services/flightService';
 
 interface FlightResultsProps {
   flights: Flight[];
@@ -44,21 +22,6 @@ const FlightResults: React.FC<FlightResultsProps> = ({ flights, onSortChange }) 
       onSortChange(newSort);
     }
   };
-
-  const sortedFlights = [...flights].sort((a, b) => {
-    switch (sortBy) {
-      case 'price':
-        return a.price - b.price;
-      case 'duration':
-        const aDuration = parseInt(a.duration.replace('h', '').replace('m', '').trim()) || 0;
-        const bDuration = parseInt(b.duration.replace('h', '').replace('m', '').trim()) || 0;
-        return aDuration - bDuration;
-      case 'departure':
-        return a.departure.time.localeCompare(b.departure.time);
-      default:
-        return 0;
-    }
-  });
 
   return (
     <div>
@@ -88,15 +51,15 @@ const FlightResults: React.FC<FlightResultsProps> = ({ flights, onSortChange }) 
 
       {/* Flight Cards */}
       <div>
-        {sortedFlights.length > 0 ? (
-          sortedFlights.map((flight, index) => (
-            <FlightCard key={flight.id} flight={flight} index={index} />
+        {flights.length > 0 ? (
+          flights.map((flight, index) => (
+            <FlightCard key={`${flight.flight_number}-${index}`} flight={flight} index={index} />
           ))
         ) : (
           <div className="bg-white rounded-xl shadow-md p-12 text-center">
             <div className="text-6xl mb-4">✈️</div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">No flights found</h3>
-            <p className="text-gray-600">Try modifying your search criteria</p>
+            <p className="text-gray-600">No flights available for selected date. Try modifying your search criteria.</p>
           </div>
         )}
       </div>

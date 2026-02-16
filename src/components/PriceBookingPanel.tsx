@@ -136,7 +136,7 @@ const PriceBookingPanel: React.FC<PriceBookingPanelProps> = ({
                 </ul>
               </div>
               <div className="ml-4 text-right">
-                <div className="text-2xl font-bold text-blue-600">${ticket.price}</div>
+                <div className="text-2xl font-bold text-blue-600">PKR {(ticket.price * 300).toLocaleString()}</div>
                 <div className="text-xs text-gray-500">per person</div>
               </div>
             </div>
@@ -202,44 +202,44 @@ const PriceBookingPanel: React.FC<PriceBookingPanelProps> = ({
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">
-              {adults} {adults === 1 ? 'Adult' : 'Adults'} × ${selectedTicketType.price}
+              {adults} {adults === 1 ? 'Adult' : 'Adults'} × PKR {(selectedTicketType.price * 300).toLocaleString()}
             </span>
             <span className="text-gray-900 font-medium">
-              ${(selectedTicketType.price * adults).toFixed(2)}
+              PKR {(selectedTicketType.price * adults * 300).toLocaleString()}
             </span>
           </div>
           {children > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">
-                {children} {children === 1 ? 'Child' : 'Children'} × ${(selectedTicketType.price * 0.75).toFixed(2)}
+                {children} {children === 1 ? 'Child' : 'Children'} × PKR {(selectedTicketType.price * 0.75 * 300).toLocaleString()}
               </span>
               <span className="text-gray-900 font-medium">
-                ${(selectedTicketType.price * 0.75 * children).toFixed(2)}
+                PKR {(selectedTicketType.price * 0.75 * children * 300).toLocaleString()}
               </span>
             </div>
           )}
           {infants > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">
-                {infants} {infants === 1 ? 'Infant' : 'Infants'} × ${(selectedTicketType.price * 0.1).toFixed(2)}
+                {infants} {infants === 1 ? 'Infant' : 'Infants'} × PKR {(selectedTicketType.price * 0.1 * 300).toLocaleString()}
               </span>
               <span className="text-gray-900 font-medium">
-                ${(selectedTicketType.price * 0.1 * infants).toFixed(2)}
+                PKR {(selectedTicketType.price * 0.1 * infants * 300).toLocaleString()}
               </span>
             </div>
           )}
           <div className="flex justify-between text-sm pt-2 border-t border-gray-300">
             <span className="text-gray-600">Subtotal</span>
-            <span className="text-gray-900 font-medium">${subtotal.toFixed(2)}</span>
+            <span className="text-gray-900 font-medium">PKR {(subtotal * 300).toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Taxes and fees</span>
-            <span className="text-gray-900 font-medium">${taxes.toFixed(2)}</span>
+            <span className="text-gray-900 font-medium">PKR {(taxes * 300).toLocaleString()}</span>
           </div>
           <div className="border-t border-gray-300 pt-2 mt-2">
             <div className="flex justify-between">
               <span className="font-semibold text-gray-900">Total</span>
-              <span className="text-2xl font-bold text-blue-600">${totalPrice.toFixed(2)}</span>
+              <span className="text-2xl font-bold text-blue-600">PKR {(totalPrice * 300).toLocaleString()}</span>
             </div>
           </div>
         </div>

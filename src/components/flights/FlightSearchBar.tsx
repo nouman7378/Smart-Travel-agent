@@ -7,6 +7,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import CityAutocomplete, { City } from './CityAutocomplete';
 
 type TripType = 'round-trip' | 'one-way' | 'multi-city';
 
@@ -14,12 +15,26 @@ interface FlightSearchBarProps {
   onSearch?: (searchData: any) => void;
 }
 
+interface LocationData {
+  display: string;
+  iataCode: string;
+  city: City | null;
+}
+
 const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
   const navigate = useNavigate();
   const [tripType, setTripType] = useState<TripType>('round-trip');
+  const [fromLocation, setFromLocation] = useState<LocationData>({
+    display: '',
+    iataCode: '',
+    city: null,
+  });
+  const [toLocation, setToLocation] = useState<LocationData>({
+    display: '',
+    iataCode: '',
+    city: null,
+  });
   const [formData, setFormData] = useState({
-    from: '',
-    to: '',
     departDate: '',
     returnDate: '',
     passengers: 1,
@@ -34,12 +49,40 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
     }));
   };
 
+  const handleFromChange = (value: string, city: City | null) => {
+    setFromLocation({
+      display: value,
+      iataCode: city?.iata_code || '',
+      city: city,
+    });
+  };
+
+  const handleToChange = (value: string, city: City | null) => {
+    setToLocation({
+      display: value,
+      iataCode: city?.iata_code || '',
+      city: city,
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const searchData = {
+      from: fromLocation.display,
+      fromIataCode: fromLocation.iataCode,
+      fromCity: fromLocation.city,
+      to: toLocation.display,
+      toIataCode: toLocation.iataCode,
+      toCity: toLocation.city,
+      ...formData,
+      tripType,
+    };
+    
     if (onSearch) {
-      onSearch({ ...formData, tripType });
+      onSearch(searchData);
     } else {
-      navigate('/search/flights', { state: { ...formData, tripType } });
+      navigate('/search/flights', { state: searchData });
     }
   };
 
@@ -73,36 +116,26 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* From */}
           <div className="lg:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">✈️</span>
-              <input
-                type="text"
-                name="from"
-                value={formData.from}
-                onChange={handleInputChange}
-                placeholder="City or airport"
-                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
-                required
-              />
-            </div>
+            <CityAutocomplete
+              label="From"
+              value={fromLocation.display}
+              onChange={handleFromChange}
+              placeholder="City or airport"
+              icon="✈️"
+              required
+            />
           </div>
 
           {/* To */}
           <div className="lg:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">🎯</span>
-              <input
-                type="text"
-                name="to"
-                value={formData.to}
-                onChange={handleInputChange}
-                placeholder="City or airport"
-                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
-                required
-              />
-            </div>
+            <CityAutocomplete
+              label="To"
+              value={toLocation.display}
+              onChange={handleToChange}
+              placeholder="City or airport"
+              icon="🎯"
+              required
+            />
           </div>
 
           {/* Dates and Passengers Row */}

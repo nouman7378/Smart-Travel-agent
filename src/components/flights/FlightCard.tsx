@@ -7,29 +7,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-interface Flight {
-  id: string;
-  airline: string;
-  airlineLogo?: string;
-  departure: {
-    airport: string;
-    code: string;
-    time: string;
-    date: string;
-  };
-  arrival: {
-    airport: string;
-    code: string;
-    time: string;
-    date: string;
-  };
-  duration: string;
-  stops: number;
-  price: number;
-  refundable?: boolean;
-  flexible?: boolean;
-}
+import type { Flight } from '../../services/flightService';
 
 interface FlightCardProps {
   flight: Flight;
@@ -39,9 +17,14 @@ interface FlightCardProps {
 const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
   const getStopsText = (stops: number) => {
     if (stops === 0) return 'Direct';
-    if (stops === 1) return '1 escale';
-    return `${stops} escales`;
+    if (stops === 1) return '1 stop';
+    return `${stops} stops`;
   };
+
+  // Convert price to PKR (approximate conversion rate: 1 EUR = 300 PKR)
+  // You can update this rate or make it dynamic
+  const EUR_TO_PKR_RATE = 300;
+  const priceInPKR = Math.round(parseFloat(flight.price) * EUR_TO_PKR_RATE).toLocaleString();
 
   return (
     <motion.div
@@ -57,15 +40,11 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
           <div className="flex items-center gap-4 mb-4">
             {/* Airline Logo */}
             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-              {flight.airlineLogo ? (
-                <img src={flight.airlineLogo} alt={flight.airline} className="w-10 h-10 object-contain" />
-              ) : (
-                <span className="text-2xl">✈️</span>
-              )}
+              <span className="text-2xl">✈️</span>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{flight.airline}</h3>
-              <p className="text-sm text-gray-500">{getStopsText(flight.stops)}</p>
+              <h3 className="font-semibold text-gray-900">{flight.airline_name}</h3>
+              <p className="text-sm text-gray-500">{flight.flight_number} • {getStopsText(flight.stops)}</p>
             </div>
           </div>
 
@@ -73,9 +52,8 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
           <div className="grid grid-cols-3 gap-4">
             {/* Departure */}
             <div>
-              <div className="text-2xl font-bold text-gray-900">{flight.departure.time}</div>
-              <div className="text-sm text-gray-600">{flight.departure.code}</div>
-              <div className="text-xs text-gray-500">{flight.departure.airport}</div>
+              <div className="text-2xl font-bold text-gray-900">{flight.departure_time}</div>
+              <div className="text-sm text-gray-600">Departure</div>
             </div>
 
             {/* Duration & Stops */}
@@ -92,40 +70,23 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
 
             {/* Arrival */}
             <div className="text-right">
-              <div className="text-2xl font-bold text-gray-900">{flight.arrival.time}</div>
-              <div className="text-sm text-gray-600">{flight.arrival.code}</div>
-              <div className="text-xs text-gray-500">{flight.arrival.airport}</div>
+              <div className="text-2xl font-bold text-gray-900">{flight.arrival_time}</div>
+              <div className="text-sm text-gray-600">Arrival</div>
             </div>
           </div>
-
-          {/* Badges */}
-          {(flight.refundable || flight.flexible) && (
-            <div className="flex gap-2 mt-4">
-              {flight.refundable && (
-                <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded">
-                  Refundable
-                </span>
-              )}
-              {flight.flexible && (
-                <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded">
-                  Flexible
-                </span>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Right Section: Price & CTA */}
         <div className="lg:border-l lg:border-gray-200 lg:pl-6 flex flex-col items-center lg:items-end justify-between min-w-[140px]">
           <div className="text-center lg:text-right mb-4">
-            <div className="text-3xl font-bold text-gray-900">€{flight.price}</div>
-            <div className="text-sm text-gray-500">par personne</div>
+            <div className="text-3xl font-bold text-gray-900">PKR {priceInPKR}</div>
+            <div className="text-sm text-gray-500">per person</div>
           </div>
           <Link
-            to={`/flight/${flight.id}`}
+            to={`/flight/${flight.flight_number}`}
             className="w-full lg:w-auto px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center"
           >
-            Sélectionner
+            Book Now
           </Link>
         </div>
       </div>

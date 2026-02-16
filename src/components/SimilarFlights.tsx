@@ -137,10 +137,10 @@ const SimilarFlights: React.FC<SimilarFlightsProps> = ({
                   <div className="text-right mb-4">
                     {flight.originalPrice && (
                       <div className="text-gray-400 line-through text-sm mb-1">
-                        ${flight.originalPrice}
+                        PKR {(flight.originalPrice * 300).toLocaleString()}
                       </div>
                     )}
-                    <div className="text-3xl font-bold text-blue-600">${flight.price}</div>
+                    <div className="text-3xl font-bold text-blue-600">PKR {(flight.price * 300).toLocaleString()}</div>
                     <p className="text-xs text-gray-500 mt-1">per person</p>
                   </div>
                   <button className="w-full lg:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors whitespace-nowrap">

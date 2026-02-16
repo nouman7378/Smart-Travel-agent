@@ -55,7 +55,7 @@ const FlightFilters: React.FC<FlightFiltersProps> = ({ onFilterChange }) => {
       {/* Price Range */}
       <div>
         <label className="block text-sm font-semibold text-gray-900 mb-3">
-          Price: €{filters.priceRange[0]} - €{filters.priceRange[1]}
+          Price: PKR {filters.priceRange[0] * 300} - PKR {filters.priceRange[1] * 300}
         </label>
         <input
           type="range"
@@ -66,8 +66,8 @@ const FlightFilters: React.FC<FlightFiltersProps> = ({ onFilterChange }) => {
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
         />
         <div className="flex justify-between text-xs text-gray-500 mt-1">
-          <span>€0</span>
-          <span>€2000+</span>
+          <span>PKR 0</span>
+          <span>PKR 600,000+</span>
         </div>
       </div>
 
