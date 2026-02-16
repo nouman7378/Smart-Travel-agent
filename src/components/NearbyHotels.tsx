@@ -116,10 +116,10 @@ const NearbyHotels: React.FC<NearbyHotelsProps> = ({
                 <div>
                   {hotel.originalPrice && (
                     <div className="text-gray-400 line-through text-sm mb-1">
-                      ${hotel.originalPrice}
+                      PKR {hotel.originalPrice.toLocaleString()}
                     </div>
                   )}
-                  <div className="text-2xl font-bold text-blue-600">${hotel.price}</div>
+                  <div className="text-2xl font-bold text-blue-600">PKR {hotel.price.toLocaleString()}</div>
                   <div className="text-xs text-gray-500">per night</div>
                 </div>
                 <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">

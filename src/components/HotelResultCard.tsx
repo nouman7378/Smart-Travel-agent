@@ -32,9 +32,10 @@ interface HotelResultCardProps {
   hotel: HotelResult;
   className?: string;
   onClick?: () => void;
+  onViewDeal?: (hotel: HotelResult) => void;
 }
 
-const HotelResultCard: React.FC<HotelResultCardProps> = ({ hotel, className = '', onClick }) => {
+const HotelResultCard: React.FC<HotelResultCardProps> = ({ hotel, className = '', onClick, onViewDeal }) => {
   const navigate = useNavigate();
   
   const handleClick = () => {
@@ -150,12 +151,12 @@ const HotelResultCard: React.FC<HotelResultCardProps> = ({ hotel, className = ''
             <div>
               {hotel.originalPrice && (
                 <div className="text-gray-400 line-through text-sm mb-1">
-                  ${hotel.originalPrice}
+                  PKR {hotel.originalPrice.toLocaleString()}
                 </div>
               )}
               <div className="flex items-baseline">
                 <span className="text-2xl md:text-3xl font-bold text-blue-600">
-                  ${hotel.price}
+                  PKR {hotel.price.toLocaleString()}
                 </span>
                 <span className="text-gray-600 text-sm ml-1">/night</span>
               </div>
@@ -164,6 +165,12 @@ const HotelResultCard: React.FC<HotelResultCardProps> = ({ hotel, className = ''
             <button
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors whitespace-nowrap"
               disabled={!hotel.availability}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onViewDeal && hotel.availability) {
+                  onViewDeal(hotel);
+                }
+              }}
             >
               {hotel.availability ? 'View Deal' : 'Unavailable'}
             </button>

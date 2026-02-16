@@ -29,9 +29,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
       image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
       rating: 4.8,
       reviewCount: 1245,
-      price: 189,
-      currency: 'USD',
-      originalPrice: 249,
+      price: 25000,
+      currency: 'PKR',
+      originalPrice: 30000,
       discount: 24,
     },
     {
@@ -41,9 +41,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
       image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80',
       rating: 4.9,
       reviewCount: 892,
-      price: 225,
-      currency: 'USD',
-      originalPrice: 299,
+      price: 22000,
+      currency: 'PKR',
+      originalPrice: 28000,
       discount: 25,
     },
     {
@@ -53,9 +53,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
       image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
       rating: 4.7,
       reviewCount: 2103,
-      price: 299,
-      currency: 'USD',
-      originalPrice: 399,
+      price: 32000,
+      currency: 'PKR',
+      originalPrice: 38000,
       discount: 25,
     },
     {
@@ -65,9 +65,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
       image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80',
       rating: 4.9,
       reviewCount: 1567,
-      price: 245,
-      currency: 'USD',
-      originalPrice: 320,
+      price: 25000,
+      currency: 'PKR',
+      originalPrice: 30000,
       discount: 23,
     },
     {
@@ -77,9 +77,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
       image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80',
       rating: 4.6,
       reviewCount: 987,
-      price: 199,
-      currency: 'USD',
-      originalPrice: 259,
+      price: 20000,
+      currency: 'PKR',
+      originalPrice: 26000,
       discount: 23,
     },
     {
@@ -89,9 +89,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
       image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80',
       rating: 4.8,
       reviewCount: 1345,
-      price: 349,
-      currency: 'USD',
-      originalPrice: 449,
+      price: 35000,
+      currency: 'PKR',
+      originalPrice: 45000,
       discount: 22,
     },
   ];
@@ -298,11 +298,11 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
           <div>
             {hotel.originalPrice && (
               <span className="text-gray-400 line-through text-xs mr-2">
-                ${hotel.originalPrice}
+                PKR {hotel.originalPrice.toLocaleString()}
               </span>
             )}
             <span className="text-xl font-semibold text-gray-900">
-              ${hotel.price}
+              PKR {hotel.price.toLocaleString()}
             </span>
             <span className="text-gray-500 text-xs ml-1">/night</span>
           </div>

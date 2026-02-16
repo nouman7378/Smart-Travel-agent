@@ -20,7 +20,8 @@ interface SearchResultsListProps {
   flights?: FlightResult[];
   cars?: CarResult[];
   className?: string;
-  onItemClick?: (id: number) => void;
+  onItemClick?: (item: any) => void;
+  onViewDeal?: (hotel: HotelResult) => void;
 }
 
 const SearchResultsList: React.FC<SearchResultsListProps> = ({
@@ -30,6 +31,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
   cars = [],
   className = '',
   onItemClick,
+  onViewDeal,
 }) => {
   return (
     <div className={`space-y-4 md:space-y-6 ${className}`}>
@@ -38,7 +40,8 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
           <HotelResultCard
             key={hotel.id}
             hotel={hotel}
-            onClick={() => onItemClick?.(hotel.id)}
+            onClick={() => onItemClick?.(hotel)}
+            onViewDeal={onViewDeal}
           />
         ))}
 

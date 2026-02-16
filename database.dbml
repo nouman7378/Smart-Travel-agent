@@ -1,0 +1,391 @@
+// Smart Travel Planner - Database Schema (Normalized)
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+//
+// NORMALIZATION NOTES:
+// - 1NF: Atomic values; JSON columns (amenities, features) store arrays—consider
+//   separate tables for strict 1NF (see amenities lookup below).
+// - 2NF: No partial dependencies; lookup tables used where attributes depend
+//   on part of a key (e.g. amenity name/category in amenities table).
+// - 3NF: Redundant user_id removed from payments (derive via booking_id).
+//   Cached columns (rating, review_count, total_amount, message_count) are
+//   intentional denormalization for performance—documented in notes.
+
+Table users {
+  user_id integer [primary key]
+  username varchar [not null]
+  email varchar [not null, unique]
+  password_hash varchar [not null]
+  full_name varchar
+  is_staff boolean [default: false]
+  is_active boolean [default: true]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table user_profiles {
+  user_profile_id integer [primary key]
+  user_id integer [not null, unique]
+  phone varchar
+  avatar_url varchar
+  preferred_currency varchar [default: 'USD']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table hotels {
+  hotel_id integer [primary key]
+  name varchar [not null]
+  location varchar
+  address text
+  stars integer
+  rating decimal
+  review_count integer [default: 0]
+  image_url varchar
+  distance_km decimal
+  created_at timestamp
+  updated_at timestamp
+}
+// Denorm: rating, review_count derivable from reviews; kept for read performance
+
+Table amenities {
+  amenity_id integer [primary key]
+  name varchar [not null]
+  category varchar [not null, note: 'basic, premium, luxury']
+  created_at timestamp
+}
+
+Table hotel_amenities {
+  hotel_amenity_id integer [primary key]
+  hotel_id integer [not null]
+  amenity_id integer [not null]
+  created_at timestamp
+  
+  indexes {
+    (hotel_id, amenity_id) [unique]
+  }
+}
+// 2NF: amenity name/category in amenities; unique constraint prevents duplicates
+
+Table room_types {
+  room_type_id integer [primary key]
+  hotel_id integer [not null]
+  name varchar [not null]
+  description text
+  max_guests integer
+  price decimal [not null]
+  original_price decimal
+  image_url varchar
+  amenities text [note: 'JSON array of amenity names']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table flights {
+  flight_id integer [primary key]
+  airline varchar [not null]
+  flight_number varchar [not null]
+  departure_code varchar
+  departure_city varchar
+  departure_time time
+  departure_date date
+  arrival_code varchar
+  arrival_city varchar
+  arrival_time time
+  arrival_date date
+  duration_minutes integer
+  stops integer [default: 0]
+  price decimal [not null]
+  original_price decimal
+  class varchar [note: 'economy, business, first']
+  aircraft varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table flight_segments {
+  flight_segment_id integer [primary key]
+  flight_id integer [not null]
+  sequence integer [not null]
+  departure_code varchar
+  departure_city varchar
+  departure_time time
+  departure_date date
+  arrival_code varchar
+  arrival_city varchar
+  arrival_time time
+  arrival_date date
+  duration_minutes integer
+  airline varchar
+  flight_number varchar
+  aircraft varchar
+  created_at timestamp
+}
+
+Table cars {
+  car_id integer [primary key]
+  name varchar [not null]
+  type varchar
+  image_url varchar
+  price decimal [not null]
+  original_price decimal
+  rating decimal
+  review_count integer [default: 0]
+  transmission varchar [note: 'automatic, manual']
+  seats integer
+  luggage integer
+  features text [note: 'JSON array of feature names']
+  created_at timestamp
+  updated_at timestamp
+}
+// Denorm: rating, review_count derivable from reviews; kept for read performance
+// Note: pickup_location/return_location moved to booking_items (booking-specific)
+
+Table packages {
+  package_id integer [primary key]
+  title varchar [not null]
+  destination_id integer
+  image_url varchar
+  price decimal [not null]
+  original_price decimal
+  price_per varchar [note: 'person, package']
+  nights integer
+  duration_days integer
+  highlights text [note: 'JSON array']
+  includes text [note: 'JSON array']
+  package_type varchar
+  availability integer [default: 0]
+  status varchar [note: 'active, inactive, draft, expired']
+  featured boolean [default: false]
+  popular boolean [default: false]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table package_components {
+  package_component_id integer [primary key]
+  package_id integer [not null]
+  component_type varchar [note: 'hotel, flight, car']
+  hotel_id integer
+  flight_id integer
+  car_id integer
+  snapshot text [note: 'JSON snapshot for historical data']
+  created_at timestamp
+}
+
+Table bookings {
+  booking_id integer [primary key]
+  booking_number varchar [not null, unique]
+  user_id integer [not null]
+  booking_type varchar [not null, note: 'flight, hotel, car, package']
+  status varchar [not null, note: 'pending, confirmed, cancelled, completed']
+  total_amount decimal [not null]
+  currency varchar [default: 'USD']
+  booking_date date
+  travel_date date
+  package_id integer
+  assigned_agent_id integer
+  notes text
+  created_at timestamp
+  updated_at timestamp
+}
+// Denorm: total_amount derivable from SUM(booking_items.total_price); kept for convenience
+
+Table booking_items {
+  booking_item_id integer [primary key]
+  booking_id integer [not null]
+  item_type varchar [not null, note: 'flight, hotel, car, package']
+  flight_id integer
+  hotel_id integer
+  room_type_id integer
+  car_id integer
+  package_id integer
+  check_in date
+  check_out date
+  pickup_location varchar [note: 'For car rentals']
+  return_location varchar [note: 'For car rentals']
+  adults integer [default: 1]
+  children integer [default: 0]
+  quantity integer [default: 1]
+  unit_price decimal
+  total_price decimal
+  metadata text [note: 'JSON for search params']
+  created_at timestamp
+}
+
+Table payments {
+  payment_id integer [primary key]
+  booking_id integer [not null]
+  amount decimal [not null]
+  currency varchar [default: 'USD']
+  status varchar [not null, note: 'pending, completed, failed, refunded']
+  payment_method varchar
+  transaction_id varchar
+  payment_date timestamp
+  last4_digits varchar
+  created_at timestamp
+}
+
+Table reviews {
+  review_id integer [primary key]
+  user_id integer [not null]
+  reviewable_type varchar [not null, note: 'hotel, package, car, flight']
+  reviewable_id integer [not null]
+  rating integer [not null]
+  title varchar
+  content text
+  verified boolean [default: false]
+  helpful_count integer [default: 0]
+  created_at timestamp
+}
+
+Table chat_sessions {
+  chat_session_id integer [primary key]
+  user_id integer
+  title varchar
+  last_message_at timestamp
+  message_count integer [default: 0]
+  created_at timestamp
+  updated_at timestamp
+}
+// Denorm: last_message_at, message_count derivable from chat_messages; kept for list performance
+
+Table chat_messages {
+  chat_message_id integer [primary key]
+  chat_session_id integer [not null]
+  content text [not null]
+  is_bot boolean [default: false]
+  message_type varchar [default: 'text', note: 'text, image, location']
+  image_url varchar
+  location_lat decimal
+  location_lng decimal
+  location_address varchar
+  quick_replies text [note: 'JSON array']
+  created_at timestamp
+}
+
+Table ticket_types {
+  ticket_type_id integer [primary key]
+  name varchar [not null]
+  price decimal [not null]
+  original_price decimal
+  description text
+  features text [note: 'JSON array']
+  available boolean [default: true]
+  changeable boolean [default: false]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table ticket_bookings {
+  ticket_booking_id integer [primary key]
+  user_id integer [not null]
+  ticket_type_id integer [not null]
+  passengers integer [not null]
+  total_price decimal [not null]
+  booking_date timestamp
+  created_at timestamp
+}
+
+Table notifications {
+  notification_id integer [primary key]
+  user_id integer
+  type varchar [note: 'booking, payment, system, alert']
+  title varchar [not null]
+  message text
+  read boolean [default: false]
+  priority varchar [note: 'low, medium, high']
+  created_at timestamp
+}
+
+Table reports {
+  report_id integer [primary key]
+  name varchar [not null]
+  type varchar [note: 'users, bookings, revenue, packages']
+  date_start date
+  date_end date
+  generated_at timestamp
+  generated_by_id integer
+  download_url varchar
+}
+
+Table system_settings {
+  system_setting_id integer [primary key]
+  key varchar [not null, unique]
+  value text [note: 'JSON or string value']
+  updated_at timestamp
+}
+
+Table destinations {
+  destination_id integer [primary key]
+  name varchar [not null]
+  type varchar [note: 'beach, mountain, city, adventure, cultural, relaxation']
+  description text
+  country varchar
+  region varchar
+  created_at timestamp
+}
+
+// ---- Ref: users ----
+Ref: user_profiles.user_id > users.user_id
+Ref: users.user_id < bookings.user_id
+Ref: users.user_id < chat_sessions.user_id
+Ref: users.user_id < reviews.user_id
+Ref: users.user_id < ticket_bookings.user_id
+Ref: users.user_id < notifications.user_id
+Ref: users.user_id < reports.generated_by_id
+Ref: users.user_id < bookings.assigned_agent_id
+
+// ---- Ref: hotels ----
+Ref: hotel_amenities.hotel_id > hotels.hotel_id
+Ref: hotel_amenities.amenity_id > amenities.amenity_id
+Ref: room_types.hotel_id > hotels.hotel_id
+Ref: booking_items.hotel_id > hotels.hotel_id
+Ref: booking_items.room_type_id > room_types.room_type_id
+Ref: package_components.hotel_id > hotels.hotel_id
+
+// ---- Ref: flights ----
+Ref: flight_segments.flight_id > flights.flight_id
+Ref: booking_items.flight_id > flights.flight_id
+Ref: package_components.flight_id > flights.flight_id
+
+// ---- Ref: cars ----
+Ref: booking_items.car_id > cars.car_id
+Ref: package_components.car_id > cars.car_id
+
+// ---- Ref: packages ----
+Ref: package_components.package_id > packages.package_id
+Ref: booking_items.package_id > packages.package_id
+Ref: bookings.package_id > packages.package_id
+Ref: packages.destination_id > destinations.destination_id
+
+// ---- Ref: bookings ----
+Ref: booking_items.booking_id > bookings.booking_id
+Ref: payments.booking_id > bookings.booking_id
+// user for payment: payments.booking_id -> bookings.user_id (no redundant user_id in payments for 3NF)
+
+// ---- Ref: chat ----
+Ref: chat_messages.chat_session_id > chat_sessions.chat_session_id
+
+// ---- Ref: tickets ----
+Ref: ticket_bookings.ticket_type_id > ticket_types.ticket_type_id
+
+// ---- RECOMMENDED INDEXES (for performance) ----
+// Note: Add these indexes in your actual database implementation
+// 
+// CREATE INDEX idx_bookings_user_id ON bookings(user_id);
+// CREATE INDEX idx_bookings_status ON bookings(status);
+// CREATE INDEX idx_bookings_booking_type ON bookings(booking_type);
+// CREATE INDEX idx_booking_items_booking_id ON booking_items(booking_id);
+// CREATE INDEX idx_payments_booking_id ON payments(booking_id);
+// CREATE INDEX idx_payments_status ON payments(status);
+// CREATE INDEX idx_reviews_reviewable ON reviews(reviewable_type, reviewable_id);
+// CREATE INDEX idx_reviews_user_id ON reviews(user_id);
+// CREATE INDEX idx_chat_messages_session_id ON chat_messages(chat_session_id);
+// CREATE INDEX idx_chat_sessions_user_id ON chat_sessions(user_id);
+// CREATE INDEX idx_packages_destination_id ON packages(destination_id);
+// CREATE INDEX idx_packages_status ON packages(status);
+// CREATE INDEX idx_packages_featured ON packages(featured) WHERE featured = true;
+// CREATE INDEX idx_hotels_location ON hotels(location);
+// CREATE INDEX idx_flights_departure ON flights(departure_code, departure_date);
+// CREATE INDEX idx_flights_arrival ON flights(arrival_code, arrival_date);

@@ -190,10 +190,10 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
                   <div className="ml-4 text-right">
                     {room.originalPrice && (
                       <div className="text-sm text-gray-400 line-through mb-1">
-                        ${room.originalPrice}
+                        PKR {room.originalPrice.toLocaleString()}
                       </div>
                     )}
-                    <div className="text-lg font-bold text-blue-600">${room.price}</div>
+                    <div className="text-lg font-bold text-blue-600">PKR {room.price.toLocaleString()}</div>
                     <div className="text-xs text-gray-500">per night</div>
                   </div>
                 </div>
@@ -209,23 +209,23 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">
-                ${selectedRoomType.price} × {nights} {nights === 1 ? 'night' : 'nights'}
+                PKR {selectedRoomType.price.toLocaleString()} × {nights} {nights === 1 ? 'night' : 'nights'}
               </span>
               <span className="text-gray-900 font-medium">
-                ${(selectedRoomType.price * nights).toFixed(2)}
+                PKR {(selectedRoomType.price * nights).toLocaleString()}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Taxes and fees</span>
               <span className="text-gray-900 font-medium">
-                ${(totalPrice * 0.15).toFixed(2)}
+                PKR {(totalPrice * 0.15).toLocaleString()}
               </span>
             </div>
             <div className="border-t border-gray-300 pt-2 mt-2">
               <div className="flex justify-between">
                 <span className="font-semibold text-gray-900">Total</span>
                 <span className="text-2xl font-bold text-blue-600">
-                  ${(totalPrice * 1.15).toFixed(2)}
+                  PKR {(totalPrice * 1.15).toLocaleString()}
                 </span>
               </div>
             </div>

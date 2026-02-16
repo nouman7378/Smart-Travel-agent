@@ -14,7 +14,8 @@
  * - Footer
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import HotelGallery from '../components/HotelGallery';
@@ -22,14 +23,118 @@ import HotelInfo, { HotelAmenity } from '../components/HotelInfo';
 import BookingPanel, { RoomType, BookingData } from '../components/BookingPanel';
 import ReviewsSection, { Review } from '../components/ReviewsSection';
 import NearbyHotels, { NearbyHotel } from '../components/NearbyHotels';
+import RoomSelectionModal from '../components/RoomSelectionModal';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 interface HotelDetailPageProps {
   hotelId?: number;
 }
 
-const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1 }) => {
+interface HotelData {
+  id: number;
+  name: string;
+  location: string;
+  address: string;
+  stars: number;
+  rating: number;
+  review_count: number;
+  distance_from_center: number;
+  image_url: string;
+}
+
+const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const hotelId = parseInt(id || '1', 10);
+  
+  const [hotel, setHotel] = useState<HotelData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showRoomModal, setShowRoomModal] = useState(false);
+  const [rooms, setRooms] = useState<RoomType[]>([]);
+  
+  // Fetch hotel data from API
+  useEffect(() => {
+    fetchHotelData();
+  }, [hotelId]);
+  
+  const fetchHotelData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_BASE_URL}/hotels/${hotelId}/`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setHotel(data.hotel);
+        // Fetch rooms after hotel data is loaded
+        fetchRooms(data.hotel.id);
+      } else {
+        setError(data.message || 'Hotel not found');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchRooms = async (hotelId: number) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hotels/${hotelId}/rooms/`);
+      const data = await response.json();
+      
+      if (data.success) {
+        // Transform API data to RoomType format
+        const transformedRooms: RoomType[] = data.rooms.map((room: any) => ({
+          id: room.id,
+          name: room.room_type,
+          description: room.description,
+          maxGuests: room.max_guests,
+          price: room.price_per_night,
+          originalPrice: room.original_price,
+          amenities: room.amenities,
+          image: room.room_image_url || '',
+        }));
+        setRooms(transformedRooms);
+      }
+    } catch (err) {
+      console.error('Error fetching rooms:', err);
+      // Use fallback static rooms if API fails
+      setRooms([
+        {
+          id: 1,
+          name: 'Deluxe Room',
+          description: 'Spacious room with city view, king bed, and modern amenities',
+          maxGuests: 2,
+          price: 25000,
+          originalPrice: 30000,
+          amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Mini Bar'],
+        },
+        {
+          id: 2,
+          name: 'Executive Suite',
+          description: 'Luxury suite with separate living area and premium amenities',
+          maxGuests: 4,
+          price: 35000,
+          originalPrice: 42000,
+          amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Mini Bar', 'Balcony'],
+        },
+        {
+          id: 3,
+          name: 'Presidential Suite',
+          description: 'Ultimate luxury with panoramic views and butler service',
+          maxGuests: 6,
+          price: 65000,
+          amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Mini Bar', 'Balcony', 'Jacuzzi'],
+        },
+      ]);
+    }
+  };
+  
   // Sample hotel data - Replace with actual API data
-  const hotelImages = [
+  const hotelImages = hotel?.image_url ? [hotel.image_url] : [
     'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80',
     'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&q=80',
     'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80',
@@ -150,8 +255,8 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
       name: 'Deluxe Room',
       description: 'Spacious room with city view, king bed, and modern amenities',
       maxGuests: 2,
-      price: 189,
-      originalPrice: 249,
+      price: 25000,
+      originalPrice: 30000,
       amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Mini Bar'],
     },
     {
@@ -159,8 +264,8 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
       name: 'Executive Suite',
       description: 'Luxury suite with separate living area and premium amenities',
       maxGuests: 4,
-      price: 299,
-      originalPrice: 399,
+      price: 35000,
+      originalPrice: 42000,
       amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Mini Bar', 'Balcony'],
     },
     {
@@ -168,7 +273,7 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
       name: 'Presidential Suite',
       description: 'Ultimate luxury with panoramic views and butler service',
       maxGuests: 6,
-      price: 599,
+      price: 65000,
       amenities: ['Free WiFi', 'Air Conditioning', 'TV', 'Mini Bar', 'Balcony', 'Jacuzzi'],
     },
   ];
@@ -244,8 +349,8 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
       rating: 4.9,
       reviewCount: 892,
       stars: 5,
-      price: 225,
-      originalPrice: 299,
+      price: 22000,
+      originalPrice: 28000,
       distance: '0.8 km away',
     },
     {
@@ -256,8 +361,8 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
       rating: 4.7,
       reviewCount: 2103,
       stars: 4,
-      price: 299,
-      originalPrice: 399,
+      price: 32000,
+      originalPrice: 38000,
       distance: '1.2 km away',
     },
     {
@@ -268,8 +373,8 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
       rating: 4.9,
       reviewCount: 1567,
       stars: 5,
-      price: 245,
-      originalPrice: 320,
+      price: 25000,
+      originalPrice: 30000,
       distance: '1.5 km away',
     },
   ];
@@ -277,16 +382,62 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
   const handleBookNow = (bookingData: BookingData) => {
     console.log('Booking data:', bookingData);
     // Handle booking logic here
-    alert(`Booking confirmed! Total: $${bookingData.totalPrice.toFixed(2)}`);
+    alert(`Booking confirmed! Total: PKR ${bookingData.totalPrice.toLocaleString()}`);
   };
 
-  const handleHotelClick = (hotelId: number) => {
-    console.log('Navigate to hotel:', hotelId);
-    // Navigate to hotel detail page
+  const handleViewDeal = () => {
+    setShowRoomModal(true);
+  };
+
+  const handleBookRoom = (roomId: number) => {
+    // Handle room booking
+    const room = rooms.find(r => r.id === roomId);
+    if (room) {
+      alert(`Booking confirmed for ${room.name}! Total: PKR ${room.price * 2}`); // Simplified for now
+    }
+  };
+
+  const handleHotelClick = (nearbyHotelId: number) => {
+    navigate(`/hotel/${nearbyHotelId}`);
   };
 
   const averageRating =
     reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
+    
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+  
+  if (error || !hotel) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Hotel Not Found</h2>
+            <p className="text-gray-600 mb-6">{error || 'The hotel you are looking for does not exist.'}</p>
+            <button
+              onClick={() => navigate('/hotels')}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Browse Hotels
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -296,36 +447,36 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = ({ hotelId: _hotelId = 1
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         {/* Hotel Gallery */}
-        <HotelGallery images={hotelImages} hotelName="Grand Plaza Hotel" className="mb-8" />
+        <HotelGallery images={hotelImages} hotelName={hotel.name} className="mb-8" />
 
         {/* Hotel Info and Booking Panel */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Hotel Info - Takes 2 columns on large screens */}
           <div className="lg:col-span-2">
             <HotelInfo
-              name="Grand Plaza Hotel"
-              location="Paris, France"
-              rating={4.8}
-              reviewCount={1245}
-              stars={5}
+              name={hotel.name}
+              location={hotel.location}
+              rating={hotel.rating}
+              reviewCount={hotel.review_count}
+              stars={hotel.stars}
               amenities={amenities}
-              description={`Experience luxury and comfort at Grand Plaza Hotel, located in the heart of Paris. Our elegant hotel offers world-class amenities and exceptional service to make your stay unforgettable.
+              description={`Experience luxury and comfort at ${hotel.name}, located in ${hotel.location}. Our elegant hotel offers world-class amenities and exceptional service to make your stay unforgettable.
 
 Our spacious rooms and suites are designed with your comfort in mind, featuring modern furnishings, premium bedding, and stunning city views. Each room is equipped with high-speed WiFi, flat-screen TVs, and luxurious bathrooms.
 
 Indulge in our award-winning restaurant serving international cuisine, relax by our rooftop pool, or unwind at our full-service spa. Our fitness center is open 24/7 for your convenience.
 
-With our prime location, you're just steps away from Paris's most famous attractions, shopping districts, and dining options. Our concierge team is available 24/7 to help you make the most of your visit.
+With our prime location at ${hotel.address}, you're just ${hotel.distance_from_center} km from the city center. Our concierge team is available 24/7 to help you make the most of your visit.
 
-Book your stay today and discover why Grand Plaza Hotel is the preferred choice for travelers seeking the perfect blend of luxury, comfort, and exceptional service.`}
+Book your stay today and discover why ${hotel.name} is the preferred choice for travelers seeking the perfect blend of luxury, comfort, and exceptional service.`}
             />
           </div>
 
           {/* Booking Panel - Sticky on large screens */}
           <div className="lg:col-span-1">
             <BookingPanel
-              basePrice={189}
-              roomTypes={roomTypes}
+              basePrice={rooms.length > 0 ? rooms[0].price : 25000}
+              roomTypes={rooms}
               onBookNow={handleBookNow}
             />
           </div>
@@ -350,6 +501,20 @@ Book your stay today and discover why Grand Plaza Hotel is the preferred choice 
 
       {/* Footer */}
       <Footer />
+
+      {/* Room Selection Modal */}
+      {hotel && (
+        <RoomSelectionModal
+          isOpen={showRoomModal}
+          onClose={() => setShowRoomModal(false)}
+          hotel={{
+            id: hotel.id,
+            name: hotel.name,
+            location: hotel.location,
+          }}
+          onBookRoom={handleBookRoom}
+        />
+      )}
     </div>
   );
 };

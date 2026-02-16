@@ -85,10 +85,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       username: result.user.username,
       email: result.user.email,
       full_name: result.user.full_name,
-      is_staff: isStaffUser({ ...result.user, email: result.user.email || result.user.username }),
+      is_staff: result.user.is_staff || isStaffUser({ ...result.user, email: result.user.email || result.user.username }),
     };
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.AUTH_TOKEN, 'authenticated');
+    
+    // Store admin credentials for API authentication if user is staff
+    if (userData.is_staff) {
+      localStorage.setItem('admin_credentials', `${username}:${password}`);
+    }
+    
     setUser(userData);
     return userData;
   };
@@ -111,6 +117,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     localStorage.removeItem(APP_CONFIG.STORAGE_KEYS.AUTH_TOKEN);
     localStorage.removeItem(APP_CONFIG.STORAGE_KEYS.USER_DATA);
+    localStorage.removeItem('admin_credentials');
     setUser(null);
   };
 
