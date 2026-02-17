@@ -168,12 +168,12 @@ const CarResultCard: React.FC<CarResultCardProps> = ({ car, className = '', onCl
             <div>
               {car.originalPrice && (
                 <div className="text-gray-400 line-through text-sm mb-1">
-                  ${car.originalPrice}
+                  PKR {car.originalPrice.toLocaleString()}
                 </div>
               )}
               <div className="flex items-baseline">
                 <span className="text-2xl md:text-3xl font-bold text-blue-600">
-                  ${car.price}
+                  PKR {car.price.toLocaleString()}
                 </span>
                 <span className="text-gray-600 text-sm ml-1">/{car.pricePer}</span>
               </div>

@@ -23,16 +23,20 @@ export interface TravelPackage {
   };
   flight: {
     airline: string;
-    departure: {
-      code: string;
-      time: string;
-    };
-    arrival: {
-      code: string;
-      time: string;
-    };
+    departureTime: string;
+    arrivalTime: string;
     duration: string;
+    departureAirport: string;
+    arrivalAirport: string;
     stops: number;
+    departure?: {
+      code: string;
+      time: string;
+    };
+    arrival?: {
+      code: string;
+      time: string;
+    };
   };
   price: number;
   originalPrice?: number;
@@ -50,6 +54,19 @@ interface PackageCardProps {
 }
 
 const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '', onClick }) => {
+  // Guard clause to prevent crashes when pkg is undefined
+  if (!pkg) {
+    return (
+      <div className={`bg-white rounded-xl shadow-md overflow-hidden ${className}`}>
+        <div className="p-5 text-center text-gray-500">
+          Package data not available
+        </div>
+      </div>
+    );
+  }
+
+  // Debug: Log the data to see which item is broken
+  console.log("Rendering package:", pkg);
   return (
     <div
       className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
@@ -64,7 +81,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
         />
         {pkg.originalPrice && (
           <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            Save {Math.round(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100)}%
+            Save {pkg.originalPrice ? Math.round(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100) : 0}%
           </div>
         )}
         {pkg.packageType && (
@@ -78,7 +95,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
             <svg
               key={i}
               className={`h-4 w-4 ${
-                i < pkg.hotel.stars ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                i < (pkg.hotel?.stars || 0) ? 'text-yellow-400 fill-current' : 'text-gray-300'
               }`}
               viewBox="0 0 20 20"
             >
@@ -113,8 +130,8 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
             <span>{pkg.hotel.location}</span>
           </div>
           <div className="flex items-center text-sm text-gray-600">
-            <span className="font-semibold text-gray-900 mr-2">{pkg.hotel.rating}</span>
-            <span>({pkg.hotel.reviewCount} reviews)</span>
+            <span className="font-semibold text-gray-900 mr-2">{pkg.hotel?.rating || 0}</span>
+            <span>({pkg.hotel?.reviewCount || 0} reviews)</span>
           </div>
         </div>
 
@@ -130,27 +147,27 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
                   d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                 />
               </svg>
-              <span className="font-medium text-gray-900">{pkg.flight.airline}</span>
+              <span className="font-medium text-gray-900">{pkg.flight?.airline || 'Flight'}</span>
             </div>
-            <span className="text-gray-600">{pkg.flight.duration}</span>
+            <span className="text-gray-600">{pkg.flight?.duration || 'Duration N/A'}</span>
           </div>
           <div className="flex items-center justify-between mt-2 text-xs text-gray-600">
             <div>
-              <span className="font-semibold">{pkg.flight.departure.code}</span>
+              <span className="font-semibold">{pkg.flight?.departureAirport || pkg.flight?.departure?.code || 'N/A'}</span>
               <span className="mx-2">→</span>
-              <span className="font-semibold">{pkg.flight.arrival.code}</span>
+              <span className="font-semibold">{pkg.flight?.arrivalAirport || pkg.flight?.arrival?.code || 'N/A'}</span>
             </div>
-            {pkg.flight.stops > 0 && (
+            {pkg.flight?.stops > 0 && (
               <span>{pkg.flight.stops} {pkg.flight.stops === 1 ? 'stop' : 'stops'}</span>
             )}
           </div>
         </div>
 
         {/* Highlights */}
-        {pkg.highlights.length > 0 && (
+        {pkg.highlights?.length > 0 && (
           <div className="mb-4">
             <div className="flex flex-wrap gap-2">
-              {pkg.highlights.map((highlight, index) => (
+              {pkg.highlights?.map((highlight, index) => (
                 <span
                   key={index}
                   className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-md font-medium"
@@ -163,11 +180,11 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
         )}
 
         {/* Includes */}
-        {pkg.includes.length > 0 && (
+        {pkg.includes?.length > 0 && (
           <div className="mb-4">
             <p className="text-xs text-gray-600 mb-1">Includes:</p>
             <ul className="text-xs text-gray-600 space-y-1">
-              {pkg.includes.slice(0, 3).map((item, index) => (
+              {pkg.includes?.slice(0, 3).map((item, index) => (
                 <li key={index} className="flex items-center">
                   <svg
                     className="h-3 w-3 text-green-500 mr-2"
@@ -195,11 +212,11 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
           <div>
             {pkg.originalPrice && (
               <div className="text-gray-400 line-through text-sm mb-1">
-                ${pkg.originalPrice}
+                PKR {pkg.originalPrice.toLocaleString()}
               </div>
             )}
             <div className="flex items-baseline">
-              <span className="text-2xl font-bold text-blue-600">${pkg.price}</span>
+              <span className="text-2xl font-bold text-blue-600">PKR {pkg.price.toLocaleString()}</span>
               <span className="text-gray-600 text-sm ml-1">
                 /{pkg.pricePer === 'person' ? 'person' : 'package'}
               </span>

@@ -1,19 +1,4 @@
-/**
- * CarRentalPage Component
- * 
- * This component is part of the Expedia.fr Car Rental Page replication for our FYP.
- * Each component is modular and reusable.
- * 
- * This is the main car rental page that combines all components:
- * - Header
- * - Search & Filters
- * - Car List
- * - Sort Bar
- * - Pagination
- * - Footer
- */
-
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import CarSearchFilters, { CarFilters } from '../components/CarSearchFilters';
 import CarList from '../components/CarList';
 import { Car } from '../components/CarCard';
@@ -25,6 +10,7 @@ interface CarRentalPageProps {
 }
 
 const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
+  // All hooks declared first, in consistent order
   const [filters, setFilters] = useState<CarFilters>({
     pickupLocation: initialFilters?.pickupLocation || '',
     dropoffLocation: initialFilters?.dropoffLocation || '',
@@ -33,177 +19,17 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
     dropoffDate: initialFilters?.dropoffDate || '',
     dropoffTime: initialFilters?.dropoffTime || '10:00',
     carType: initialFilters?.carType || [],
-    priceRange: initialFilters?.priceRange || [0, 200],
+    priceRange: initialFilters?.priceRange || [0, 15000],
     companies: initialFilters?.companies || [],
   });
+  
   const [currentSort, setCurrentSort] = useState('popularity');
   const [currentPage, setCurrentPage] = useState(1);
-
-  // Sample car data - Replace with actual API data
-  const allCars: Car[] = [
-    {
-      id: 1,
-      model: 'Toyota Camry',
-      type: 'Mid-size',
-      image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
-      company: 'Hertz',
-      price: 45,
-      originalPrice: 60,
-      pricePer: 'day',
-      rating: 4.5,
-      reviewCount: 234,
-      features: ['GPS', 'Bluetooth', 'USB Charger', 'Backup Camera'],
-      transmission: 'Automatic',
-      seats: 5,
-      luggage: 2,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 2,
-      model: 'BMW 3 Series',
-      type: 'Luxury',
-      image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
-      company: 'Avis',
-      price: 89,
-      originalPrice: 120,
-      pricePer: 'day',
-      rating: 4.8,
-      reviewCount: 456,
-      features: ['GPS', 'Leather Seats', 'Sunroof', 'Premium Sound'],
-      transmission: 'Automatic',
-      seats: 5,
-      luggage: 2,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 3,
-      model: 'Honda Civic',
-      type: 'Compact',
-      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
-      company: 'Enterprise',
-      price: 35,
-      originalPrice: 45,
-      pricePer: 'day',
-      rating: 4.6,
-      reviewCount: 189,
-      features: ['GPS', 'Bluetooth', 'USB Charger'],
-      transmission: 'Automatic',
-      seats: 5,
-      luggage: 1,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 4,
-      model: 'Ford Explorer',
-      type: 'SUV',
-      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
-      company: 'Budget',
-      price: 75,
-      originalPrice: 95,
-      pricePer: 'day',
-      rating: 4.4,
-      reviewCount: 312,
-      features: ['GPS', 'Third Row Seating', 'AWD', 'Roof Rack'],
-      transmission: 'Automatic',
-      seats: 7,
-      luggage: 4,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 5,
-      model: 'Mercedes-Benz E-Class',
-      type: 'Luxury',
-      image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80',
-      company: 'National',
-      price: 120,
-      originalPrice: 150,
-      pricePer: 'day',
-      rating: 4.9,
-      reviewCount: 278,
-      features: ['GPS', 'Leather Seats', 'Sunroof', 'Premium Sound', 'Heated Seats'],
-      transmission: 'Automatic',
-      seats: 5,
-      luggage: 3,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 6,
-      model: 'Nissan Altima',
-      type: 'Mid-size',
-      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
-      company: 'Alamo',
-      price: 42,
-      pricePer: 'day',
-      rating: 4.3,
-      reviewCount: 156,
-      features: ['GPS', 'Bluetooth', 'USB Charger'],
-      transmission: 'Automatic',
-      seats: 5,
-      luggage: 2,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 7,
-      model: 'Jeep Wrangler',
-      type: 'SUV',
-      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
-      company: 'Thrifty',
-      price: 68,
-      originalPrice: 85,
-      pricePer: 'day',
-      rating: 4.7,
-      reviewCount: 421,
-      features: ['GPS', '4WD', 'Removable Doors', 'Roof Rack'],
-      transmission: 'Manual',
-      seats: 5,
-      luggage: 2,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 8,
-      model: 'Tesla Model 3',
-      type: 'Electric',
-      image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&q=80',
-      company: 'Hertz',
-      price: 95,
-      originalPrice: 125,
-      pricePer: 'day',
-      rating: 4.9,
-      reviewCount: 567,
-      features: ['GPS', 'Autopilot', 'Supercharging', 'Premium Sound'],
-      transmission: 'Automatic',
-      seats: 5,
-      luggage: 2,
-      fuelType: 'Electric',
-      mileage: 'Unlimited',
-    },
-    {
-      id: 9,
-      model: 'Chevrolet Malibu',
-      type: 'Mid-size',
-      image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
-      company: 'Enterprise',
-      price: 38,
-      pricePer: 'day',
-      rating: 4.2,
-      reviewCount: 198,
-      features: ['GPS', 'Bluetooth', 'USB Charger'],
-      transmission: 'Automatic',
-      seats: 5,
-      luggage: 2,
-      fuelType: 'Gasoline',
-      mileage: 'Unlimited',
-    },
-  ];
-
-  // Filter and sort cars
+  const [allCars, setAllCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Memoized filtered and sorted cars - declared after all useState hooks
   const filteredAndSortedCars = useMemo(() => {
     let cars = [...allCars];
 
@@ -238,8 +64,89 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
 
     return cars;
   }, [filters, currentSort, allCars]);
+  
+  // Effect to fetch cars - declared after useMemo
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch('http://localhost:8000/api/cars/');
+        const data = await response.json();
+        
+        if (data.success) {
+          // Transform API data to match Car interface
+          const transformedCars: Car[] = data.cars.map((car: any) => ({
+            id: car.id,
+            model: car.model,
+            type: car.type_display,
+            image: car.car_image_url || 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
+            company: car.company,
+            price: car.price_per_day,
+            originalPrice: car.original_price,
+            pricePer: 'day' as const,
+            rating: car.rating,
+            reviewCount: car.review_count,
+            features: car.features,
+            transmission: car.transmission === 'automatic' ? 'Automatic' : 'Manual',
+            seats: car.seats,
+            luggage: car.luggage_capacity,
+            fuelType: car.fuel_type,
+            mileage: car.mileage,
+          }));
+          
+          setAllCars(transformedCars);
+        } else {
+          setError(data.message || 'Failed to load cars');
+        }
+      } catch (err) {
+        setError('Network error. Please try again.');
+        console.error('Error fetching cars:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCars();
+  }, []);
 
-  // Pagination
+  // Loading state - early return after all hooks
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading cars...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state - early return after all hooks
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-lg shadow-md max-w-md">
+          <div className="text-red-500 mb-4">
+            <svg className="h-16 w-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Cars</h3>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Pagination calculations
   const itemsPerPage = 9;
   const totalPages = Math.ceil(filteredAndSortedCars.length / itemsPerPage);
   const paginatedCars = filteredAndSortedCars.slice(
@@ -252,6 +159,7 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
     // Navigate to car detail page
   };
 
+  // Main render
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Content */}
@@ -292,4 +200,3 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
 };
 
 export default CarRentalPage;
-

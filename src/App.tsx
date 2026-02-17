@@ -108,8 +108,9 @@ import ModelPerformance from './pages/admin/ModelPerformance';
 import TrainingDataManager from './pages/admin/TrainingDataManager';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import UserManagement from './pages/admin/UserManagement';
-import PackagesManagement from './pages/admin/PackagesManagement';
+import PackageManagement from './pages/admin/PackageManagement';
 import HotelManagement from './pages/admin/HotelManagement';
+import CarManagement from './pages/admin/CarManagement';
 import BookingManagement from './pages/admin/BookingManagement';
 import PaymentsRevenue from './pages/admin/PaymentsRevenue';
 import ReportsAnalytics from './pages/admin/ReportsAnalytics';
@@ -246,8 +247,9 @@ const App: React.FC = () => {
               <Route path="/admin" element={<AdminRoute />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="users" element={<UserManagement />} />
-                <Route path="packages" element={<PackagesManagement />} />
+                <Route path="packages" element={<PackageManagement />} />
                 <Route path="hotels" element={<HotelManagement />} />
+                <Route path="cars" element={<CarManagement />} />
                 <Route path="bookings" element={<BookingManagement />} />
                 <Route path="payments" element={<PaymentsRevenue />} />
                 <Route path="reports" element={<ReportsAnalytics />} />

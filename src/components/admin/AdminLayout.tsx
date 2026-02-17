@@ -64,6 +64,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       ),
     },
     {
+      name: 'Cars',
+      path: '/admin/cars',
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V4m0 0h14a2 2 0 012 2v8a2 2 0 01-2 2h-2.972a2 2 0 00-1.682.9l-.812 1.086a2 2 0 01-1.682.9H8m0 0H4m16 0v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2m16 0V4m-8-2v4m0 0H4" />
+        </svg>
+      ),
+    },
+    {
       name: 'Bookings',
       path: '/admin/bookings',
       icon: (
