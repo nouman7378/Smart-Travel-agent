@@ -58,14 +58,29 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Search submitted:', { activeTab, formData });
-    // Navigate to search results page based on active tab
-    const routes: Record<SearchTab, string> = {
-      flights: '/search/flights',
-      hotels: '/search/hotels',
-      cars: '/search/cars',
-      packages: '/packages',
-    };
-    navigate(routes[activeTab]);
+
+    // Navigate based on active tab.
+    // For flights, send the user to the dedicated /flights page which
+    // uses the real backend API integration instead of the legacy
+    // /search/flights demo with hardcoded data.
+    if (activeTab === 'flights') {
+      navigate('/flights', {
+        state: {
+          from: formData.from,
+          to: formData.to,
+          departDate: formData.checkIn,
+          returnDate: formData.checkOut,
+          passengers: formData.passengers,
+        },
+      });
+    } else {
+      const routes: Record<Exclude<SearchTab, 'flights'>, string> = {
+        hotels: '/search/hotels',
+        cars: '/search/cars',
+        packages: '/packages',
+      };
+      navigate(routes[activeTab as Exclude<SearchTab, 'flights'>]);
+    }
   };
 
   return (

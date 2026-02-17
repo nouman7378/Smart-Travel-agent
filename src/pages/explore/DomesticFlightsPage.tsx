@@ -69,7 +69,7 @@ const DomesticFlightsPage: React.FC = () => {
                   </div>
                 </div>
                 <Link
-                  to="/search/flights"
+                  to="/flights"
                   className="text-blue-600 hover:text-blue-700 font-medium"
                 >
                   Search flights →

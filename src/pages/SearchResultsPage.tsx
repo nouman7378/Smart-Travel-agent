@@ -144,55 +144,12 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
 
   // Use only API hotels - no hardcoded fallback
   const sampleHotels: HotelResult[] = initialResults?.hotels || apiHotels;
-
-  const sampleFlights: FlightResult[] = initialResults?.flights || [
-    {
-      id: 1,
-      airline: 'Air France',
-      departure: {
-        airport: 'Charles de Gaulle Airport',
-        code: 'CDG',
-        time: '08:30',
-        date: 'Mon, Dec 15',
-      },
-      arrival: {
-        airport: 'John F. Kennedy International',
-        code: 'JFK',
-        time: '11:45',
-        date: 'Mon, Dec 15',
-      },
-      duration: '8h 15m',
-      stops: 0,
-      price: 650,
-      originalPrice: 850,
-      currency: 'USD',
-      aircraft: 'Boeing 777',
-      baggage: '1 carry-on included',
-    },
-    {
-      id: 2,
-      airline: 'Lufthansa',
-      departure: {
-        airport: 'Frankfurt Airport',
-        code: 'FRA',
-        time: '14:20',
-        date: 'Mon, Dec 15',
-      },
-      arrival: {
-        airport: 'Heathrow Airport',
-        code: 'LHR',
-        time: '15:50',
-        date: 'Mon, Dec 15',
-      },
-      duration: '1h 30m',
-      stops: 0,
-      price: 320,
-      currency: 'USD',
-      aircraft: 'Airbus A320',
-      baggage: '1 carry-on included',
-    },
-  ];
-
+  
+  // For flights and cars, rely only on initialResults when provided.
+  // This avoids showing hardcoded demo data and keeps the page consistent
+  // with real API-backed flows (e.g., dedicated Flights and Cars pages).
+  const sampleFlights: FlightResult[] = initialResults?.flights || [];
+  
   const sampleCars: CarResult[] = initialResults?.cars || [
     {
       id: 1,
