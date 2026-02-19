@@ -10,10 +10,19 @@ import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { AdminUser, UserRole, UserStatus } from '@/types/admin';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+
+const getAdminAuthHeader = (): string => {
+  const adminCreds = localStorage.getItem('admin_credentials');
+  if (adminCreds) return `Basic ${btoa(adminCreds)}`;
+  return '';
+};
+
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<UserRole | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<UserStatus | 'all'>('all');
@@ -23,83 +32,49 @@ const UserManagement: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setLoading(true);
+        setError(null);
+        
+        const headers: Record<string, string> = {};
+        const authHeader = getAdminAuthHeader();
+        if (authHeader) headers['Authorization'] = authHeader;
 
-        const mockUsers: AdminUser[] = [
-          {
-            id: '1',
-            email: 'john.doe@example.com',
-            name: 'John Doe',
-            role: 'traveler',
-            status: 'active',
-            registrationDate: '2024-01-15',
-            lastLogin: '2025-01-27',
-            totalBookings: 12,
-            totalSpent: 15600,
-            phone: '+1 234-567-8900',
-          },
-          {
-            id: '2',
-            email: 'jane.smith@example.com',
-            name: 'Jane Smith',
-            role: 'traveler',
-            status: 'active',
-            registrationDate: '2024-02-20',
-            lastLogin: '2025-01-26',
-            totalBookings: 8,
-            totalSpent: 9800,
-          },
-          {
-            id: '3',
-            email: 'agent.mike@travelhub.com',
-            name: 'Mike Johnson',
-            role: 'agent',
-            status: 'active',
-            registrationDate: '2023-11-10',
-            lastLogin: '2025-01-28',
-            totalBookings: 45,
-            totalSpent: 0,
-          },
-          {
-            id: '4',
-            email: 'admin@travelhub.com',
-            name: 'Admin User',
-            role: 'admin',
-            status: 'active',
-            registrationDate: '2023-01-01',
-            lastLogin: '2025-01-28',
-            totalBookings: 0,
-            totalSpent: 0,
-          },
-          {
-            id: '5',
-            email: 'suspended.user@example.com',
-            name: 'Suspended User',
-            role: 'traveler',
-            status: 'suspended',
-            registrationDate: '2024-03-05',
-            lastLogin: '2024-12-15',
-            totalBookings: 3,
-            totalSpent: 3200,
-          },
-          {
-            id: '6',
-            email: 'inactive.user@example.com',
-            name: 'Inactive User',
-            role: 'traveler',
-            status: 'inactive',
-            registrationDate: '2024-05-12',
-            lastLogin: '2024-10-20',
-            totalBookings: 1,
-            totalSpent: 1500,
-          },
-        ];
+        const response = await fetch(`${API_BASE_URL}/admin/users/`, {
+          credentials: 'include',
+          headers,
+        });
 
-        setUsers(mockUsers);
-        setFilteredUsers(mockUsers);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch users: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.users) {
+          // Map backend response to AdminUser format
+          const mappedUsers: AdminUser[] = data.users.map((u: any) => ({
+            id: String(u.id),
+            email: u.email || '',
+            name: u.name || u.email || 'Unknown',
+            role: u.role as UserRole,
+            status: u.status as UserStatus,
+            registrationDate: u.registrationDate || '',
+            lastLogin: u.lastLogin || undefined,
+            totalBookings: u.totalBookings || 0,
+            totalSpent: u.totalSpent || 0,
+            phone: u.phone || undefined,
+          }));
+
+          setUsers(mappedUsers);
+          setFilteredUsers(mappedUsers);
+        } else {
+          throw new Error(data.message || 'Failed to fetch users');
+        }
+      } catch (err) {
+        console.error('Error fetching users:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch users');
+        setUsers([]);
+        setFilteredUsers([]);
       } finally {
         setLoading(false);
       }
@@ -285,6 +260,13 @@ const UserManagement: React.FC = () => {
             Add User
           </button>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+            {error}
+          </div>
+        )}
 
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
