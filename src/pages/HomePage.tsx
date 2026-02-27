@@ -16,24 +16,12 @@
 
 import React from 'react';
 import Hero from '../components/Hero';
-import PopularDestinations from '../components/PopularDestinations';
-import TravelCategories from '../components/TravelCategories';
-import FeaturedHotels from '../components/FeaturedHotels';
 
 const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section - Main Search */}
+      {/* Hero Section - Main Search with all content */}
       <Hero />
-
-      {/* Popular Destinations Section */}
-      <PopularDestinations />
-
-      {/* Travel Categories Section */}
-      <TravelCategories />
-
-      {/* Featured Hotels Section */}
-      <FeaturedHotels />
     </div>
   );
 };

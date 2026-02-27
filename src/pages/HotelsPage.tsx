@@ -11,61 +11,28 @@ import Hero from '../components/Hero';
 
 const HotelsPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div 
+          animate={{ y: [0, -30, 0], x: [0, 20, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"
+        />
+        <motion.div 
+          animate={{ y: [0, 40, 0], x: [0, -30, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute top-40 right-20 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl"
+        />
+        <motion.div 
+          animate={{ y: [0, -50, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-40 left-1/4 w-80 h-80 bg-pink-400/20 rounded-full blur-3xl"
+        />
+      </div>
+
       {/* Hero Section with Hotel Search */}
-      <Hero className="min-h-[80vh]" />
-      
-      {/* Additional Hotel Content */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-6xl mx-auto"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-              Discover Amazing Hotels
-            </h2>
-            <p className="text-lg text-gray-600 text-center max-w-2xl mx-auto mb-12">
-              Browse through thousands of hotels worldwide and find the perfect accommodation for your stay.
-            </p>
-            
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              {[
-                {
-                  icon: '🏨',
-                  title: 'Wide Selection',
-                  description: 'Choose from luxury resorts, budget hotels, and everything in between',
-                },
-                {
-                  icon: '💰',
-                  title: 'Best Rates',
-                  description: 'Get exclusive deals and discounts on hotel bookings',
-                },
-                {
-                  icon: '⭐',
-                  title: 'Verified Reviews',
-                  description: 'Read authentic reviews from verified guests to make informed decisions',
-                },
-              ].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <Hero className="min-h-[80vh] relative z-10" />
     </div>
   );
 };

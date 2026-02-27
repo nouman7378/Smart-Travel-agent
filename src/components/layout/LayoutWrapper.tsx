@@ -8,7 +8,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
-import Footer from './Footer';
+import ModernFooter from '../ModernFooter';
 import PageTransition from '../common/PageTransition';
 
 interface LayoutWrapperProps {
@@ -24,7 +24,7 @@ const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ className = '' }) => {
           <Outlet />
         </PageTransition>
       </main>
-      <Footer />
+      <ModernFooter />
     </div>
   );
 };

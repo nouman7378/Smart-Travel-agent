@@ -26,6 +26,7 @@ import BookingConfirmationPage from './pages/BookingConfirmationPage';
 
 // Company Pages
 import AboutPage from './pages/AboutPage';
+import OurStoryPage from './pages/OurStoryPage';
 import JobsPage from './pages/JobsPage';
 import JobPage from './pages/JobPage';
 import ListPropertyPage from './pages/ListPropertyPage';
@@ -132,6 +133,7 @@ const App: React.FC = () => {
             <Route element={<LayoutWrapper />}>
           {/* Home Page */}
               <Route path="/" element={<HomePage />} />
+              <Route path="/explore" element={<HomePage />} />
 
           {/* Search Results Pages */}
               <Route path="/search/hotels" element={<SearchResultsPage searchType="hotels" />} />
@@ -159,6 +161,7 @@ const App: React.FC = () => {
 
           {/* Company Pages */}
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/about/story" element={<OurStoryPage />} />
               <Route path="/jobs" element={<JobsPage />} />
               <Route path="/job" element={<JobPage />} />
               <Route path="/list-property" element={<ListPropertyPage />} />

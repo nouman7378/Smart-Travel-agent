@@ -30,11 +30,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
   // Navigation items
   const navItems = [
-    { name: 'Flights', href: '/flights' },
-    { name: 'Hotels', href: '/hotels' },
-    { name: 'Cars', href: '/cars' },
-    { name: 'Packages', href: '/packages' },
-    { name: 'AI Chat', href: '/chat' },
+    { name: 'AI Chatbot', href: '/chat' },
     { name: 'Itinerary', href: '/itinerary/builder' },
     { name: 'Booking', href: '/booking/demo' },
     { name: 'Community', href: '/community' },

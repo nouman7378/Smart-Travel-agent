@@ -99,14 +99,82 @@ const BookingDemoPage: React.FC = () => {
 
   return (
     <PageLayout skipHeaderFooter={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
-        <div className="max-w-7xl mx-auto px-4">
+      <div className="min-h-screen relative overflow-hidden py-8">
+        {/* Background Image with Gradient Overlay - Same as other pages */}
+        <div className="absolute inset-0">
+          <div
+            className="absolute inset-0 bg-cover bg-center transform scale-110 animate-zoom-in-out"
+            style={{
+              backgroundImage: 'url(https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=80)',
+            }}
+          ></div>
+          {/* Modern Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-purple-800/60 to-pink-900/70"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20"></div>
+          {/* Animated Mesh Gradient */}
+          <div className="absolute inset-0 opacity-40">
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-blue-400/50 via-transparent to-transparent"></div>
+            <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-pink-400/50 via-transparent to-transparent"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-400/30 via-transparent to-transparent"></div>
+          </div>
+        </div>
+        
+        {/* Enhanced Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div 
+            animate={{ y: [0, -30, 0], x: [0, 20, 0], scale: [1, 1.1, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-20 left-10 w-72 h-72 bg-blue-400/30 rounded-full blur-3xl"
+          />
+          <motion.div 
+            animate={{ y: [0, 40, 0], x: [0, -30, 0], scale: [1, 1.2, 1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute top-40 right-20 w-96 h-96 bg-purple-400/30 rounded-full blur-3xl"
+          />
+          <motion.div 
+            animate={{ y: [0, -50, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute bottom-40 left-1/4 w-80 h-80 bg-pink-400/30 rounded-full blur-3xl"
+          />
+          <motion.div 
+            animate={{ y: [0, 30, 0], x: [0, 40, 0] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+            className="absolute bottom-20 right-10 w-64 h-64 bg-indigo-400/30 rounded-full blur-3xl"
+          />
+          {/* Animated Grid Pattern */}
+          <div className="absolute inset-0 opacity-10" style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}></div>
+          {/* Floating Particles */}
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white/30 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.2, 0.8, 0.2],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           {/* Header */}
           <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2 drop-shadow-lg">
               Booking Demo
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white/80 drop-shadow-md">
               Select your travel items and complete a demo booking
             </p>
           </div>

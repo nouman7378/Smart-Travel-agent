@@ -10,12 +10,14 @@ import React from 'react';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 import FooterNew from './FooterNew';
+import ModernFooter from './ModernFooter';
 import AnimatedPage from './AnimatedPage';
 
 interface PageLayoutProps {
   children: React.ReactNode;
   className?: string;
   useNewFooter?: boolean;
+  useModernFooter?: boolean;
   skipHeaderFooter?: boolean; // Skip Header/Footer when already provided by LayoutWrapper
 }
 
@@ -23,6 +25,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   children, 
   className = '', 
   useNewFooter = false,
+  useModernFooter = true,
   skipHeaderFooter = false 
 }) => {
   // If skipHeaderFooter is true, only render content (for pages inside LayoutWrapper)
@@ -40,7 +43,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Header />
         <main className={`flex-1 ${className}`}>{children}</main>
-        {useNewFooter ? <FooterNew /> : <Footer />}
+        {useModernFooter ? <ModernFooter /> : useNewFooter ? <FooterNew /> : <Footer />}
       </div>
     </AnimatedPage>
   );

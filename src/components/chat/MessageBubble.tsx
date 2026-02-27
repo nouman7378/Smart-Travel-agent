@@ -97,16 +97,16 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
       className={`flex ${isBot ? 'justify-start' : 'justify-end'} mb-4`}
     >
       <div
-        className={`max-w-[75%] md:max-w-[60%] rounded-2xl px-4 py-3 ${
+        className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-5 py-4 shadow-lg ${
           isBot
-            ? 'bg-blue-50 text-gray-800 rounded-tl-sm'
-            : 'bg-blue-600 text-white rounded-tr-sm'
+            ? 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-800 rounded-tl-sm border border-blue-100/50'
+            : 'bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 text-white rounded-tr-sm shadow-blue-500/25'
         }`}
       >
         {/* Message Content */}
@@ -168,17 +168,20 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
           </div>
         )}
 
-        {/* Timestamp */}
-        <p
-          className={`text-xs mt-2 ${
-            isBot ? 'text-gray-500' : 'text-blue-200'
-          }`}
-        >
-          {message.timestamp.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-        </p>
+        {/* Timestamp with read receipt */}
+        <div className={`flex items-center gap-1 mt-2 ${isBot ? 'text-gray-400' : 'text-blue-200/80'}`}>
+          <span className="text-xs">
+            {message.timestamp.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </span>
+          {!isBot && (
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+          )}
+        </div>
       </div>
     </motion.div>
   );
