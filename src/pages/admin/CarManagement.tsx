@@ -149,11 +149,18 @@ const CarManagement: React.FC = () => {
       });
       if (fileInputRef.current?.files?.[0]) fd.append('image', fileInputRef.current.files[0]);
 
-      const headers: Record<string, string> = {};
+      const fetchOptions: any = { 
+        method: 'POST', 
+        credentials: 'include', 
+        body: fd 
+      };
+      
       const authHeader = getAdminAuthHeader();
-      if (authHeader) headers['Authorization'] = authHeader;
+      if (authHeader) {
+        fetchOptions.headers = { 'Authorization': authHeader };
+      }
 
-      const res = await fetch(url, { method: 'POST', credentials: 'include', headers, body: fd });
+      const res = await fetch(url, fetchOptions);
       const result = await res.json();
       if (result.success) {
         resetForm();

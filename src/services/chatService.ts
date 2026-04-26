@@ -1,9 +1,11 @@
 /**
  * AI Chat Service
- * 
+ *
  * Intelligent travel assistant with context management, follow-up questions,
  * and travel-specific logic for personalized recommendations.
  */
+
+import { API_PREFIX } from '../config/env.config';
 
 export interface ConversationContext {
   budget?: {
@@ -44,6 +46,7 @@ export interface ChatResponse {
     type: 'package' | 'destination' | 'hotel' | 'flight';
     items: any[];
   };
+  sessionId?: string;
 }
 
 // Mock travel data for recommendations
@@ -67,11 +70,25 @@ const mockPackages = [
 
 class ChatService {
   private context: ConversationContext = {};
+  private sessionId?: string;
 
   /**
-   * Process user message and generate intelligent response
+   * Process user message and generate intelligent response.
+   * First tries the backend AI/RAG API. If that fails, falls back
+   * to the local heuristic implementation so the UI still works.
    */
   async processMessage(userMessage: string): Promise<ChatResponse> {
+    // Try backend AI API first
+    const backendResponse = await this.callBackend(userMessage);
+    if (backendResponse) {
+      this.context = backendResponse.context || {};
+      if (backendResponse.sessionId) {
+        this.sessionId = backendResponse.sessionId;
+      }
+      return backendResponse;
+    }
+
+    // Fallback: existing frontend-only heuristic logic
     const lowerMessage = userMessage.toLowerCase().trim();
 
     // Update context based on user message
@@ -87,6 +104,47 @@ class ChatService {
 
     // Generate response with follow-up questions
     return this.generateResponseWithFollowUp(missingInfo, lowerMessage);
+  }
+
+  /**
+   * Call backend AI chat API. Returns null on error so callers can
+   * gracefully fall back to local logic.
+   */
+  private async callBackend(userMessage: string): Promise<ChatResponse | null> {
+    try {
+      const response = await fetch(`${API_PREFIX}/ai/chat/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          sessionId: this.sessionId,
+        }),
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        console.error('Backend AI chat error', data);
+        return null;
+      }
+
+      const payload: ChatResponse = {
+        message: data.message,
+        quickReplies: data.quickReplies || [],
+        needsFollowUp: !!data.needsFollowUp,
+        context: (data.context || {}) as ConversationContext,
+        recommendations: data.recommendations,
+        sessionId: data.sessionId,
+      };
+
+      return payload;
+    } catch (error) {
+      console.error('Failed to call backend AI chat API', error);
+      return null;
+    }
   }
 
   /**
@@ -269,20 +327,18 @@ class ChatService {
 
     // If this is the first interaction or very vague
     if (missingInfo.length >= 3 || userMessage.length < 10) {
-      message = "I'd love to help you plan your perfect trip! To give you the best recommendations, I'll need a few details:\n\n";
-      message += "**What I need to know:**\n";
-      message += "• What's your budget range?\n";
-      message += "• Where would you like to go (or what type of destination)?\n";
-      message += "• When are you planning to travel?\n";
-      message += "• How many people will be traveling?\n\n";
-      message += "You can tell me all at once, or I'll ask you step by step! 😊";
-      
-      quickReplies = [
-        'Budget trip under $1000',
-        'Luxury vacation',
-        'Beach destination',
-        'City break',
-      ];
+      const missingSummary = missingInfo
+        .map((field) => this.describeMissingField(field))
+        .join(', ');
+
+      message = `I still need a bit more info (${missingSummary}) to tailor the trip. Share whatever details you already know and I'll guide you through the rest.`;
+
+      const primaryField = missingInfo[0];
+      quickReplies = this.getQuickReplySuggestions(primaryField);
+
+      if (!quickReplies.length) {
+        quickReplies = ['Share budget', 'Pick a destination', 'Travel dates', 'Travelers'];
+      }
     } else if (missingInfo.includes('budget')) {
       message = "Great! To find the best options for you, what's your budget range? For example:\n\n";
       message += "• Budget-friendly: Under $1,000\n";
@@ -409,6 +465,7 @@ class ChatService {
    */
   resetContext(): void {
     this.context = {};
+    this.sessionId = undefined;
   }
 
   /**
@@ -416,6 +473,38 @@ class ChatService {
    */
   getContext(): ConversationContext {
     return { ...this.context };
+  }
+
+  /**
+   * Map internal context keys to user-friendly labels.
+   */
+  private describeMissingField(field: string): string {
+    const labels: Record<string, string> = {
+      budget: 'budget range',
+      destination: 'destination',
+      dates: 'travel dates',
+      travelers: 'number of travelers',
+    };
+
+    return labels[field] || field;
+  }
+
+  /**
+   * Provide contextual quick reply suggestions for a missing field.
+   */
+  private getQuickReplySuggestions(field?: string): string[] {
+    switch (field) {
+      case 'budget':
+        return ['Under $1000', '$1000-$3000', '$3000+', 'Flexible'];
+      case 'destination':
+        return ['Beach', 'City', 'Mountain', 'Adventure'];
+      case 'dates':
+        return ['This month', 'Next month', 'In 3 months', 'Flexible dates'];
+      case 'travelers':
+        return ['1 person', '2 people', 'Family (4+)', 'Group (6+)'];
+      default:
+        return [];
+    }
   }
 }
 

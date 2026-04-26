@@ -9,33 +9,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
-
-interface Activity {
-  id: string;
-  time: string;
-  title: string;
-  description: string;
-  location: string;
-  duration: string;
-  cost: number;
-}
-
-interface DayPlan {
-  day: number;
-  date: string;
-  activities: Activity[];
-  totalCost: number;
-}
-
-interface Itinerary {
-  id: string;
-  destination: string;
-  startDate: string;
-  endDate: string;
-  budget: number;
-  days: DayPlan[];
-  totalCost: number;
-}
+import { generateItinerary, Itinerary } from '../../services/itineraryService';
 
 const ItineraryBuilderPage: React.FC = () => {
   const navigate = useNavigate();
@@ -55,68 +29,22 @@ const ItineraryBuilderPage: React.FC = () => {
     setIsGenerating(true);
 
     try {
-      // Simulate processing time
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const generated = await generateItinerary({
+        destination: formData.destination,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        budget: parseFloat(formData.budget),
+        preferences: formData.preferences,
+        travelers: parseInt(formData.travelers, 10) || 1,
+      });
 
-      // Generate mock itinerary for frontend-only functionality
-      const mockItinerary: Itinerary = {
-        id: '1',
-        destination: formData.destination || 'Paris',
-        startDate: formData.startDate || '2024-06-01',
-        endDate: formData.endDate || '2024-06-05',
-        budget: parseFloat(formData.budget) || 2000,
-        days: [
-          {
-            day: 1,
-            date: formData.startDate || '2024-06-01',
-            activities: [
-              {
-                id: '1',
-                time: '09:00',
-                title: 'Eiffel Tower Visit',
-                description: 'Visit the iconic Eiffel Tower',
-                location: formData.destination || 'Paris',
-                duration: '2 hours',
-                cost: 25,
-              },
-              {
-                id: '2',
-                time: '14:00',
-                title: 'Louvre Museum',
-                description: 'Explore world-famous art collection',
-                location: formData.destination || 'Paris',
-                duration: '3 hours',
-                cost: 17,
-              },
-            ],
-            totalCost: 42,
-          },
-          {
-            day: 2,
-            date: formData.endDate || '2024-06-02',
-            activities: [
-              {
-                id: '3',
-                time: '10:00',
-                title: 'Notre-Dame Cathedral',
-                description: 'Historic Gothic cathedral',
-                location: formData.destination || 'Paris',
-                duration: '1.5 hours',
-                cost: 0,
-              },
-            ],
-            totalCost: 0,
-          },
-        ],
-        totalCost: 42,
-      };
-      setItinerary(mockItinerary);
+      setItinerary(generated);
     } catch (error) {
       console.error('Error generating itinerary:', error);
-      // Use default mock itinerary on error
+      // Use default mock itinerary on error so the page still demonstrates behaviour
       const defaultItinerary: Itinerary = {
         id: '1',
-        destination: formData.destination || 'Paris',
+        destination: formData.destination || 'Sample Destination',
         startDate: formData.startDate || '2024-06-01',
         endDate: formData.endDate || '2024-06-05',
         budget: parseFloat(formData.budget) || 2000,
@@ -128,9 +56,9 @@ const ItineraryBuilderPage: React.FC = () => {
               {
                 id: '1',
                 time: '09:00',
-                title: 'Eiffel Tower Visit',
-                description: 'Visit the iconic Eiffel Tower',
-                location: formData.destination || 'Paris',
+                title: 'Sample Activity',
+                description: 'Example activity used when AI is unavailable.',
+                location: formData.destination || 'Sample City',
                 duration: '2 hours',
                 cost: 25,
               },
