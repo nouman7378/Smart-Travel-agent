@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import EmojiIcon from '../common/EmojiIcon';
 
 const StatsSection: React.FC = () => {
   const stats = [
@@ -44,7 +45,9 @@ const StatsSection: React.FC = () => {
               whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
               className="text-center"
             >
-              <div className="text-4xl md:text-5xl mb-3">{stat.icon}</div>
+              <div className="flex justify-center mb-3 text-blue-100">
+                <EmojiIcon icon={stat.icon} className="h-10 w-10 md:h-12 md:w-12" />
+              </div>
               <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">{stat.number}</div>
               <div className="text-sm md:text-base text-blue-100">{stat.label}</div>
             </motion.div>

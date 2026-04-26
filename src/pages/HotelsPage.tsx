@@ -8,6 +8,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
+import EmojiIcon from '../components/common/EmojiIcon';
 
 const HotelsPage: React.FC = () => {
   return (
@@ -57,7 +58,9 @@ const HotelsPage: React.FC = () => {
                   transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                   className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
                 >
-                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <div className="mb-4 text-blue-600">
+                    <EmojiIcon icon={feature.icon} className="h-9 w-9" />
+                  </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
                   <p className="text-gray-600">{feature.description}</p>
                 </motion.div>

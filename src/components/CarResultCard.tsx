@@ -9,6 +9,10 @@
  */
 
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import AddToBookingButton from './common/AddToBookingButton';
+import { useAuth } from '../contexts/AuthContext';
+import { useBooking } from '../contexts/BookingContext';
 
 export interface CarResult {
   id: number;
@@ -45,6 +49,35 @@ interface CarResultCardProps {
 }
 
 const CarResultCard: React.FC<CarResultCardProps> = ({ car, className = '', onClick }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
+  const { addItemToBooking } = useBooking();
+
+  const handleAddToBooking = async () => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: `${location.pathname}${location.search}` } });
+      return false;
+    }
+
+    await addItemToBooking({
+      item_type: 'car',
+      reference_id: car.id,
+      title: car.model,
+      subtitle: `${car.company} - ${car.type}`,
+      unit_price: car.price,
+      quantity: 1,
+      metadata: {
+        company: car.company,
+        type: car.type,
+        pickup: car.pickup,
+        dropoff: car.dropoff,
+      },
+    });
+
+    return true;
+  };
+
   return (
     <div
       className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
@@ -179,9 +212,12 @@ const CarResultCard: React.FC<CarResultCardProps> = ({ car, className = '', onCl
               </div>
               <p className="text-xs text-gray-500 mt-1">Includes taxes and fees</p>
             </div>
-            <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors whitespace-nowrap">
-              View Deal
-            </button>
+            <AddToBookingButton
+              onAdd={handleAddToBooking}
+              idleLabel="Add to Booking"
+              addedLabel="Added to Booking"
+              className="px-6 py-3"
+            />
           </div>
         </div>
       </div>

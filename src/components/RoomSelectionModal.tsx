@@ -6,7 +6,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import AddToBookingButton from './common/AddToBookingButton';
+import { useAuth } from '../contexts/AuthContext';
+import { useBooking } from '../contexts/BookingContext';
 
 interface Room {
   id: number;
@@ -40,6 +44,10 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
   hotel,
   onBookRoom,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
+  const { addItemToBooking } = useBooking();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,10 +88,10 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
     }
   };
 
-  const handleBookRoom = (roomId: number) => {
+  const handleBookRoom = async (room: Room) => {
     if (!checkIn || !checkOut) {
       alert('Please select check-in and check-out dates');
-      return;
+      return false;
     }
     
     // Calculate nights
@@ -93,11 +101,35 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
     
     if (nights <= 0) {
       alert('Check-out date must be after check-in date');
-      return;
+      return false;
     }
-    
-    onBookRoom(roomId);
-    onClose();
+
+    if (!isAuthenticated) {
+      onClose();
+      navigate('/login', { state: { from: `${location.pathname}${location.search}` } });
+      return false;
+    }
+
+    await addItemToBooking({
+      item_type: 'hotel_room',
+      reference_id: room.id,
+      title: `${hotel.name} - ${room.room_type}`,
+      subtitle: `${hotel.location}`,
+      unit_price: room.price_per_night,
+      quantity: nights,
+      metadata: {
+        hotelId: hotel.id,
+        hotelName: hotel.name,
+        roomType: room.room_type,
+        checkIn,
+        checkOut,
+        guests,
+        nights,
+      },
+    });
+
+    onBookRoom(room.id);
+    return true;
   };
 
   const calculateTotalPrice = (pricePerNight: number) => {
@@ -297,13 +329,14 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
                                 <div className="text-sm text-gray-600">
                                   {room.available_rooms} room{room.available_rooms !== 1 ? 's' : ''} available
                                 </div>
-                                <button
-                                  onClick={() => handleBookRoom(room.id)}
+                                <AddToBookingButton
+                                  onAdd={() => handleBookRoom(room)}
                                   disabled={!checkIn || !checkOut || nights <= 0}
-                                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors whitespace-nowrap"
-                                >
-                                  Book Now
-                                </button>
+                                  idleLabel="Add to Booking"
+                                  addedLabel="Added to Booking"
+                                  redirectTo="/booking/demo"
+                                  className="px-6 py-2"
+                                />
                               </div>
                             </div>
                           </div>

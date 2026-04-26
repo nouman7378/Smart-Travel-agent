@@ -3,10 +3,10 @@
  * Clean design with glass effects and modern aesthetics
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { motion } from 'framer-motion';
+import { useBooking } from '../../contexts/BookingContext';
 
 interface HeaderProps {
   className?: string;
@@ -16,8 +16,11 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
+  const { itemCount } = useBooking();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement | null>(null);
 
   // Scroll effect for header
   useEffect(() => {
@@ -27,6 +30,21 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isProfileMenuOpen &&
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isProfileMenuOpen]);
 
   // Navigation items
   const navItems = [
@@ -91,6 +109,11 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 `}
               >
                 {item.name}
+                {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
+                  <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold">
+                    {itemCount}
+                  </span>
+                )}
                 
                 {/* Active indicator */}
                 {(location.pathname === item.href || location.pathname.startsWith(item.href + '/')) && (
@@ -118,35 +141,74 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   </Link>
                 )}
                 {/* User Info */}
-                <div className="hidden sm:flex items-center space-x-3 px-4 py-2 bg-blue-50 rounded-xl">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                <div className="relative hidden sm:block" ref={profileMenuRef}>
+                  <button
+                    type="button"
+                    aria-label="Open profile menu"
+                    onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md transition-all duration-200 bg-gradient-to-br from-blue-500 to-purple-600 hover:scale-105"
+                  >
                     {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 hidden md:block">
-                    {user?.username || user?.email?.split('@')[0]}
-                  </span>
+                  </button>
+
+                  {isProfileMenuOpen && (
+                    <div className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-50">
+                      <div className="flex items-center space-x-3 pb-3 border-b border-gray-100">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-semibold">
+                          {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-gray-900 truncate">
+                            {user?.username || 'User'}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 space-y-3">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="bg-gray-50 rounded-lg px-3 py-2">
+                            <p className="text-[10px] uppercase tracking-wide text-gray-500">Username</p>
+                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.username || '-'}</p>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg px-3 py-2">
+                            <p className="text-[10px] uppercase tracking-wide text-gray-500">Role</p>
+                            <p className="text-sm font-semibold text-gray-900">
+                              {user?.is_staff ? 'Admin' : 'Traveler'}
+                            </p>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg px-3 py-2">
+                            <p className="text-[10px] uppercase tracking-wide text-gray-500">User ID</p>
+                            <p className="text-sm font-semibold text-gray-900">{user?.id ?? '-'}</p>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg px-3 py-2">
+                            <p className="text-[10px] uppercase tracking-wide text-gray-500">Name</p>
+                            <p className="text-sm font-semibold text-gray-900 truncate">
+                              {user?.full_name || user?.username || '-'}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="bg-gray-50 rounded-lg px-3 py-2">
+                          <p className="text-[10px] uppercase tracking-wide text-gray-500">Email</p>
+                          <p className="text-sm font-semibold text-gray-900 break-all">{user?.email || '-'}</p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            logout();
+                            setIsProfileMenuOpen(false);
+                            navigate('/login');
+                          }}
+                          className="w-full px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm font-semibold"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                
-                {/* Logout Button */}
-                <motion.button
-                  onClick={() => {
-                    logout();
-                    navigate('/');
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="hidden sm:flex items-center space-x-2 px-6 py-2.5 bg-white/80 backdrop-blur-md border border-white/20 text-gray-700 rounded-xl font-medium shadow-lg shadow-black/5 hover:bg-white hover:shadow-xl hover:shadow-black/10 transition-all duration-200"
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                  <span>Logout</span>
-                </motion.button>
               </>
             ) : (
               /* Sign In Button with Glass Effect */
@@ -213,6 +275,11 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   `}
                 >
                   {item.name}
+                  {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
+                    <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold">
+                      {itemCount}
+                    </span>
+                  )}
                 </Link>
               ))}
             </div>
@@ -233,32 +300,16 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     <span>Admin</span>
                   </Link>
                 )}
-                <div className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-50 rounded-xl">
+                <Link
+                  to="/profile"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-50 border border-blue-100 text-blue-700 rounded-xl font-medium hover:bg-blue-100 transition-all duration-200"
+                >
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                     {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                   </div>
-                  <span className="text-sm font-medium text-gray-700">
-                    {user?.username || user?.email?.split('@')[0]}
-                  </span>
-                </div>
-                <button
-                  onClick={() => {
-                    logout();
-                    setIsMenuOpen(false);
-                    navigate('/');
-                  }}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 bg-white/80 backdrop-blur-md border border-white/20 text-gray-700 rounded-xl font-medium shadow-lg shadow-black/5 text-center hover:bg-white transition-all duration-200"
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                  <span>Logout</span>
-                </button>
+                  <span>Profile</span>
+                </Link>
               </div>
             ) : (
               <Link

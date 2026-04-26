@@ -15,8 +15,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
 import SearchFilters, { FilterState } from '../components/SearchFilters';
 import SortBar from '../components/SortBar';
 import SearchResultsList from '../components/SearchResultsList';
@@ -85,8 +83,8 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
 
   const handleBookRoom = (roomId: number) => {
     if (selectedHotel) {
-      alert(`Booking confirmed for room ${roomId} at ${selectedHotel.name}!`);
-      setShowRoomModal(false);
+      // Keep the user on this page; button animation provides booking feedback.
+      console.log(`Added room ${roomId} at ${selectedHotel.name} to booking`);
     }
   };
 
@@ -285,9 +283,6 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <Header />
-
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <div className="flex flex-col lg:flex-row gap-6">
@@ -363,9 +358,6 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
           </main>
         </div>
       </div>
-
-      {/* Footer */}
-      <Footer />
     
       {/* Room Selection Modal */}
       {selectedHotel && (

@@ -9,6 +9,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { BookingProvider } from './contexts/BookingContext';
 import LayoutWrapper from './components/layout/LayoutWrapper';
 import AdminRoute from './components/AdminRoute';
 
@@ -23,6 +24,7 @@ import CarRentalPage from './pages/CarRentalPage';
 import PackagesPage from './pages/PackagesPage';
 import AuthPage from './pages/AuthPage';
 import BookingConfirmationPage from './pages/BookingConfirmationPage';
+import ProfilePage from './pages/ProfilePage';
 
 // Company Pages
 import AboutPage from './pages/AboutPage';
@@ -127,8 +129,9 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Router>
-          <Routes>
+                <BookingProvider>
+                    <Router>
+                        <Routes>
             <Route element={<LayoutWrapper />}>
           {/* Home Page */}
               <Route path="/" element={<HomePage />} />
@@ -156,6 +159,7 @@ const App: React.FC = () => {
           {/* Booking Confirmation Page */}
               <Route path="/booking/confirmation" element={<BookingConfirmationPage />} />
               <Route path="/booking/confirmation/:type" element={<BookingConfirmationPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
 
           {/* Company Pages */}
               <Route path="/about" element={<AboutPage />} />
@@ -262,8 +266,9 @@ const App: React.FC = () => {
                 <Route path="training-data" element={<TrainingDataManager />} />
                 <Route path="training" element={<TrainingDataManager />} />
               </Route>
-          </Routes>
-        </Router>
+                        </Routes>
+                    </Router>
+                </BookingProvider>
       </AuthProvider>
     </ThemeProvider>
   );

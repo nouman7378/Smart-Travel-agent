@@ -13,7 +13,7 @@
  */
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LoginForm, { LoginData } from '../components/LoginForm';
 import SignUpForm, { SignUpData } from '../components/SignUpForm';
@@ -27,15 +27,17 @@ interface AuthPageProps {
 
 const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'login' }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, signup } = useAuth();
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const [error, setError] = useState<string>('');
+  const redirectPath = (location.state as { from?: string } | null)?.from || '/';
 
   const handleLogin = async (data: LoginData) => {
     try {
       setError('');
       const user = await login(data.username, data.password);
-      navigate(user?.is_staff ? '/admin' : '/');
+      navigate(user?.is_staff ? '/admin' : redirectPath);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
       console.error('Login error:', err);
@@ -52,7 +54,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'login' }) => {
         confirm_password: data.confirm_password,
         terms_accepted: data.terms_accepted,
       });
-      navigate('/');
+      navigate(redirectPath);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed. Please try again.');
       console.error('Sign up error:', err);

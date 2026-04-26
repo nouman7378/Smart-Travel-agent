@@ -390,10 +390,10 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
   };
 
   const handleBookRoom = (roomId: number) => {
-    // Handle room booking
     const room = rooms.find(r => r.id === roomId);
     if (room) {
-      alert(`Booking confirmed for ${room.name}! Total: PKR ${room.price * 2}`); // Simplified for now
+      // Keep the user on this page; button animation confirms add-to-booking.
+      console.log(`Added room ${room.name} to booking`);
     }
   };
 

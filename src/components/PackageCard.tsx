@@ -10,6 +10,10 @@
  */
 
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import AddToBookingButton from './common/AddToBookingButton';
+import { useAuth } from '../contexts/AuthContext';
+import { useBooking } from '../contexts/BookingContext';
 
 export interface TravelPackage {
   id: number;
@@ -54,6 +58,11 @@ interface PackageCardProps {
 }
 
 const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '', onClick }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
+  const { addItemToBooking } = useBooking();
+
   // Guard clause to prevent crashes when pkg is undefined
   if (!pkg) {
     return (
@@ -65,8 +74,29 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
     );
   }
 
-  // Debug: Log the data to see which item is broken
-  console.log("Rendering package:", pkg);
+  const handleAddToBooking = async () => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: `${location.pathname}${location.search}` } });
+      return false;
+    }
+
+    await addItemToBooking({
+      item_type: 'package',
+      reference_id: pkg.id,
+      title: pkg.hotel.name,
+      subtitle: `${pkg.hotel.location} - ${pkg.nights} night${pkg.nights === 1 ? '' : 's'}`,
+      unit_price: pkg.price,
+      quantity: 1,
+      metadata: {
+        packageType: pkg.packageType || '',
+        airline: pkg.flight?.airline || '',
+        destination: pkg.hotel.location,
+      },
+    });
+
+    return true;
+  };
+
   return (
     <div
       className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
@@ -225,9 +255,13 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
               {pkg.nights} {pkg.nights === 1 ? 'night' : 'nights'} stay
             </p>
           </div>
-          <button className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors text-sm whitespace-nowrap">
-            View Deal
-          </button>
+          <AddToBookingButton
+            onAdd={handleAddToBooking}
+            idleLabel="Add to Booking"
+            addedLabel="Added to Booking"
+            redirectTo="/booking/demo"
+            className="px-5 py-2.5 text-sm"
+          />
         </div>
       </div>
     </div>

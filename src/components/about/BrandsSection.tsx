@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import EmojiIcon from '../common/EmojiIcon';
 
 const BrandsSection: React.FC = () => {
   const brands = [
@@ -62,8 +63,8 @@ const BrandsSection: React.FC = () => {
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
               className="bg-white p-6 md:p-8 rounded-2xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300"
             >
-              <div className={`w-16 h-16 bg-gradient-to-br ${brand.color} rounded-xl flex items-center justify-center text-3xl mb-6`}>
-                {brand.icon}
+              <div className={`w-16 h-16 bg-gradient-to-br ${brand.color} rounded-xl flex items-center justify-center text-white mb-6`}>
+                <EmojiIcon icon={brand.icon} className="h-8 w-8" />
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{brand.name}</h3>
               <p className="text-gray-600 leading-relaxed">{brand.description}</p>

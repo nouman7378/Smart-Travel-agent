@@ -1,19 +1,21 @@
 /**
  * BookingDemoPage Component
  * 
- * Real booking demo interface allowing users to select hotels/flights/bus
- * from mock data, show price breakdown, and confirmation preview.
+ * Booking interface with review and confirmation flow.
+ * No hardcoded demo inventory is rendered on this page.
  * Part of the AI Travel Chatbot application.
  */
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
+import { useAuth } from '../../contexts/AuthContext';
+import { useBooking } from '../../contexts/BookingContext';
 
 interface BookingItem {
   id: string;
-  type: 'hotel' | 'flight' | 'bus';
+  type: 'hotel' | 'flight' | 'bus' | 'car' | 'package';
   name: string;
   details: string;
   price: number;
@@ -24,6 +26,8 @@ interface BookingItem {
 
 const BookingDemoPage: React.FC = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { items: bookingItems, refreshCart } = useBooking();
   const [selectedItems, setSelectedItems] = useState<BookingItem[]>([]);
   const [bookingStep, setBookingStep] = useState<'select' | 'review' | 'confirm'>('select');
   const [guestInfo, setGuestInfo] = useState({
@@ -33,38 +37,30 @@ const BookingDemoPage: React.FC = () => {
     specialRequests: '',
   });
 
-  // Mock data for selection
-  const mockHotels = [
-    { id: 'h1', name: 'Serena Hotel Hunza', location: 'Karimabad, Hunza', price: 45, rating: 4.5, amenities: ['WiFi', 'Restaurant', 'Mountain View'] },
-    { id: 'h2', name: 'Shangrila Resort', location: 'Skardu', price: 50, rating: 4.6, amenities: ['WiFi', 'Lake View', 'Restaurant'] },
-    { id: 'h3', name: 'Pearl Continental Lahore', location: 'Lahore', price: 80, rating: 4.7, amenities: ['WiFi', 'Pool', 'Spa'] },
-  ];
+  useEffect(() => {
+    if (isAuthenticated) {
+      void refreshCart();
+    }
+  }, [isAuthenticated, refreshCart]);
 
-  const mockFlights = [
-    { id: 'f1', name: 'Pakistan International Airlines', route: 'Islamabad → Skardu', price: 150, duration: '1h 15m', date: '2024-06-15' },
-    { id: 'f2', name: 'Air Blue', route: 'Lahore → Karachi', price: 120, duration: '1h 30m', date: '2024-06-15' },
-    { id: 'f3', name: 'Serene Air', route: 'Islamabad → Gilgit', price: 140, duration: '1h 20m', date: '2024-06-15' },
-  ];
-
-  const mockBusRoutes = [
-    { id: 'b1', name: 'Luxury Coach', route: 'Islamabad → Hunza', price: 25, duration: '12 hours', date: '2024-06-15' },
-    { id: 'b2', name: 'Daewoo Express', route: 'Lahore → Karachi', price: 20, duration: '14 hours', date: '2024-06-15' },
-    { id: 'b3', name: 'Faisal Movers', route: 'Islamabad → Skardu', price: 30, duration: '16 hours', date: '2024-06-15' },
-  ];
-
-  const addToBooking = (item: any, type: 'hotel' | 'flight' | 'bus') => {
-    const bookingItem: BookingItem = {
-      id: item.id,
-      type,
-      name: item.name,
-      details: type === 'hotel' ? item.location : item.route,
-      price: item.price,
-      quantity: 1,
-      date: item.date,
-      location: type === 'hotel' ? item.location : undefined,
-    };
-    setSelectedItems([...selectedItems, bookingItem]);
-  };
+  useEffect(() => {
+    const mappedItems: BookingItem[] = bookingItems.map((item) => ({
+      id: String(item.id),
+      type:
+        item.item_type === 'hotel_room'
+          ? 'hotel'
+          : item.item_type === 'car'
+          ? 'car'
+          : 'package',
+      name: item.title,
+      details: item.subtitle || '',
+      price: item.unit_price,
+      quantity: item.quantity,
+      date: typeof item.metadata?.checkIn === 'string' ? item.metadata.checkIn : undefined,
+      location: item.subtitle || undefined,
+    }));
+    setSelectedItems(mappedItems);
+  }, [bookingItems]);
 
   const removeFromBooking = (id: string) => {
     setSelectedItems(selectedItems.filter(item => item.id !== id));
@@ -76,7 +72,7 @@ const BookingDemoPage: React.FC = () => {
     ));
   };
 
-  const subtotal = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = subtotal * 0.05; // 5% tax
   const serviceFee = 10;
   const total = subtotal + tax + serviceFee;
@@ -167,50 +163,8 @@ const BookingDemoPage: React.FC = () => {
                         <span className="text-2xl">🏨</span>
                         Hotels
                       </h2>
-                      <div className="space-y-4">
-                        {mockHotels.map((hotel) => (
-                          <motion.div
-                            key={hotel.id}
-                            whileHover={{ scale: 1.02 }}
-                            className="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-all"
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                                  {hotel.name}
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-2">📍 {hotel.location}</p>
-                                <div className="flex items-center gap-2 mb-2">
-                                  <span className="text-yellow-500">★</span>
-                                  <span className="text-sm font-semibold">{hotel.rating}</span>
-                                  <span className="text-xs text-gray-500">({hotel.amenities.length} amenities)</span>
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                  {hotel.amenities.map((amenity, idx) => (
-                                    <span
-                                      key={idx}
-                                      className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded"
-                                    >
-                                      {amenity}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="text-right ml-4">
-                                <p className="text-2xl font-bold text-blue-600 mb-2">
-                                  ${hotel.price}
-                                  <span className="text-sm font-normal text-gray-600">/night</span>
-                                </p>
-                                <button
-                                  onClick={() => addToBooking(hotel, 'hotel')}
-                                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
-                                >
-                                  Add to Booking
-                                </button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
+                      <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-600">
+                        Hotel items can be added from the hotel pages and will appear in your booking summary.
                       </div>
                     </div>
 
@@ -220,37 +174,8 @@ const BookingDemoPage: React.FC = () => {
                         <span className="text-2xl">✈️</span>
                         Flights
                       </h2>
-                      <div className="space-y-4">
-                        {mockFlights.map((flight) => (
-                          <motion.div
-                            key={flight.id}
-                            whileHover={{ scale: 1.02 }}
-                            className="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-all"
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex-1">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                                  {flight.name}
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-1">🛫 {flight.route}</p>
-                                <p className="text-xs text-gray-500">
-                                  ⏱️ {flight.duration} • 📅 {flight.date}
-                                </p>
-                              </div>
-                              <div className="text-right ml-4">
-                                <p className="text-2xl font-bold text-blue-600 mb-2">
-                                  ${flight.price}
-                                </p>
-                                <button
-                                  onClick={() => addToBooking(flight, 'flight')}
-                                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
-                                >
-                                  Add to Booking
-                                </button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
+                      <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-600">
+                        Flight items can be added from the flights pages and will appear in your booking summary.
                       </div>
                     </div>
 
@@ -260,37 +185,8 @@ const BookingDemoPage: React.FC = () => {
                         <span className="text-2xl">🚌</span>
                         Bus Routes
                       </h2>
-                      <div className="space-y-4">
-                        {mockBusRoutes.map((bus) => (
-                          <motion.div
-                            key={bus.id}
-                            whileHover={{ scale: 1.02 }}
-                            className="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-all"
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex-1">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                                  {bus.name}
-                                </h3>
-                                <p className="text-sm text-gray-600 mb-1">🛣️ {bus.route}</p>
-                                <p className="text-xs text-gray-500">
-                                  ⏱️ {bus.duration} • 📅 {bus.date}
-                                </p>
-                              </div>
-                              <div className="text-right ml-4">
-                                <p className="text-2xl font-bold text-blue-600 mb-2">
-                                  ${bus.price}
-                                </p>
-                                <button
-                                  onClick={() => addToBooking(bus, 'bus')}
-                                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
-                                >
-                                  Add to Booking
-                                </button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
+                      <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-600">
+                        Package and transport items can be added from their pages and will appear in your booking summary.
                       </div>
                     </div>
                   </motion.div>
@@ -497,9 +393,15 @@ const BookingDemoPage: React.FC = () => {
                     Booking Summary
                   </h2>
                   {selectedItems.length === 0 ? (
-                    <p className="text-gray-500 text-sm">
-                      No items selected yet. Add items from the list to see your booking summary.
-                    </p>
+                    isAuthenticated ? (
+                      <p className="text-gray-500 text-sm">
+                        No items selected yet. Add items from hotel, car, and package pages to see your booking summary.
+                      </p>
+                    ) : (
+                      <p className="text-gray-500 text-sm">
+                        Please <Link to="/login" className="text-blue-600 font-medium">sign in</Link> to manage booking items.
+                      </p>
+                    )
                   ) : (
                     <>
                       <div className="space-y-3 mb-4">

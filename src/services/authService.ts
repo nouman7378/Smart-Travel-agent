@@ -48,6 +48,7 @@ export async function login(credentials: LoginCredentials): Promise<LoginSuccess
   try {
     res = await fetch(url, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -121,6 +122,7 @@ export async function signup(payload: SignupPayload): Promise<SignupSuccessRespo
   try {
     res = await fetch(url, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
