@@ -11,7 +11,7 @@ export const APP_CONFIG = {
   API_BASE_URL,
   
   // Auth – superadmin email treated as staff when backend does not return is_staff
-  SUPERADMIN_EMAIL: 'superadmin@admin.com',
+  SUPERADMIN_EMAIL: 'admin@admin.com',
 
   // Local Storage Keys
   STORAGE_KEYS: {

@@ -83,6 +83,14 @@ export interface DashboardStats {
     bookings: number;
     revenue: number;
   };
+  revenueData?: Array<{ month: string; revenue: number }>;
+  recentBookings?: Array<{
+    id: string;
+    customer: string;
+    package: string;
+    amount: number;
+    status: string;
+  }>;
 }
 
 export interface Notification {

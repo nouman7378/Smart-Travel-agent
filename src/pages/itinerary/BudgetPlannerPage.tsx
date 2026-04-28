@@ -7,6 +7,8 @@
 
 import React, { useState } from 'react';
 import PageLayout from '../../components/PageLayout';
+import { Lightbulb } from 'lucide-react';
+
 
 interface BudgetCategory {
   id: string;
@@ -17,13 +19,13 @@ interface BudgetCategory {
 }
 
 const BudgetPlannerPage: React.FC = () => {
-  const [totalBudget, setTotalBudget] = useState(2000);
+  const [totalBudget, setTotalBudget] = useState(500000);
   const [categories, setCategories] = useState<BudgetCategory[]>([
-    { id: '1', name: 'Accommodation', amount: 600, percentage: 30, color: 'bg-blue-500' },
-    { id: '2', name: 'Transportation', amount: 400, percentage: 20, color: 'bg-green-500' },
-    { id: '3', name: 'Food & Dining', amount: 500, percentage: 25, color: 'bg-yellow-500' },
-    { id: '4', name: 'Activities', amount: 300, percentage: 15, color: 'bg-purple-500' },
-    { id: '5', name: 'Shopping', amount: 200, percentage: 10, color: 'bg-red-500' },
+    { id: '1', name: 'Accommodation', amount: 150000, percentage: 30, color: 'bg-blue-500' },
+    { id: '2', name: 'Transportation', amount: 100000, percentage: 20, color: 'bg-green-500' },
+    { id: '3', name: 'Food & Dining', amount: 125000, percentage: 25, color: 'bg-yellow-500' },
+    { id: '4', name: 'Activities', amount: 75000, percentage: 15, color: 'bg-purple-500' },
+    { id: '5', name: 'Shopping', amount: 50000, percentage: 10, color: 'bg-red-500' },
   ]);
 
   const updateCategory = (id: string, amount: number) => {
@@ -80,16 +82,16 @@ const BudgetPlannerPage: React.FC = () => {
                 <div className="flex items-center gap-4">
                   <input
                     type="number"
-                    value={totalBudget}
+                    value={Math.round(totalBudget)}
                     onChange={(e) => updateTotalBudget(parseFloat(e.target.value) || 0)}
-                    className="text-3xl font-bold text-blue-600 border-none focus:outline-none focus:ring-0 w-32"
+                    className="text-3xl font-bold text-blue-600 border-none focus:outline-none focus:ring-0 w-48"
                   />
-                  <span className="text-2xl text-gray-600">USD</span>
+                  <span className="text-2xl text-gray-600">PKR</span>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-sm text-gray-600">Allocated</span>
                   <span className="text-lg font-semibold text-gray-800">
-                    ${currentTotal.toFixed(2)}
+                    PKR {Math.round(currentTotal).toLocaleString()}
                   </span>
                 </div>
                 <div className="mt-2 flex items-center justify-between">
@@ -99,7 +101,7 @@ const BudgetPlannerPage: React.FC = () => {
                       remaining >= 0 ? 'text-green-600' : 'text-red-600'
                     }`}
                   >
-                    ${remaining.toFixed(2)}
+                    PKR {Math.round(remaining).toLocaleString()}
                   </span>
                 </div>
                 <div className="mt-4 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -127,16 +129,16 @@ const BudgetPlannerPage: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <input
                             type="number"
-                            value={category.amount.toFixed(2)}
+                            value={Math.round(category.amount)}
                             onChange={(e) =>
                               updateCategory(
                                 category.id,
                                 parseFloat(e.target.value) || 0
                               )
                             }
-                            className="w-24 px-2 py-1 border border-gray-300 rounded text-right focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-32 px-2 py-1 border border-gray-300 rounded text-right focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           />
-                          <span className="text-sm text-gray-600">USD</span>
+                          <span className="text-sm text-gray-600">PKR</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -172,7 +174,7 @@ const BudgetPlannerPage: React.FC = () => {
                           {category.name}
                         </span>
                         <span className="text-sm text-gray-600">
-                          ${category.amount.toFixed(2)}
+                          PKR {Math.round(category.amount).toLocaleString()}
                         </span>
                       </div>
                       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -191,7 +193,7 @@ const BudgetPlannerPage: React.FC = () => {
               {/* Budget Tips */}
               <div className="bg-blue-50 rounded-xl shadow-sm p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                  💡 Budget Tips
+                  <Lightbulb className="inline w-5 h-5" /> Budget Tips
                 </h3>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li>• Book flights in advance for better prices</li>

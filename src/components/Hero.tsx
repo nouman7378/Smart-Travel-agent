@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Bot, Building, Car, Globe, Luggage, MapPin, Plane, Rocket, Star, Target } from 'lucide-react';
+
 
 interface HeroProps {
   className?: string;
@@ -124,10 +126,10 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
             {/* Search Tabs */}
             <div className="flex border-b border-gray-200">
               {([
-                { id: 'flights', icon: '✈️', label: 'Flights' },
-                { id: 'hotels', icon: '🏨', label: 'Hotels' },
-                { id: 'cars', icon: '🚗', label: 'Cars' },
-                { id: 'packages', icon: '🎒', label: 'Packages' }
+                { id: 'flights', icon: <Plane className="w-5 h-5" />, label: 'Flights' },
+                { id: 'hotels', icon: <Building className="w-5 h-5" />, label: 'Hotels' },
+                { id: 'cars', icon: <Car className="w-5 h-5" />, label: 'Cars' },
+                { id: 'packages', icon: <Luggage className="w-5 h-5" />, label: 'Packages' }
               ] as const).map((tab) => (
                 <motion.button
                   key={tab.id}
@@ -159,7 +161,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                   <div className="lg:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">From</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">📍</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><MapPin className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="from"
@@ -173,7 +175,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                   <div className="lg:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">To</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🎯</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Target className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
@@ -214,7 +216,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Destination</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🏨</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Building className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
@@ -268,7 +270,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Pick-up</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🚗</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Car className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="from"
@@ -282,7 +284,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Drop-off</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">📍</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><MapPin className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
@@ -321,7 +323,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Destination</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base">🌍</span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Globe className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
@@ -385,7 +387,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                       animate={{ x: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
                     >
-                      🚀
+                      <Rocket className="inline w-5 h-5" />
                     </motion.span>
                   </motion.button>
                 </div>
@@ -402,7 +404,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
                       animate={{ rotate: [0, 10, -10, 0] }}
                       transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                     >
-                      🤖
+                      <Bot className="inline w-5 h-5" />
                     </motion.span>
                     <span>Ask AI Assistant</span>
                   </motion.button>
@@ -417,7 +419,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
               { number: '50K+', label: 'Happy Travelers' },
               { number: '100+', label: 'Destinations' },
               { number: '24/7', label: 'AI Support' },
-              { number: '5★', label: 'Rated Service' }
+              { number: <span className="flex items-center justify-center gap-1">5 <Star className="w-5 h-5 fill-current" /></span>, label: 'Rated Service' }
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>

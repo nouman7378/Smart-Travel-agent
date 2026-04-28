@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
 import { generateItinerary, Itinerary } from '../../services/itineraryService';
+import { MapPin } from 'lucide-react';
+
 
 const ItineraryBuilderPage: React.FC = () => {
   const navigate = useNavigate();
@@ -161,7 +163,7 @@ const ItineraryBuilderPage: React.FC = () => {
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Budget (USD) *
+                      Budget (PKR) *
                     </label>
                     <input
                       type="number"
@@ -171,7 +173,7 @@ const ItineraryBuilderPage: React.FC = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, budget: e.target.value })
                       }
-                      placeholder="e.g., 2000"
+                      placeholder="e.g., 200000"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -228,7 +230,7 @@ const ItineraryBuilderPage: React.FC = () => {
                   <div className="text-right">
                     <p className="text-sm text-gray-600">Total Budget</p>
                     <p className="text-2xl font-bold text-blue-600">
-                      ${itinerary.totalCost.toFixed(2)}
+                      PKR {itinerary.totalCost.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -288,12 +290,12 @@ const ItineraryBuilderPage: React.FC = () => {
                             {activity.description}
                           </p>
                           <p className="text-xs text-gray-500">
-                            📍 {activity.location}
+                            <MapPin className="inline w-5 h-5" /> {activity.location}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-gray-800">
-                            ${activity.cost.toFixed(2)}
+                            PKR {activity.cost.toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -302,7 +304,7 @@ const ItineraryBuilderPage: React.FC = () => {
 
                   <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
                     <p className="text-sm text-gray-600">
-                      Day Total: <span className="font-semibold">${dayPlan.totalCost.toFixed(2)}</span>
+                      Day Total: <span className="font-semibold">PKR {dayPlan.totalCost.toLocaleString()}</span>
                     </p>
                   </div>
                 </motion.div>

@@ -10,6 +10,8 @@ import FlightSearchBar from '../components/flights/FlightSearchBar';
 import FlightFilters from '../components/flights/FlightFilters';
 import FlightResults from '../components/flights/FlightResults';
 import { searchFlights, extractAirportCode, formatDate, Flight } from '../services/flightService';
+import { Banknote, Calendar, Frown, Star } from 'lucide-react';
+
 
 const FlightsPage: React.FC = () => {
   const [flights, setFlights] = useState<Flight[]>([]);
@@ -204,7 +206,7 @@ const FlightsPage: React.FC = () => {
         <section className="py-8 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl shadow-md p-12 text-center">
-              <div className="text-6xl mb-4">😕</div>
+              <div className="text-6xl mb-4"><Frown className="inline w-5 h-5" /></div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Oops!</h3>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
@@ -261,17 +263,17 @@ const FlightsPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {[
                   {
-                    icon: '💰',
+                    icon: <Banknote className="w-5 h-5" />,
                     title: 'Best prices',
                     description: 'Compare prices from multiple airlines to get the best deals',
                   },
                   {
-                    icon: '📅',
+                    icon: <Calendar className="w-5 h-5" />,
                     title: 'Flexible dates',
                     description: 'Check prices on different dates to find the cheapest options',
                   },
                   {
-                    icon: '⭐',
+                    icon: <Star className="w-5 h-5" />,
                     title: 'Trusted airlines',
                     description: 'Book with confidence from our network of partner airlines',
                   },

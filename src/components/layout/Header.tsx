@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
     { name: 'AI Chat', href: '/chat' },
     { name: 'Itinerary', href: '/itinerary/builder' },
     { name: 'Booking', href: '/booking/demo' },
-    { name: 'Community', href: '/community' },
+    { name: 'Reviews', href: '/community' },
   ];
 
   return (

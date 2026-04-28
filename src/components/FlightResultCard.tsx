@@ -160,11 +160,11 @@ const FlightResultCard: React.FC<FlightResultCardProps> = ({
             <div className="text-right mb-4">
               {flight.originalPrice && (
                 <div className="text-gray-400 line-through text-sm mb-1">
-                  ${flight.originalPrice}
+                  PKR {flight.originalPrice.toLocaleString()}
                 </div>
               )}
               <div className="text-3xl md:text-4xl font-bold text-blue-600">
-                ${flight.price}
+                PKR {flight.price.toLocaleString()}
               </div>
               <p className="text-xs text-gray-500 mt-1">per person</p>
             </div>

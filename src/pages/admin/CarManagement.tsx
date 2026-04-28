@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
+import { X } from 'lucide-react';
+
 
 interface Car {
   id: number;
@@ -231,7 +233,7 @@ const CarManagement: React.FC = () => {
             <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-200 flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-gray-800">{editingCar ? 'Edit Car' : 'Add New Car'}</h2>
-                <button onClick={resetForm} className="text-gray-400 hover:text-gray-600">✕</button>
+                <button onClick={resetForm} className="text-gray-400 hover:text-gray-600"><X className="inline w-5 h-5" /></button>
               </div>
 
               <form onSubmit={handleSubmit} className="p-6 space-y-4">

@@ -8,6 +8,8 @@
 
 import React, { useState } from 'react';
 import PageLayout from '../../components/PageLayout';
+import { AlertTriangle, CircleDollarSign, CreditCard, Landmark } from 'lucide-react';
+
 
 const PaymentGatewayDemoPage: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal' | 'bank'>('card');
@@ -49,7 +51,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
             </p>
             <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
               <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                ⚠️ This is a demo. No real payments will be processed.
+                <AlertTriangle className="inline w-5 h-5" /> This is a demo. No real payments will be processed.
               </p>
             </div>
           </div>
@@ -61,9 +63,9 @@ const PaymentGatewayDemoPage: React.FC = () => {
             </h2>
             <div className="grid grid-cols-3 gap-4 mb-6">
               {[
-                { id: 'card', label: 'Credit Card', icon: '💳' },
-                { id: 'paypal', label: 'PayPal', icon: '🅿️' },
-                { id: 'bank', label: 'Bank Transfer', icon: '🏦' },
+                { id: 'card', label: 'Credit Card', icon: <CreditCard className="w-5 h-5" /> },
+                { id: 'paypal', label: 'PayPal', icon: <CircleDollarSign className="w-5 h-5" /> },
+                { id: 'bank', label: 'Bank Transfer', icon: <Landmark className="w-5 h-5" /> },
               ].map((method) => (
                 <button
                   key={method.id}
@@ -198,15 +200,15 @@ const PaymentGatewayDemoPage: React.FC = () => {
             <div className="mt-6 pt-6 border-t border-gray-200 dark:border-dark-border">
               <div className="flex justify-between mb-2">
                 <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
-                <span className="font-semibold text-gray-800 dark:text-dark-text">$1,200.00</span>
+                <span className="font-semibold text-gray-800 dark:text-dark-text">PKR 350,000</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-600 dark:text-gray-400">Tax</span>
-                <span className="font-semibold text-gray-800 dark:text-dark-text">$60.00</span>
+                <span className="font-semibold text-gray-800 dark:text-dark-text">PKR 17,500</span>
               </div>
               <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200 dark:border-dark-border">
                 <span className="text-gray-800 dark:text-dark-text">Total</span>
-                <span className="text-blue-600">$1,260.00</span>
+                <span className="text-blue-600">PKR 367,500</span>
               </div>
             </div>
 

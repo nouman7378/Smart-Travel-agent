@@ -183,7 +183,7 @@ const UserManagement: React.FC = () => {
       key: 'totalSpent',
       header: 'Total Spent',
       render: (user: AdminUser) => (
-        <span className="text-gray-800">${user.totalSpent.toLocaleString()}</span>
+        <span className="text-gray-800">PKR {user.totalSpent.toLocaleString()}</span>
       ),
     },
     {
@@ -430,7 +430,7 @@ const UserManagement: React.FC = () => {
                   <div>
                     <p className="text-sm text-gray-600">Total Spent</p>
                     <p className="font-medium text-gray-800">
-                      ${selectedUser.totalSpent.toLocaleString()}
+                        PKR {selectedUser.totalSpent.toLocaleString()}
                     </p>
                   </div>
                   {selectedUser.phone && (

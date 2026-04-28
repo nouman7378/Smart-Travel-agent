@@ -9,6 +9,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
 import EmojiIcon from '../components/common/EmojiIcon';
+import { Banknote, Building, Star } from 'lucide-react';
+
 
 const HotelsPage: React.FC = () => {
   return (
@@ -36,17 +38,17 @@ const HotelsPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
               {[
                 {
-                  icon: '🏨',
+                  icon: <Building className="w-5 h-5" />,
                   title: 'Wide Selection',
                   description: 'Choose from luxury resorts, budget hotels, and everything in between',
                 },
                 {
-                  icon: '💰',
+                  icon: <Banknote className="w-5 h-5" />,
                   title: 'Best Rates',
                   description: 'Get exclusive deals and discounts on hotel bookings',
                 },
                 {
-                  icon: '⭐',
+                  icon: <Star className="w-5 h-5" />,
                   title: 'Verified Reviews',
                   description: 'Read authentic reviews from verified guests to make informed decisions',
                 },

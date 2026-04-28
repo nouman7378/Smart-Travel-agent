@@ -10,6 +10,14 @@ import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { AdminBooking, BookingStatus, PaymentStatus } from '@/types/admin';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+
+const getAdminAuthHeader = (): string => {
+  const adminCreds = localStorage.getItem('admin_credentials');
+  if (adminCreds) return `Basic ${btoa(adminCreds)}`;
+  return '';
+};
+
 const BookingManagement: React.FC = () => {
   const [bookings, setBookings] = useState<AdminBooking[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<AdminBooking[]>([]);
@@ -23,90 +31,29 @@ const BookingManagement: React.FC = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setLoading(true);
+        
+        const headers: Record<string, string> = {};
+        const authHeader = getAdminAuthHeader();
+        if (authHeader) headers['Authorization'] = authHeader;
 
-        const mockBookings: AdminBooking[] = [
-          {
-            id: '1',
-            bookingNumber: 'TH-2025-001234',
-            userId: '1',
-            userName: 'John Doe',
-            userEmail: 'john.doe@example.com',
-            packageId: '1',
-            packageName: 'Paris Getaway Package',
-            bookingType: 'package',
-            status: 'confirmed',
-            totalAmount: 1250,
-            paymentStatus: 'completed',
-            bookingDate: '2025-01-15',
-            travelDate: '2025-03-20',
-            assignedAgent: 'Mike Johnson',
-            notes: 'Customer requested window seat',
-          },
-          {
-            id: '2',
-            bookingNumber: 'TH-2025-001235',
-            userId: '2',
-            userName: 'Jane Smith',
-            userEmail: 'jane.smith@example.com',
-            packageId: '2',
-            packageName: 'Tokyo Adventure',
-            bookingType: 'package',
-            status: 'pending',
-            totalAmount: 2100,
-            paymentStatus: 'pending',
-            bookingDate: '2025-01-20',
-            travelDate: '2025-04-10',
-          },
-          {
-            id: '3',
-            bookingNumber: 'TH-2025-001236',
-            userId: '1',
-            userName: 'John Doe',
-            userEmail: 'john.doe@example.com',
-            bookingType: 'hotel',
-            status: 'confirmed',
-            totalAmount: 450,
-            paymentStatus: 'completed',
-            bookingDate: '2025-01-18',
-            travelDate: '2025-02-15',
-            assignedAgent: 'Mike Johnson',
-          },
-          {
-            id: '4',
-            bookingNumber: 'TH-2025-001237',
-            userId: '3',
-            userName: 'Bob Wilson',
-            userEmail: 'bob.wilson@example.com',
-            bookingType: 'flight',
-            status: 'cancelled',
-            totalAmount: 680,
-            paymentStatus: 'refunded',
-            bookingDate: '2025-01-10',
-            travelDate: '2025-02-28',
-            notes: 'Customer cancelled due to personal reasons',
-          },
-          {
-            id: '5',
-            bookingNumber: 'TH-2025-001238',
-            userId: '4',
-            userName: 'Alice Brown',
-            userEmail: 'alice.brown@example.com',
-            packageId: '4',
-            packageName: 'Dubai Luxury Experience',
-            bookingType: 'package',
-            status: 'completed',
-            totalAmount: 3200,
-            paymentStatus: 'completed',
-            bookingDate: '2024-12-05',
-            travelDate: '2025-01-10',
-            assignedAgent: 'Mike Johnson',
-          },
-        ];
+        const response = await fetch(`${API_BASE_URL}/admin/bookings/`, {
+          credentials: 'include',
+          headers,
+        });
 
-        setBookings(mockBookings);
-        setFilteredBookings(mockBookings);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch bookings: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.bookings) {
+          setBookings(data.bookings);
+          setFilteredBookings(data.bookings);
+        } else {
+          throw new Error(data.message || 'Failed to fetch bookings');
+        }
       } catch (error) {
         console.error('Error fetching bookings:', error);
       } finally {
@@ -191,7 +138,7 @@ const BookingManagement: React.FC = () => {
       key: 'totalAmount',
       header: 'Amount',
       render: (booking: AdminBooking) => (
-        <span className="font-semibold text-gray-800">${booking.totalAmount.toLocaleString()}</span>
+        <span className="font-semibold text-gray-800">PKR {booking.totalAmount.toLocaleString()}</span>
       ),
     },
     {
@@ -375,7 +322,7 @@ const BookingManagement: React.FC = () => {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Revenue</p>
             <p className="text-2xl font-bold text-blue-600 mt-1">
-              ${bookings.reduce((sum, b) => sum + b.totalAmount, 0).toLocaleString()}
+              PKR {bookings.reduce((sum, b) => sum + b.totalAmount, 0).toLocaleString()}
             </p>
           </div>
         </div>
@@ -472,7 +419,7 @@ const BookingManagement: React.FC = () => {
                     <div>
                       <p className="text-sm text-gray-600">Total Amount</p>
                       <p className="font-semibold text-gray-800 text-lg">
-                        ${selectedBooking.totalAmount.toLocaleString()}
+                        PKR {selectedBooking.totalAmount.toLocaleString()}
                       </p>
                     </div>
                     <div>

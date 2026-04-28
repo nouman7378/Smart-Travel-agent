@@ -10,6 +10,14 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import StatCard from '@/components/admin/StatCard';
 import { DashboardStats } from '@/types/admin';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+
+const getAdminAuthHeader = (): string => {
+  const adminCreds = localStorage.getItem('admin_credentials');
+  if (adminCreds) return `Basic ${btoa(adminCreds)}`;
+  return '';
+};
+
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -19,24 +27,28 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setLoading(true);
+        
+        const headers: Record<string, string> = {};
+        const authHeader = getAdminAuthHeader();
+        if (authHeader) headers['Authorization'] = authHeader;
 
-        setStats({
-          totalUsers: 12450,
-          activeTravelers: 8920,
-          totalTrips: 342,
-          ongoingBookings: 156,
-          completedTrips: 2840,
-          monthlyRevenue: 245000,
-          pendingRequests: 23,
-          expiringSubscriptions: 12,
-          growth: {
-            users: 12.5,
-            bookings: 8.3,
-            revenue: 15.2,
-          },
+        const response = await fetch(`${API_BASE_URL}/admin/dashboard/stats/?timeFilter=${timeFilter}`, {
+          credentials: 'include',
+          headers,
         });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch dashboard stats: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.stats) {
+          setStats(data.stats);
+        } else {
+          throw new Error(data.message || 'Failed to fetch dashboard stats');
+        }
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
@@ -61,24 +73,19 @@ const AdminDashboard: React.FC = () => {
   }
 
   // Chart data for revenue
-  const revenueData = [
-    { month: 'Jan', revenue: 180000 },
-    { month: 'Feb', revenue: 195000 },
-    { month: 'Mar', revenue: 210000 },
-    { month: 'Apr', revenue: 225000 },
-    { month: 'May', revenue: 235000 },
-    { month: 'Jun', revenue: 245000 },
+  const revenueData = stats.revenueData || [
+    { month: 'Jan', revenue: 0 },
+    { month: 'Feb', revenue: 0 },
+    { month: 'Mar', revenue: 0 },
+    { month: 'Apr', revenue: 0 },
+    { month: 'May', revenue: 0 },
+    { month: 'Jun', revenue: 0 },
   ];
 
-  const maxRevenue = Math.max(...revenueData.map((d) => d.revenue));
+  const maxRevenue = Math.max(...revenueData.map((d) => d.revenue), 1);
 
   // Recent bookings data
-  const recentBookings = [
-    { id: '1', customer: 'John Doe', package: 'Paris Getaway', amount: 1250, status: 'confirmed' },
-    { id: '2', customer: 'Jane Smith', package: 'Tokyo Adventure', amount: 2100, status: 'pending' },
-    { id: '3', customer: 'Mike Johnson', package: 'Bali Paradise', amount: 980, status: 'confirmed' },
-    { id: '4', customer: 'Sarah Williams', package: 'Dubai Luxury', amount: 3200, status: 'pending' },
-  ];
+  const recentBookings = stats.recentBookings || [];
 
   return (
     <AdminLayout>
@@ -196,7 +203,7 @@ const AdminDashboard: React.FC = () => {
           />
           <StatCard
             title="Monthly Revenue"
-            value={`$${stats.monthlyRevenue.toLocaleString()}`}
+            value={`PKR ${stats.monthlyRevenue.toLocaleString()}`}
             change={{ value: stats.growth.revenue, isPositive: true, label: 'from last month' }}
             icon={
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,7 +275,7 @@ const AdminDashboard: React.FC = () => {
                   </div>
                   <p className="text-xs text-gray-600 mt-2">{item.month}</p>
                   <p className="text-xs font-semibold text-gray-800 mt-1">
-                    ${(item.revenue / 1000).toFixed(0)}k
+                    PKR {(item.revenue / 1000).toFixed(0)}k
                   </p>
                 </div>
               ))}
@@ -298,7 +305,7 @@ const AdminDashboard: React.FC = () => {
                     <p className="text-sm text-gray-600">{booking.package}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-gray-800">${booking.amount}</p>
+                    <p className="font-semibold text-gray-800">PKR {booking.amount}</p>
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${
                         booking.status === 'confirmed'

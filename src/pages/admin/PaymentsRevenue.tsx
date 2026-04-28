@@ -10,6 +10,14 @@ import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { Payment, PaymentStatus } from '@/types/admin';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+
+const getAdminAuthHeader = (): string => {
+  const adminCreds = localStorage.getItem('admin_credentials');
+  if (adminCreds) return `Basic ${btoa(adminCreds)}`;
+  return '';
+};
+
 const PaymentsRevenue: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [filteredPayments, setFilteredPayments] = useState<Payment[]>([]);
@@ -21,90 +29,29 @@ const PaymentsRevenue: React.FC = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setLoading(true);
+        
+        const headers: Record<string, string> = {};
+        const authHeader = getAdminAuthHeader();
+        if (authHeader) headers['Authorization'] = authHeader;
 
-        const mockPayments: Payment[] = [
-          {
-            id: '1',
-            bookingId: '1',
-            bookingNumber: 'TH-2025-001234',
-            userId: '1',
-            userName: 'John Doe',
-            amount: 1250,
-            status: 'completed',
-            paymentMethod: 'Credit Card',
-            transactionId: 'TXN-2025-001234',
-            paymentDate: '2025-01-15',
-            currency: 'USD',
-          },
-          {
-            id: '2',
-            bookingId: '2',
-            bookingNumber: 'TH-2025-001235',
-            userId: '2',
-            userName: 'Jane Smith',
-            amount: 2100,
-            status: 'pending',
-            paymentMethod: 'PayPal',
-            paymentDate: '2025-01-20',
-            currency: 'USD',
-          },
-          {
-            id: '3',
-            bookingId: '3',
-            bookingNumber: 'TH-2025-001236',
-            userId: '1',
-            userName: 'John Doe',
-            amount: 450,
-            status: 'completed',
-            paymentMethod: 'Credit Card',
-            transactionId: 'TXN-2025-001236',
-            paymentDate: '2025-01-18',
-            currency: 'USD',
-          },
-          {
-            id: '4',
-            bookingId: '4',
-            bookingNumber: 'TH-2025-001237',
-            userId: '3',
-            userName: 'Bob Wilson',
-            amount: 680,
-            status: 'refunded',
-            paymentMethod: 'Credit Card',
-            transactionId: 'TXN-2025-001237',
-            paymentDate: '2025-01-10',
-            currency: 'USD',
-          },
-          {
-            id: '5',
-            bookingId: '5',
-            bookingNumber: 'TH-2025-001238',
-            userId: '4',
-            userName: 'Alice Brown',
-            amount: 3200,
-            status: 'completed',
-            paymentMethod: 'Bank Transfer',
-            transactionId: 'TXN-2025-001238',
-            paymentDate: '2024-12-05',
-            currency: 'USD',
-          },
-          {
-            id: '6',
-            bookingId: '6',
-            bookingNumber: 'TH-2025-001239',
-            userId: '5',
-            userName: 'Charlie Davis',
-            amount: 980,
-            status: 'failed',
-            paymentMethod: 'Credit Card',
-            paymentDate: '2025-01-22',
-            currency: 'USD',
-          },
-        ];
+        const response = await fetch(`${API_BASE_URL}/admin/payments/`, {
+          credentials: 'include',
+          headers,
+        });
 
-        setPayments(mockPayments);
-        setFilteredPayments(mockPayments);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch payments: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.payments) {
+          setPayments(data.payments);
+          setFilteredPayments(data.payments);
+        } else {
+          throw new Error(data.message || 'Failed to fetch payments');
+        }
       } catch (error) {
         console.error('Error fetching payments:', error);
       } finally {
@@ -195,7 +142,7 @@ const PaymentsRevenue: React.FC = () => {
       header: 'Amount',
       render: (payment: Payment) => (
         <span className="font-semibold text-gray-800">
-          ${payment.amount.toLocaleString()} {payment.currency}
+          PKR {payment.amount.toLocaleString()}
         </span>
       ),
     },
@@ -292,7 +239,7 @@ const PaymentsRevenue: React.FC = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-bold text-gray-800">${totalRevenue.toLocaleString()}</p>
+            <p className="text-3xl font-bold text-gray-800">PKR {totalRevenue.toLocaleString()}</p>
             <p className="text-sm text-green-600 mt-2">+15.2% from last month</p>
           </div>
 
@@ -346,7 +293,7 @@ const PaymentsRevenue: React.FC = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-gray-800">${refundedAmount.toLocaleString()}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-gray-800">PKR {refundedAmount.toLocaleString()}</p>
             <p className="text-sm text-gray-600 mt-2">Total refunded</p>
           </div>
         </div>
@@ -369,7 +316,7 @@ const PaymentsRevenue: React.FC = () => {
                   </div>
                   <p className="text-xs text-gray-600 mt-2">{item.month}</p>
                   <p className="text-xs font-semibold text-gray-800 mt-1">
-                    ${(item.revenue / 1000).toFixed(0)}k
+                    PKR {(item.revenue / 1000).toFixed(0)}k
                   </p>
                 </div>
               ))}
@@ -387,7 +334,7 @@ const PaymentsRevenue: React.FC = () => {
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-gray-700">{method}</span>
                       <span className="text-sm font-semibold text-gray-800">
-                        ${amount.toLocaleString()}
+                        PKR {amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">

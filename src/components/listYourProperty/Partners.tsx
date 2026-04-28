@@ -6,15 +6,17 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Bell, Building, Globe, Home, Plane } from 'lucide-react';
+
 
 const Partners: React.FC = () => {
   const partners = [
-    { name: 'Booking.com', logo: '🏨' },
-    { name: 'Airbnb', logo: '🏠' },
-    { name: 'Hotels.com', logo: '🛎️' },
-    { name: 'Vrbo', logo: '🏡' },
-    { name: 'Agoda', logo: '🌏' },
-    { name: 'Expedia', logo: '✈️' },
+    { name: 'Booking.com', logo: <Building className="w-5 h-5" /> },
+    { name: 'Airbnb', logo: <Home className="w-5 h-5" /> },
+    { name: 'Hotels.com', logo: <Bell className="w-5 h-5" /> },
+    { name: 'Vrbo', logo: <Home className="w-5 h-5" /> },
+    { name: 'Agoda', logo: <Globe className="w-5 h-5" /> },
+    { name: 'Expedia', logo: <Plane className="w-5 h-5" /> },
   ];
 
   return (

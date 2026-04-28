@@ -6,41 +6,43 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Building, Castle, Home, Umbrella } from 'lucide-react';
+
 
 const PropertyTypes: React.FC = () => {
   const propertyTypes = [
     {
-      icon: '🏨',
+      icon: <Building className="w-5 h-5" />,
       title: 'Hotels',
       description: 'Full-service hotels and boutique properties',
       count: '50K+',
     },
     {
-      icon: '🏡',
+      icon: <Home className="w-5 h-5" />,
       title: 'Villas',
       description: 'Luxury villas and private vacation homes',
       count: '25K+',
     },
     {
-      icon: '🏠',
+      icon: <Home className="w-5 h-5" />,
       title: 'Apartments',
       description: 'Serviced apartments and condos',
       count: '100K+',
     },
     {
-      icon: '🏖️',
+      icon: <Umbrella className="w-5 h-5" />,
       title: 'Resorts',
       description: 'All-inclusive resorts and beach properties',
       count: '15K+',
     },
     {
-      icon: '🏘️',
+      icon: <Building className="w-5 h-5" />,
       title: 'Holiday Rentals',
       description: 'Holiday homes and vacation rentals',
       count: '200K+',
     },
     {
-      icon: '🏰',
+      icon: <Castle className="w-5 h-5" />,
       title: 'Boutique Hotels',
       description: 'Unique boutique and design hotels',
       count: '10K+',

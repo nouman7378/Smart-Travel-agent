@@ -7,6 +7,8 @@
  */
 
 import React, { useState } from 'react';
+import { Building2, CloudSun, Landmark, Mountain, Snowflake, Sun, Thermometer, TreePine, Umbrella } from 'lucide-react';
+
 
 interface FilterOptions {
   budgetRange: [number, number];
@@ -32,12 +34,12 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   });
 
   const destinationTypes = [
-    { id: 'mountains', label: 'Mountains', icon: '🏔️' },
-    { id: 'beaches', label: 'Beaches', icon: '🏖️' },
-    { id: 'historical', label: 'Historical', icon: '🏛️' },
-    { id: 'desert', label: 'Desert', icon: '🏜️' },
-    { id: 'cities', label: 'Cities', icon: '🏙️' },
-    { id: 'nature', label: 'Nature', icon: '🌲' },
+    { id: 'mountains', label: 'Mountains', icon: <Mountain className="w-5 h-5" /> },
+    { id: 'beaches', label: 'Beaches', icon: <Umbrella className="w-5 h-5" /> },
+    { id: 'historical', label: 'Historical', icon: <Landmark className="w-5 h-5" /> },
+    { id: 'desert', label: 'Desert', icon: <Sun className="w-5 h-5" /> },
+    { id: 'cities', label: 'Cities', icon: <Building2 className="w-5 h-5" /> },
+    { id: 'nature', label: 'Nature', icon: <TreePine className="w-5 h-5" /> },
   ];
 
   const seasons = [
@@ -48,10 +50,10 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   ];
 
   const weatherTypes = [
-    { id: 'sunny', label: 'Sunny', icon: '☀️' },
-    { id: 'mild', label: 'Mild', icon: '🌤️' },
-    { id: 'cool', label: 'Cool', icon: '❄️' },
-    { id: 'warm', label: 'Warm', icon: '🌡️' },
+    { id: 'sunny', label: 'Sunny', icon: <Sun className="w-5 h-5" /> },
+    { id: 'mild', label: 'Mild', icon: <CloudSun className="w-5 h-5" /> },
+    { id: 'cool', label: 'Cool', icon: <Snowflake className="w-5 h-5" /> },
+    { id: 'warm', label: 'Warm', icon: <Thermometer className="w-5 h-5" /> },
   ];
 
   const handleBudgetChange = (min: number, max: number) => {

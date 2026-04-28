@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 
 interface EmojiIconProps {
-  icon: string;
+  icon: string | React.ReactNode;
   className?: string;
 }
 
@@ -56,6 +56,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const EmojiIcon: React.FC<EmojiIconProps> = ({ icon, className = 'h-5 w-5' }) => {
+  if (typeof icon !== 'string') {
+    return <div className={className}>{icon}</div>;
+  }
   const normalizedIcon = icon.replace('\uFE0F', '');
   const IconComponent = iconMap[normalizedIcon] || Star;
   return <IconComponent className={className} aria-hidden="true" />;

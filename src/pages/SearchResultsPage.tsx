@@ -48,7 +48,7 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
   const [currentSort, setCurrentSort] = useState('popularity');
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<FilterState>({
-    priceRange: [0, 1000],
+    priceRange: [0, 500000],
     stars: [],
     rating: 0,
     amenities: [],
@@ -155,9 +155,9 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
       type: 'Mid-size',
       image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
       company: 'Hertz',
-      price: 45,
-      originalPrice: 60,
-      currency: 'USD',
+      price: 12000,
+      originalPrice: 15000,
+      currency: 'PKR',
       pricePer: 'day',
       pickup: {
         location: 'Paris CDG Airport',
@@ -181,9 +181,9 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
       type: 'Luxury',
       image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
       company: 'Avis',
-      price: 89,
-      originalPrice: 120,
-      currency: 'USD',
+      price: 25000,
+      originalPrice: 30000,
+      currency: 'PKR',
       pricePer: 'day',
       pickup: {
         location: 'New York JFK Airport',

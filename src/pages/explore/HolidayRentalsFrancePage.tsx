@@ -7,6 +7,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
+import { Home, Umbrella } from 'lucide-react';
+
 
 const HolidayRentalsFrancePage: React.FC = () => {
   return (
@@ -47,17 +49,17 @@ const HolidayRentalsFrancePage: React.FC = () => {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center p-6 bg-gray-50 rounded-lg">
-                <div className="text-3xl mb-2">🏠</div>
+                <div className="text-3xl mb-2"><Home className="inline w-5 h-5" /></div>
                 <h3 className="font-semibold text-gray-900 mb-2">Apartments</h3>
                 <p className="text-gray-600 text-sm">City center locations</p>
               </div>
               <div className="text-center p-6 bg-gray-50 rounded-lg">
-                <div className="text-3xl mb-2">🏖️</div>
+                <div className="text-3xl mb-2"><Umbrella className="inline w-5 h-5" /></div>
                 <h3 className="font-semibold text-gray-900 mb-2">Villas</h3>
                 <p className="text-gray-600 text-sm">Luxury coastal properties</p>
               </div>
               <div className="text-center p-6 bg-gray-50 rounded-lg">
-                <div className="text-3xl mb-2">🏡</div>
+                <div className="text-3xl mb-2"><Home className="inline w-5 h-5" /></div>
                 <h3 className="font-semibold text-gray-900 mb-2">Countryside</h3>
                 <p className="text-gray-600 text-sm">Charming rural retreats</p>
               </div>

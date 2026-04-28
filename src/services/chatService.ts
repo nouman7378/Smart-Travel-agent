@@ -167,12 +167,12 @@ class ChatService {
         if (pattern.source.includes('under') || pattern.source.includes('below') || pattern.source.includes('max')) {
           this.context.budget = {
             max: parseInt(match[1]),
-            currency: 'USD',
+            currency: 'PKR',
           };
         } else if (pattern.source.includes('over') || pattern.source.includes('above') || pattern.source.includes('min')) {
           this.context.budget = {
             min: parseInt(match[1]),
-            currency: 'USD',
+            currency: 'PKR',
           };
         } else {
           const min = parseInt(match[1]);
@@ -180,7 +180,7 @@ class ChatService {
           this.context.budget = {
             min: Math.min(min, max || min),
             max: max || min,
-            currency: 'USD',
+            currency: 'PKR',
           };
         }
         break;
@@ -190,11 +190,11 @@ class ChatService {
     // Handle budget keywords
     if (!this.context.budget) {
       if (lower.includes('budget') && (lower.includes('friendly') || lower.includes('cheap') || lower.includes('low'))) {
-        this.context.budget = { max: 1000, currency: 'USD' };
+        this.context.budget = { max: 50000, currency: 'PKR' };
       } else if (lower.includes('luxury') || lower.includes('premium') || lower.includes('high-end')) {
-        this.context.budget = { min: 3000, currency: 'USD' };
+        this.context.budget = { min: 300000, currency: 'PKR' };
       } else if (lower.includes('mid') || lower.includes('moderate') || lower.includes('medium')) {
-        this.context.budget = { min: 1000, max: 3000, currency: 'USD' };
+        this.context.budget = { min: 100000, max: 300000, currency: 'PKR' };
       }
     }
 
@@ -341,11 +341,11 @@ class ChatService {
       }
     } else if (missingInfo.includes('budget')) {
       message = "Great! To find the best options for you, what's your budget range? For example:\n\n";
-      message += "• Budget-friendly: Under $1,000\n";
-      message += "• Mid-range: $1,000 - $3,000\n";
-      message += "• Luxury: $3,000+";
+      message += "• Budget-friendly: Under PKR 50,000\n";
+      message += "• Mid-range: PKR 100,000 - 300,000\n";
+      message += "• Luxury: PKR 300,000+";
       
-      quickReplies = ['Under $1000', '$1000-$3000', '$3000+', 'Flexible'];
+      quickReplies = ['Under 50k', '100k-300k', '300k+', 'Flexible'];
     } else if (missingInfo.includes('destination')) {
       message = "Where would you like to travel? I can help you find:\n\n";
       message += "• Beach destinations (Bali, Maldives, Santorini)\n";
@@ -433,7 +433,7 @@ class ChatService {
     if (filteredPackages.length > 0) {
       message += "**Travel Packages:**\n";
       filteredPackages.slice(0, 3).forEach((pkg, idx) => {
-        message += `${idx + 1}. ${pkg.name} - $${pkg.price} for ${pkg.duration} days\n`;
+        message += `${idx + 1}. ${pkg.name} - PKR ${pkg.price.toLocaleString()} for ${pkg.duration} days\n`;
       });
       message += "\n";
     }
@@ -495,7 +495,7 @@ class ChatService {
   private getQuickReplySuggestions(field?: string): string[] {
     switch (field) {
       case 'budget':
-        return ['Under $1000', '$1000-$3000', '$3000+', 'Flexible'];
+        return ['Under 50k', '100k-300k', '300k+', 'Flexible'];
       case 'destination':
         return ['Beach', 'City', 'Mountain', 'Adventure'];
       case 'dates':

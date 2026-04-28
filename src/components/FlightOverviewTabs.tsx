@@ -9,6 +9,8 @@
  */
 
 import React, { useState } from 'react';
+import { Briefcase, Calendar, X } from 'lucide-react';
+
 
 interface FlightOverviewTabsProps {
   itinerary: {
@@ -44,9 +46,9 @@ const FlightOverviewTabs: React.FC<FlightOverviewTabsProps> = ({
   const [activeTab, setActiveTab] = useState<'itinerary' | 'baggage' | 'cancellation'>('itinerary');
 
   const tabs = [
-    { id: 'itinerary' as const, label: 'Itinerary', icon: '📅' },
-    { id: 'baggage' as const, label: 'Baggage', icon: '🧳' },
-    { id: 'cancellation' as const, label: 'Cancellation Policy', icon: '❌' },
+    { id: 'itinerary' as const, label: 'Itinerary', icon: <Calendar className="w-5 h-5" /> },
+    { id: 'baggage' as const, label: 'Baggage', icon: <Briefcase className="w-5 h-5" /> },
+    { id: 'cancellation' as const, label: 'Cancellation Policy', icon: <X className="w-5 h-5" /> },
   ];
 
   return (

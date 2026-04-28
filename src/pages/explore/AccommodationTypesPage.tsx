@@ -7,15 +7,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
+import { Bed, Building, Home, Umbrella, Utensils } from 'lucide-react';
+
 
 const AccommodationTypesPage: React.FC = () => {
   const types = [
-    { name: 'Hotels', icon: '🏨', description: 'Comfortable hotels for every budget' },
-    { name: 'Resorts', icon: '🏖️', description: 'All-inclusive luxury resorts' },
-    { name: 'Apartments', icon: '🏠', description: 'Self-catering apartments' },
-    { name: 'Villas', icon: '🏡', description: 'Private villas and holiday homes' },
-    { name: 'Hostels', icon: '🛏️', description: 'Budget-friendly hostels' },
-    { name: 'B&Bs', icon: '🍳', description: 'Charming bed and breakfasts' },
+    { name: 'Hotels', icon: <Building className="w-5 h-5" />, description: 'Comfortable hotels for every budget' },
+    { name: 'Resorts', icon: <Umbrella className="w-5 h-5" />, description: 'All-inclusive luxury resorts' },
+    { name: 'Apartments', icon: <Home className="w-5 h-5" />, description: 'Self-catering apartments' },
+    { name: 'Villas', icon: <Home className="w-5 h-5" />, description: 'Private villas and holiday homes' },
+    { name: 'Hostels', icon: <Bed className="w-5 h-5" />, description: 'Budget-friendly hostels' },
+    { name: 'B&Bs', icon: <Utensils className="w-5 h-5" />, description: 'Charming bed and breakfasts' },
   ];
 
   return (

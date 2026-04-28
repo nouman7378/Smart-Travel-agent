@@ -11,6 +11,14 @@ import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { AdminPackage, TripStatus } from '@/types/admin';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+
+const getAdminAuthHeader = (): string => {
+  const adminCreds = localStorage.getItem('admin_credentials');
+  if (adminCreds) return `Basic ${btoa(adminCreds)}`;
+  return '';
+};
+
 const PackagesManagement: React.FC = () => {
   const navigate = useNavigate();
   const [packages, setPackages] = useState<AdminPackage[]>([]);
@@ -25,91 +33,47 @@ const PackagesManagement: React.FC = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setLoading(true);
+        
+        const headers: Record<string, string> = {};
+        const authHeader = getAdminAuthHeader();
+        if (authHeader) headers['Authorization'] = authHeader;
 
-        const mockPackages: AdminPackage[] = [
-          {
-            id: '1',
-            title: 'Paris Getaway Package',
-            destination: 'Paris, France',
-            price: 1250,
-            originalPrice: 1500,
-            duration: 5,
-            availability: 12,
-            status: 'active',
-            featured: true,
-            popular: true,
-            bookings: 45,
-            image: '/api/placeholder/400/300',
-            createdAt: '2024-01-15',
-            updatedAt: '2025-01-20',
-          },
-          {
-            id: '2',
-            title: 'Tokyo Adventure',
-            destination: 'Tokyo, Japan',
-            price: 2100,
-            duration: 7,
-            availability: 8,
-            status: 'active',
-            featured: true,
-            popular: false,
-            bookings: 32,
-            image: '/api/placeholder/400/300',
-            createdAt: '2024-02-10',
-            updatedAt: '2025-01-18',
-          },
-          {
-            id: '3',
-            title: 'Bali Paradise',
-            destination: 'Bali, Indonesia',
-            price: 980,
-            duration: 4,
-            availability: 0,
-            status: 'inactive',
-            featured: false,
-            popular: true,
-            bookings: 28,
-            image: '/api/placeholder/400/300',
-            createdAt: '2024-03-05',
-            updatedAt: '2025-01-15',
-          },
-          {
-            id: '4',
-            title: 'Dubai Luxury Experience',
-            destination: 'Dubai, UAE',
-            price: 3200,
-            originalPrice: 3800,
-            duration: 6,
-            availability: 5,
-            status: 'active',
-            featured: false,
-            popular: false,
-            bookings: 15,
-            image: '/api/placeholder/400/300',
-            createdAt: '2024-04-12',
-            updatedAt: '2025-01-22',
-          },
-          {
-            id: '5',
-            title: 'New York City Break',
-            destination: 'New York, USA',
-            price: 1450,
-            duration: 4,
-            availability: 20,
-            status: 'draft',
-            featured: false,
-            popular: false,
-            bookings: 0,
-            image: '/api/placeholder/400/300',
-            createdAt: '2025-01-25',
-            updatedAt: '2025-01-25',
-          },
-        ];
+        const response = await fetch(`${API_BASE_URL}/admin/packages/`, {
+          credentials: 'include',
+          headers,
+        });
 
-        setPackages(mockPackages);
-        setFilteredPackages(mockPackages);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch packages: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.packages) {
+          // Map backend fields to frontend interface
+          const mappedPackages: AdminPackage[] = data.packages.map((pkg: any) => ({
+            id: pkg.id.toString(),
+            title: pkg.title,
+            destination: pkg.destination,
+            price: pkg.price,
+            originalPrice: pkg.originalPrice,
+            duration: pkg.nights || 0,
+            availability: pkg.availability || 0,
+            status: pkg.status as TripStatus,
+            featured: pkg.is_featured,
+            popular: pkg.is_popular,
+            bookings: pkg.bookings || 0,
+            image: pkg.hotel?.image || '/api/placeholder/400/300',
+            createdAt: pkg.created_at,
+            updatedAt: pkg.updated_at,
+          }));
+          
+          setPackages(mappedPackages);
+          setFilteredPackages(mappedPackages);
+        } else {
+          throw new Error(data.message || 'Failed to fetch packages');
+        }
       } catch (error) {
         console.error('Error fetching packages:', error);
       } finally {
@@ -197,10 +161,10 @@ const PackagesManagement: React.FC = () => {
       header: 'Price',
       render: (pkg: AdminPackage) => (
         <div>
-          <p className="font-semibold text-gray-800">${pkg.price.toLocaleString()}</p>
+          <p className="font-semibold text-gray-800">PKR {pkg.price.toLocaleString()}</p>
           {pkg.originalPrice && (
             <p className="text-sm text-gray-500 line-through">
-              ${pkg.originalPrice.toLocaleString()}
+              PKR {pkg.originalPrice.toLocaleString()}
             </p>
           )}
         </div>

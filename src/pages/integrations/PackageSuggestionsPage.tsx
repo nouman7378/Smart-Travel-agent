@@ -8,6 +8,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
+import { Check, MapPin, Star } from 'lucide-react';
+
 
 interface TravelPackage {
   id: string;
@@ -227,7 +229,7 @@ const PackageSuggestionsPage: React.FC = () => {
                       {pkg.title}
                     </h3>
                     <div className="flex items-center gap-1">
-                      <span className="text-yellow-500">★</span>
+                      <span className="text-yellow-500"><Star className="inline w-5 h-5" /></span>
                       <span className="text-sm font-semibold">
                         {pkg.rating}
                       </span>
@@ -238,7 +240,7 @@ const PackageSuggestionsPage: React.FC = () => {
                   </div>
 
                   <p className="text-sm text-gray-600 mb-3">
-                    📍 {pkg.destination} • ⏱️ {pkg.duration}
+                    <MapPin className="inline w-5 h-5" /> {pkg.destination} • ⏱️ {pkg.duration}
                   </p>
 
                   <p className="text-sm text-gray-700 mb-4 line-clamp-2">
@@ -252,7 +254,7 @@ const PackageSuggestionsPage: React.FC = () => {
                     <ul className="space-y-1">
                       {pkg.includes.slice(0, 3).map((item, idx) => (
                         <li key={idx} className="text-xs text-gray-600 flex items-center gap-2">
-                          <span className="text-green-500">✓</span>
+                          <span className="text-green-500"><Check className="inline w-5 h-5" /></span>
                           {item}
                         </li>
                       ))}

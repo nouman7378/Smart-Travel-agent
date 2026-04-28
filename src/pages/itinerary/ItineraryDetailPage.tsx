@@ -10,6 +10,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
 import { fetchItinerary, Itinerary, DayPlan } from '../../services/itineraryService';
+import { MapPin } from 'lucide-react';
+
 
 const ItineraryDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -155,12 +157,12 @@ const ItineraryDetailPage: React.FC = () => {
                       {activity.description}
                     </p>
                     <p className="text-xs text-gray-500">
-                      📍 {activity.location}
+                      <MapPin className="inline w-5 h-5" /> {activity.location}
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-gray-800">
-                      ${activity.cost.toFixed(2)}
+                      PKR {activity.cost.toLocaleString()}
                     </p>
                   </div>
                 </div>

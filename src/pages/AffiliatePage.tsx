@@ -7,6 +7,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../components/PageLayout';
+import { Banknote, BarChart, Gift } from 'lucide-react';
+
 
 const AffiliatePage: React.FC = () => {
   return (
@@ -44,17 +46,17 @@ const AffiliatePage: React.FC = () => {
             <h2 className="text-3xl font-bold mb-4">Why Join Our Affiliate Program?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <div className="text-3xl mb-2">💰</div>
+                <div className="text-3xl mb-2"><Banknote className="inline w-5 h-5" /></div>
                 <h3 className="text-xl font-semibold mb-2">Competitive Commissions</h3>
                 <p>Earn up to 8% commission on every booking</p>
               </div>
               <div>
-                <div className="text-3xl mb-2">📊</div>
+                <div className="text-3xl mb-2"><BarChart className="inline w-5 h-5" /></div>
                 <h3 className="text-xl font-semibold mb-2">Real-Time Tracking</h3>
                 <p>Monitor your earnings and performance in real-time</p>
               </div>
               <div>
-                <div className="text-3xl mb-2">🎁</div>
+                <div className="text-3xl mb-2"><Gift className="inline w-5 h-5" /></div>
                 <h3 className="text-xl font-semibold mb-2">Marketing Tools</h3>
                 <p>Access banners, links, and promotional materials</p>
               </div>

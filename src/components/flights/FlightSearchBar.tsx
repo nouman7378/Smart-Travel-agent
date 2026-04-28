@@ -8,6 +8,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import CityAutocomplete, { City } from './CityAutocomplete';
+import { Plane, Target } from 'lucide-react';
+
 
 type TripType = 'round-trip' | 'one-way' | 'multi-city';
 
@@ -121,7 +123,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               value={fromLocation.display}
               onChange={handleFromChange}
               placeholder="City or airport"
-              icon="✈️"
+              icon=<Plane className="w-5 h-5" />
               required
             />
           </div>
@@ -133,7 +135,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               value={toLocation.display}
               onChange={handleToChange}
               placeholder="City or airport"
-              icon="🎯"
+              icon=<Target className="w-5 h-5" />
               required
             />
           </div>

@@ -7,6 +7,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../components/PageLayout';
+import { Mail, MessageCircle, Phone } from 'lucide-react';
+
 
 const SupportPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -58,19 +60,19 @@ const SupportPage: React.FC = () => {
       title: 'Email Support',
       description: 'Get help via email',
       contact: 'support@travelhub.com',
-      icon: '✉️',
+      icon: <Mail className="w-5 h-5" />,
     },
     {
       title: 'Phone Support',
       description: 'Call us 24/7',
       contact: '+33 1 23 45 67 89',
-      icon: '📞',
+      icon: <Phone className="w-5 h-5" />,
     },
     {
       title: 'Live Chat',
       description: 'Chat with our team',
       contact: 'Available 24/7',
-      icon: '💬',
+      icon: <MessageCircle className="w-5 h-5" />,
     },
   ];
 

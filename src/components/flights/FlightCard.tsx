@@ -8,6 +8,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import type { Flight } from '../../services/flightService';
+import { Circle, Plane } from 'lucide-react';
+
 
 interface FlightCardProps {
   flight: Flight;
@@ -40,7 +42,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
           <div className="flex items-center gap-4 mb-4">
             {/* Airline Logo */}
             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl">✈️</span>
+              <span className="text-2xl"><Plane className="inline w-5 h-5" /></span>
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">{flight.airline_name}</h3>
@@ -62,7 +64,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
               <div className="relative">
                 <div className="h-px bg-gray-300"></div>
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2">
-                  <span className="text-xs text-gray-400">●</span>
+                  <span className="text-xs text-gray-400"><Circle className="inline w-5 h-5" /></span>
                 </div>
               </div>
               <div className="text-xs text-gray-500 mt-1">{getStopsText(flight.stops)}</div>

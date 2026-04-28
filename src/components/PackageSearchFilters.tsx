@@ -13,6 +13,8 @@
  */
 
 import React, { useState } from 'react';
+import { Star } from 'lucide-react';
+
 
 export interface PackageFilters {
   destination: string;
@@ -221,7 +223,7 @@ const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
               <span className="ml-3 text-sm text-gray-700 group-hover:text-blue-600">
                 {[...Array(rating)].map((_, i) => (
                   <span key={i} className="text-yellow-400">
-                    ★
+                    <Star className="inline w-5 h-5" />
                   </span>
                 ))}
                 <span className="text-gray-400 ml-1">and up</span>

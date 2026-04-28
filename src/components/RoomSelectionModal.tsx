@@ -334,7 +334,6 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
                                   disabled={!checkIn || !checkOut || nights <= 0}
                                   idleLabel="Add to Booking"
                                   addedLabel="Added to Booking"
-                                  redirectTo="/booking/demo"
                                   className="px-6 py-2"
                                 />
                               </div>

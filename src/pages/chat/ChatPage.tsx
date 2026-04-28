@@ -1,10 +1,3 @@
-/**
- * ChatPage Component
- * 
- * AI Travel Assistant with intelligent conversation flow, context retention,
- * and personalized travel recommendations.
- */
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -15,6 +8,8 @@ import TypingIndicator from '../../components/chat/TypingIndicator';
 import SuggestedPrompts from '../../components/chat/SuggestedPrompts';
 import PageLayout from '../../components/PageLayout';
 import { chatService, ConversationContext } from '../../services/chatService';
+import { Banknote, Calendar, Lightbulb, MapPin, Plane, Users } from 'lucide-react';
+
 
 const ChatPage: React.FC = () => {
   const navigate = useNavigate();
@@ -101,7 +96,7 @@ const ChatPage: React.FC = () => {
         responseContent += '**💡 Recommendations:**\n';
         response.recommendations.items.forEach((item, idx) => {
           if (response.recommendations?.type === 'package') {
-            responseContent += `${idx + 1}. ${item.name} - $${item.price} (${item.duration} days)\n`;
+            responseContent += `${idx + 1}. ${item.name} - PKR ${item.price.toLocaleString()} (${item.duration} days)\n`;
           }
         });
       }
@@ -110,7 +105,9 @@ const ChatPage: React.FC = () => {
       if (response.needsFollowUp && Object.keys(response.context).length > 0) {
         const contextSummary: string[] = [];
         if (response.context.budget) {
-          contextSummary.push(`💰 Budget: $${response.context.budget.min || 0}${response.context.budget.max ? ` - $${response.context.budget.max}` : '+'}`);
+          const min = response.context.budget.min || 0;
+          const max = response.context.budget.max;
+          contextSummary.push(`💰 Budget: PKR ${min.toLocaleString()}${max ? ` - ${max.toLocaleString()}` : '+'}`);
         }
         if (response.context.destination) {
           contextSummary.push(`📍 Destination: ${response.context.destination.name || response.context.destination.type || 'Not specified'}`);

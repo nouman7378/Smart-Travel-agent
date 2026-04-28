@@ -7,31 +7,33 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import EmojiIcon from '../common/EmojiIcon';
+import { Building, Car, Luggage, Plane } from 'lucide-react';
+
 
 const BrandsSection: React.FC = () => {
   const brands = [
     {
       name: 'TravelHub Flights',
       description: 'Your gateway to the world with flights to over 150 countries',
-      icon: '✈️',
+      icon: <Plane className="w-5 h-5" />,
       color: 'from-blue-500 to-blue-600',
     },
     {
       name: 'TravelHub Hotels',
       description: 'Discover amazing stays from budget-friendly to luxury resorts',
-      icon: '🏨',
+      icon: <Building className="w-5 h-5" />,
       color: 'from-purple-500 to-purple-600',
     },
     {
       name: 'TravelHub Cars',
       description: 'Rent a car and explore destinations at your own pace',
-      icon: '🚗',
+      icon: <Car className="w-5 h-5" />,
       color: 'from-indigo-500 to-indigo-600',
     },
     {
       name: 'TravelHub Packages',
       description: 'Complete vacation packages with flights, hotels, and activities',
-      icon: '🎒',
+      icon: <Luggage className="w-5 h-5" />,
       color: 'from-pink-500 to-pink-600',
     },
   ];

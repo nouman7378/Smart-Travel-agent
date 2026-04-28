@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBooking } from '../../contexts/BookingContext';
+import { Building, Bus, Calendar, Check, Plane, Trash2 } from 'lucide-react';
+
 
 interface BookingItem {
   id: string;
@@ -127,7 +129,7 @@ const BookingDemoPage: React.FC = () => {
                           : 'bg-gray-300 text-gray-600'
                       }`}
                     >
-                      {isCompleted ? '✓' : stepNum}
+                      {isCompleted ? <Check className="w-5 h-5" /> : stepNum}
                     </div>
                     <span className={`font-medium ${isActive ? 'text-blue-600' : 'text-gray-600'}`}>
                       {step}
@@ -160,7 +162,7 @@ const BookingDemoPage: React.FC = () => {
                     {/* Hotels Section */}
                     <div className="bg-white rounded-xl shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <span className="text-2xl">🏨</span>
+                        <span className="text-2xl"><Building className="inline w-5 h-5" /></span>
                         Hotels
                       </h2>
                       <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-600">
@@ -171,7 +173,7 @@ const BookingDemoPage: React.FC = () => {
                     {/* Flights Section */}
                     <div className="bg-white rounded-xl shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <span className="text-2xl">✈️</span>
+                        <span className="text-2xl"><Plane className="inline w-5 h-5" /></span>
                         Flights
                       </h2>
                       <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-600">
@@ -182,7 +184,7 @@ const BookingDemoPage: React.FC = () => {
                     {/* Bus Routes Section */}
                     <div className="bg-white rounded-xl shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <span className="text-2xl">🚌</span>
+                        <span className="text-2xl"><Bus className="inline w-5 h-5" /></span>
                         Bus Routes
                       </h2>
                       <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-600">
@@ -214,13 +216,13 @@ const BookingDemoPage: React.FC = () => {
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-xl">
-                                  {item.type === 'hotel' ? '🏨' : item.type === 'flight' ? '✈️' : '🚌'}
+                                  {item.type === 'hotel' ? <Building className="w-5 h-5" /> : item.type === 'flight' ? <Plane className="w-5 h-5" /> : <Bus className="w-5 h-5" />}
                                 </span>
                                 <h3 className="font-semibold text-gray-800">{item.name}</h3>
                               </div>
                               <p className="text-sm text-gray-600">{item.details}</p>
                               {item.date && (
-                                <p className="text-xs text-gray-500 mt-1">📅 {item.date}</p>
+                                <p className="text-xs text-gray-500 mt-1"><Calendar className="inline w-5 h-5" /> {item.date}</p>
                               )}
                             </div>
                             <div className="flex items-center gap-4">
@@ -240,13 +242,13 @@ const BookingDemoPage: React.FC = () => {
                                 </button>
                               </div>
                               <p className="text-lg font-bold text-gray-800 w-24 text-right">
-                                ${(item.price * item.quantity).toFixed(2)}
+                                PKR {(item.price * item.quantity).toLocaleString()}
                               </p>
                               <button
                                 onClick={() => removeFromBooking(item.id)}
                                 className="text-red-600 hover:text-red-700 p-2"
                               >
-                                🗑️
+                                <Trash2 className="inline w-5 h-5" />
                               </button>
                             </div>
                           </div>
@@ -339,7 +341,7 @@ const BookingDemoPage: React.FC = () => {
                     className="bg-white rounded-xl shadow-lg p-8 text-center"
                   >
                     <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-4xl">✓</span>
+                      <span className="text-4xl"><Check className="inline w-5 h-5" /></span>
                     </div>
                     <h2 className="text-3xl font-bold text-gray-800 mb-2">
                       Booking Confirmed!
@@ -354,12 +356,12 @@ const BookingDemoPage: React.FC = () => {
                           <span className="text-gray-600">
                             {item.name} x{item.quantity}
                           </span>
-                          <span className="font-semibold">${(item.price * item.quantity).toFixed(2)}</span>
+                          <span className="font-semibold">PKR {(item.price * item.quantity).toLocaleString()}</span>
                         </div>
                       ))}
                       <div className="border-t border-gray-300 pt-2 mt-2 flex justify-between font-bold">
                         <span>Total</span>
-                        <span>${total.toFixed(2)}</span>
+                        <span>PKR {total.toLocaleString()}</span>
                       </div>
                     </div>
                     <div className="flex gap-4">
@@ -411,7 +413,7 @@ const BookingDemoPage: React.FC = () => {
                               {item.name} x{item.quantity}
                             </span>
                             <span className="font-semibold">
-                              ${(item.price * item.quantity).toFixed(2)}
+                              PKR {(item.price * item.quantity).toLocaleString()}
                             </span>
                           </div>
                         ))}
@@ -419,19 +421,19 @@ const BookingDemoPage: React.FC = () => {
                       <div className="border-t border-gray-200 pt-3 space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Subtotal</span>
-                          <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                          <span className="font-semibold">PKR {subtotal.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Tax (5%)</span>
-                          <span className="font-semibold">${tax.toFixed(2)}</span>
+                          <span className="font-semibold">PKR {tax.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Service Fee</span>
-                          <span className="font-semibold">${serviceFee.toFixed(2)}</span>
+                          <span className="font-semibold">PKR {serviceFee.toLocaleString()}</span>
                         </div>
                         <div className="border-t border-gray-200 pt-2 flex justify-between font-bold text-lg">
                           <span>Total</span>
-                          <span className="text-blue-600">${total.toFixed(2)}</span>
+                          <span className="text-blue-600">PKR {total.toLocaleString()}</span>
                         </div>
                       </div>
                       {bookingStep === 'select' && (

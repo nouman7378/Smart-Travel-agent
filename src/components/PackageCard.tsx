@@ -238,15 +238,15 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
         )}
 
         {/* Price and Book Button */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <div>
+        <div className="flex items-end justify-between gap-3 pt-4 border-t border-gray-200">
+          <div className="min-w-0">
             {pkg.originalPrice && (
               <div className="text-gray-400 line-through text-sm mb-1">
                 PKR {pkg.originalPrice.toLocaleString()}
               </div>
             )}
             <div className="flex items-baseline">
-              <span className="text-2xl font-bold text-blue-600">PKR {pkg.price.toLocaleString()}</span>
+              <span className="text-xl sm:text-2xl font-bold text-blue-600 leading-none">PKR {pkg.price.toLocaleString()}</span>
               <span className="text-gray-600 text-sm ml-1">
                 /{pkg.pricePer === 'person' ? 'person' : 'package'}
               </span>
@@ -259,8 +259,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
             onAdd={handleAddToBooking}
             idleLabel="Add to Booking"
             addedLabel="Added to Booking"
-            redirectTo="/booking/demo"
-            className="px-5 py-2.5 text-sm"
+            className="px-4 py-2 text-sm shrink-0"
           />
         </div>
       </div>

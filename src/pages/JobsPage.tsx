@@ -7,43 +7,45 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../components/PageLayout';
+import { Handshake, Laptop, Megaphone, Palette, Settings } from 'lucide-react';
+
 
 const JobsPage: React.FC = () => {
   const jobCategories = [
     {
       title: 'Engineering',
       description: 'Build the future of travel technology',
-      icon: '💻',
+      icon: <Laptop className="w-5 h-5" />,
       count: 25,
     },
     {
       title: 'Product & Design',
       description: 'Create amazing user experiences',
-      icon: '🎨',
+      icon: <Palette className="w-5 h-5" />,
       count: 15,
     },
     {
       title: 'Marketing',
       description: 'Share our story with the world',
-      icon: '📢',
+      icon: <Megaphone className="w-5 h-5" />,
       count: 20,
     },
     {
       title: 'Customer Support',
       description: 'Help travelers have great experiences',
-      icon: '🤝',
+      icon: <Handshake className="w-5 h-5" />,
       count: 30,
     },
     {
       title: 'Sales & Partnerships',
       description: 'Build relationships with partners',
-      icon: '🤝',
+      icon: <Handshake className="w-5 h-5" />,
       count: 18,
     },
     {
       title: 'Operations',
       description: 'Keep everything running smoothly',
-      icon: '⚙️',
+      icon: <Settings className="w-5 h-5" />,
       count: 12,
     },
   ];

@@ -7,28 +7,30 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
+import { Crown, Gift, Lock, Star } from 'lucide-react';
+
 
 const RewardsPage: React.FC = () => {
   const benefits = [
     {
       title: 'Earn Points',
       description: 'Earn points on every booking',
-      icon: '⭐',
+      icon: <Star className="w-5 h-5" />,
     },
     {
       title: 'Redeem Rewards',
       description: 'Use points for discounts and free stays',
-      icon: '🎁',
+      icon: <Gift className="w-5 h-5" />,
     },
     {
       title: 'Member-Only Deals',
       description: 'Access exclusive member rates',
-      icon: '🔒',
+      icon: <Lock className="w-5 h-5" />,
     },
     {
       title: 'VIP Benefits',
       description: 'Priority support and upgrades',
-      icon: '👑',
+      icon: <Crown className="w-5 h-5" />,
     },
   ];
 

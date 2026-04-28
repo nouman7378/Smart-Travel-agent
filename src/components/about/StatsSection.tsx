@@ -7,15 +7,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import EmojiIcon from '../common/EmojiIcon';
+import { Building, Globe, MessageCircle, Plane, Star, Users } from 'lucide-react';
+
 
 const StatsSection: React.FC = () => {
   const stats = [
-    { number: '10M+', label: 'Happy Travelers', icon: '👥' },
-    { number: '500K+', label: 'Hotels Worldwide', icon: '🏨' },
-    { number: '150+', label: 'Countries', icon: '🌍' },
-    { number: '24/7', label: 'Customer Support', icon: '💬' },
-    { number: '50K+', label: 'Destinations', icon: '✈️' },
-    { number: '99%', label: 'Satisfaction Rate', icon: '⭐' },
+    { number: '10M+', label: 'Happy Travelers', icon: <Users className="w-5 h-5" /> },
+    { number: '500K+', label: 'Hotels Worldwide', icon: <Building className="w-5 h-5" /> },
+    { number: '150+', label: 'Countries', icon: <Globe className="w-5 h-5" /> },
+    { number: '24/7', label: 'Customer Support', icon: <MessageCircle className="w-5 h-5" /> },
+    { number: '50K+', label: 'Destinations', icon: <Plane className="w-5 h-5" /> },
+    { number: '99%', label: 'Satisfaction Rate', icon: <Star className="w-5 h-5" /> },
   ];
 
   return (
