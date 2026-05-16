@@ -28,16 +28,58 @@ interface BookingItem {
 
 const BookingDemoPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { items: bookingItems, refreshCart } = useBooking();
   const [selectedItems, setSelectedItems] = useState<BookingItem[]>([]);
-  const [bookingStep, setBookingStep] = useState<'select' | 'review' | 'confirm'>('select');
-  const [guestInfo, setGuestInfo] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    specialRequests: '',
+  const [bookingStep, setBookingStep] = useState<'select' | 'review' | 'confirm'>(() => {
+    try {
+      const saved = sessionStorage.getItem('bookingDemoStep');
+      if (saved === 'review' || saved === 'confirm') return saved;
+    } catch (e) {
+      console.error('Session storage error:', e);
+    }
+    return 'select';
   });
+  
+  const [guestInfo, setGuestInfo] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('bookingDemoGuestInfo');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Session storage error:', e);
+    }
+    return {
+      name: user?.full_name || user?.username || '',
+      email: user?.email || '',
+      phone: '',
+      specialRequests: '',
+    };
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Sync guest info if user loads after initial state
+  useEffect(() => {
+    if (user && !guestInfo.name && !guestInfo.email) {
+      setGuestInfo(prev => ({
+        ...prev,
+        name: user.full_name || user.username || '',
+        email: user.email || '',
+      }));
+    }
+  }, [user, guestInfo.name, guestInfo.email]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('bookingDemoStep', bookingStep);
+    } catch (e) {}
+  }, [bookingStep]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('bookingDemoGuestInfo', JSON.stringify(guestInfo));
+    } catch (e) {}
+  }, [guestInfo]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -87,12 +129,46 @@ const BookingDemoPage: React.FC = () => {
     setBookingStep('review');
   };
 
-  const handleConfirmBooking = () => {
+  const handleConfirmBooking = async () => {
     if (!guestInfo.name || !guestInfo.email || !guestInfo.phone) {
       alert('Please fill in all required guest information');
       return;
     }
-    setBookingStep('confirm');
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/bookings/confirm/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': user?.id.toString() || '',
+        },
+        body: JSON.stringify({
+          guest_info: guestInfo,
+          items: selectedItems.map(item => ({
+            id: item.id,
+            quantity: item.quantity
+          })),
+          total_amount: total
+        }),
+      });
+
+      if (response.ok) {
+        setBookingStep('confirm');
+        // Refresh cart to show it's empty
+        if (isAuthenticated) {
+          void refreshCart();
+        }
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Failed to confirm booking');
+      }
+    } catch (error) {
+      console.error('Booking confirmation error:', error);
+      alert('An error occurred while confirming your booking.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -270,8 +346,9 @@ const BookingDemoPage: React.FC = () => {
                             type="text"
                             required
                             value={guestInfo.name}
+                            readOnly={!!user}
                             onChange={(e) => setGuestInfo({ ...guestInfo, name: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${user ? 'bg-gray-50 cursor-not-allowed text-gray-500' : ''}`}
                             placeholder="John Doe"
                           />
                         </div>
@@ -283,8 +360,9 @@ const BookingDemoPage: React.FC = () => {
                             type="email"
                             required
                             value={guestInfo.email}
+                            readOnly={!!user}
                             onChange={(e) => setGuestInfo({ ...guestInfo, email: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${user ? 'bg-gray-50 cursor-not-allowed text-gray-500' : ''}`}
                             placeholder="john@example.com"
                           />
                         </div>
@@ -325,9 +403,10 @@ const BookingDemoPage: React.FC = () => {
                       </button>
                       <button
                         onClick={handleConfirmBooking}
-                        className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                        disabled={isSubmitting}
+                        className={`flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
-                        Confirm Booking
+                        {isSubmitting ? 'Processing...' : 'Confirm Booking'}
                       </button>
                     </div>
                   </motion.div>
