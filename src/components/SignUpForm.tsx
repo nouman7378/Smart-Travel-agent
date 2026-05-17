@@ -105,19 +105,19 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
             autoComplete="name"
             value={formData.full_name}
             onChange={(e) => handleChange('full_name', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.full_name ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 ${
+              errors.full_name ? 'border-red-500 bg-red-50/30' : 'border-gray-200 bg-gray-50/50 hover:bg-white'
             }`}
             placeholder="Enter your full name"
           />
           {errors.full_name && (
-            <p className="mt-1 text-sm text-red-600">{errors.full_name}</p>
+            <p className="mt-1 text-xs text-red-600 font-medium">{errors.full_name}</p>
           )}
         </div>
 
         {/* Email Field (used as login username) */}
         <div>
-          <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="signup-email" className="block text-sm font-semibold text-gray-700 mb-2">
             Email Address
           </label>
           <input
@@ -126,20 +126,19 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
             autoComplete="email"
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 ${
+              errors.email ? 'border-red-500 bg-red-50/30' : 'border-gray-200 bg-gray-50/50 hover:bg-white'
             }`}
             placeholder="Enter your email"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+            <p className="mt-1 text-xs text-red-600 font-medium">{errors.email}</p>
           )}
-          <p className="mt-1 text-xs text-gray-500">You will use this email to sign in</p>
         </div>
 
         {/* Password Field */}
         <div>
-          <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="signup-password" className="block text-sm font-semibold text-gray-700 mb-2">
             Password
           </label>
           <input
@@ -148,24 +147,21 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
             autoComplete="new-password"
             value={formData.password}
             onChange={(e) => handleChange('password', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.password ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 ${
+              errors.password ? 'border-red-500 bg-red-50/30' : 'border-gray-200 bg-gray-50/50 hover:bg-white'
             }`}
             placeholder="Create a password"
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+            <p className="mt-1 text-xs text-red-600 font-medium">{errors.password}</p>
           )}
-          <p className="mt-1 text-xs text-gray-500">
-            At least 8 characters with one uppercase, one lowercase, and one number
-          </p>
         </div>
 
         {/* Confirm Password Field */}
         <div>
           <label
             htmlFor="signup-confirm-password"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-semibold text-gray-700 mb-2"
           >
             Confirm Password
           </label>
@@ -175,45 +171,45 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, className = '' }) => 
             autoComplete="new-password"
             value={formData.confirm_password}
             onChange={(e) => handleChange('confirm_password', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.confirm_password ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 ${
+              errors.confirm_password ? 'border-red-500 bg-red-50/30' : 'border-gray-200 bg-gray-50/50 hover:bg-white'
             }`}
             placeholder="Confirm your password"
           />
           {errors.confirm_password && (
-            <p className="mt-1 text-sm text-red-600">{errors.confirm_password}</p>
+            <p className="mt-1 text-xs text-red-600 font-medium">{errors.confirm_password}</p>
           )}
         </div>
 
         {/* Terms and Conditions */}
-        <div className="flex items-start">
+        <div className="flex items-start py-1">
           <input
             type="checkbox"
             id="terms"
             checked={formData.terms_accepted}
             onChange={(e) => handleChange('terms_accepted', e.target.checked)}
-            className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500/20"
           />
-          <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
+          <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
             I agree to the{' '}
-            <a href="#terms" className="text-blue-600 hover:text-blue-700 font-medium">
-              Terms and Conditions
+            <a href="#terms" className="text-blue-600 hover:text-blue-700 font-bold">
+              Terms
             </a>{' '}
             and{' '}
-            <a href="#privacy" className="text-blue-600 hover:text-blue-700 font-medium">
-              Privacy Policy
+            <a href="#privacy" className="text-blue-600 hover:text-blue-700 font-bold">
+              Privacy
             </a>
           </label>
         </div>
         {errors.terms_accepted && (
-          <p className="mt-1 text-sm text-red-600">{errors.terms_accepted}</p>
+          <p className="mt-1 text-xs text-red-600 font-medium">{errors.terms_accepted}</p>
         )}
 
         {/* Submit Button */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:transform-none"
+          className="w-full px-4 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all duration-200 shadow-blue-200 shadow-lg hover:shadow-blue-300 transform hover:-translate-y-1 active:translate-y-0"
         >
           {isSubmitting ? 'Creating account...' : 'Create Account'}
         </button>

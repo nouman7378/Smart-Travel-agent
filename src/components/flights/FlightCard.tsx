@@ -34,7 +34,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
       whileHover={{ y: -4, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
-      className="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-4 transition-all duration-300"
+      className="bg-white rounded-lg shadow-md border border-gray-200 p-6 mb-4 transition-all duration-300"
     >
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         {/* Left Section: Airline & Flight Info */}
@@ -86,7 +86,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
           </div>
           <Link
             to={`/flight/${flight.flight_number}`}
-            className="w-full lg:w-auto px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center"
+            className="w-full lg:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-center"
           >
             Book Now
           </Link>

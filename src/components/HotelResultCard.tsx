@@ -48,7 +48,7 @@ const HotelResultCard: React.FC<HotelResultCardProps> = ({ hotel, className = ''
 
   return (
     <motion.div
-      className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer ${className}`}
+      className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer ${className}`}
       onClick={handleClick}
       whileHover={{ scale: 1.02, y: -4 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}

@@ -168,7 +168,7 @@ const FAQsPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden"
+              className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden"
             >
               <button
                 onClick={() => toggleFAQ(index)}
@@ -208,7 +208,7 @@ const FAQsPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-12 max-w-4xl mx-auto"
         >
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 text-center border border-blue-100">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 text-center border border-blue-100">
             <h2 className="text-2xl font-bold text-gray-800 mb-3">Still have questions?</h2>
             <p className="text-gray-600 mb-6">
               Our support team is here to help you 24/7

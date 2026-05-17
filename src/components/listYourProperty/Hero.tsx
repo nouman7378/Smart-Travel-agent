@@ -40,7 +40,7 @@ const Hero: React.FC = () => {
           >
             <Link
               to="#get-started"
-              className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Get Started Now
             </Link>

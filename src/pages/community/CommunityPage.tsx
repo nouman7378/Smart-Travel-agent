@@ -142,7 +142,7 @@ const CommunityPage: React.FC = () => {
           </div>
 
           {/* Create Post */}
-          <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-xl p-6 mb-6">
+          <div className="bg-white dark:bg-dark-surface rounded-lg shadow-xl p-6 mb-6">
             <h2 className="text-xl font-bold text-gray-800 dark:text-dark-text mb-4">
               Share Your Experience
             </h2>
@@ -152,7 +152,7 @@ const CommunityPage: React.FC = () => {
               placeholder="What's on your mind? Share your travel story..."
               rows={4}
               disabled={submitting}
-              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text mb-4"
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text mb-4"
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div className="flex items-center px-4 py-2 bg-gray-50 dark:bg-dark-bg rounded-lg border border-gray-200 dark:border-dark-border">
@@ -190,7 +190,7 @@ const CommunityPage: React.FC = () => {
                 <p className="text-gray-500">Loading community feed...</p>
               </div>
             ) : posts.length === 0 ? (
-              <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-xl p-12 text-center">
+              <div className="bg-white dark:bg-dark-surface rounded-lg shadow-xl p-12 text-center">
                 <p className="text-gray-500 text-lg">No posts yet. Be the first to share!</p>
               </div>
             ) : (
@@ -200,7 +200,7 @@ const CommunityPage: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white dark:bg-dark-surface rounded-2xl shadow-xl p-6"
+                  className="bg-white dark:bg-dark-surface rounded-lg shadow-xl p-6"
                 >
                   {/* Post Header */}
                   <div className="flex items-center gap-3 mb-4">
@@ -237,7 +237,7 @@ const CommunityPage: React.FC = () => {
 
                   {/* Post Images */}
                   {post.images && post.images.length > 0 && (
-                    <div className="mb-4 rounded-xl overflow-hidden">
+                    <div className="mb-4 rounded-lg overflow-hidden">
                       <img
                         src={post.images[0]}
                         alt="Post"

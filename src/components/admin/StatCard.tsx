@@ -32,7 +32,7 @@ const StatCard: React.FC<StatCardProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow"
+      className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow"
     >
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-medium text-gray-600">{title}</h3>

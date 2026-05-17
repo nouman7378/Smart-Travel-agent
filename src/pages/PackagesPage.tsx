@@ -81,7 +81,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ initialFilters }) => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('http://localhost:8000/api/packages/');
+        const response = await fetch('http://localhost:8001/api/packages/');
         const data = await response.json();
         
         if (data.success) {

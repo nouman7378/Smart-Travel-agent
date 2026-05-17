@@ -85,7 +85,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-dark-surface rounded-xl shadow-lg p-6 space-y-6">
+    <div className="bg-white dark:bg-dark-surface rounded-lg shadow-lg p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold text-gray-800 dark:text-dark-text">
           Advanced Filters

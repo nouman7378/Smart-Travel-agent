@@ -61,7 +61,7 @@ const HotelsFrancePage: React.FC = () => {
               >
                 <Link
                   to={`/search/hotels?destination=${city.name}`}
-                  className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all"
+                  className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all"
                 >
                   <img src={city.image} alt={city.name} className="w-full h-48 object-cover" />
                   <div className="p-6">

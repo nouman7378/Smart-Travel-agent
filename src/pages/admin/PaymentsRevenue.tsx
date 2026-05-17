@@ -225,7 +225,7 @@ const PaymentsRevenue: React.FC = () => {
 
         {/* Revenue Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-600">Total Revenue</h3>
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -243,7 +243,7 @@ const PaymentsRevenue: React.FC = () => {
             <p className="text-sm text-green-600 mt-2">+15.2% from last month</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-600">Pending Payments</h3>
               <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -261,7 +261,7 @@ const PaymentsRevenue: React.FC = () => {
             <p className="text-sm text-gray-600 mt-2">Requires attention</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-600">Failed Payments</h3>
               <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
@@ -279,7 +279,7 @@ const PaymentsRevenue: React.FC = () => {
             <p className="text-sm text-red-600 mt-2">Needs review</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-600">Refunded</h3>
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -301,7 +301,7 @@ const PaymentsRevenue: React.FC = () => {
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Revenue Trend */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Revenue Trend</h2>
             <div className="flex items-end justify-between gap-2 h-64">
               {revenueData.map((item) => (
@@ -324,7 +324,7 @@ const PaymentsRevenue: React.FC = () => {
           </div>
 
           {/* Revenue by Payment Method */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Revenue by Payment Method</h2>
             <div className="space-y-4">
               {Object.entries(revenueByMethod).map(([method, amount]) => {
@@ -352,7 +352,7 @@ const PaymentsRevenue: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search */}
             <div className="relative">

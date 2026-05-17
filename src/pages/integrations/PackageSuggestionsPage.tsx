@@ -197,7 +197,7 @@ const PackageSuggestionsPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow"
               >
                 <div className="relative">
                   <img
@@ -288,7 +288,7 @@ const PackageSuggestionsPage: React.FC = () => {
           </div>
 
           {filteredPackages.length === 0 && (
-            <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+            <div className="bg-white rounded-lg shadow-sm p-12 text-center">
               <p className="text-gray-600">No packages found for this category</p>
             </div>
           )}

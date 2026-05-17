@@ -115,7 +115,7 @@ const BusRoutesPage: React.FC = () => {
           </div>
 
           {/* Search Bar */}
-          <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <input
               type="text"
               value={searchQuery}
@@ -130,7 +130,7 @@ const BusRoutesPage: React.FC = () => {
             {/* Routes List */}
             <div className="lg:col-span-2 space-y-4">
               {filteredRoutes.length === 0 ? (
-                <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+                <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                   <p className="text-gray-600">No routes found</p>
                 </div>
               ) : (
@@ -141,7 +141,7 @@ const BusRoutesPage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                     onClick={() => setSelectedRoute(route)}
-                    className={`bg-white rounded-xl shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow border-2 ${
+                    className={`bg-white rounded-lg shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow border-2 ${
                       selectedRoute?.id === route.id
                         ? 'border-blue-500'
                         : 'border-transparent'
@@ -220,7 +220,7 @@ const BusRoutesPage: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-white rounded-xl shadow-sm p-6 sticky top-6"
+                  className="bg-white rounded-lg shadow-sm p-6 sticky top-6"
                 >
                   <h3 className="text-xl font-semibold text-gray-800 mb-4">
                     Route Details
@@ -296,7 +296,7 @@ const BusRoutesPage: React.FC = () => {
                   </div>
                 </motion.div>
               ) : (
-                <div className="bg-white rounded-xl shadow-sm p-6 text-center">
+                <div className="bg-white rounded-lg shadow-sm p-6 text-center">
                   <p className="text-gray-600">
                     Select a route to view details
                   </p>

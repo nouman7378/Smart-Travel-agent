@@ -76,7 +76,7 @@ const PropertyTypes: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="bg-white p-6 md:p-8 rounded-2xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300 cursor-pointer group"
+              className="bg-white p-6 md:p-8 rounded-lg shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300 cursor-pointer group"
             >
               <div className="text-5xl mb-4">{type.icon}</div>
               <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{type.title}</h3>

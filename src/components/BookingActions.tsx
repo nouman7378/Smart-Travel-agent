@@ -50,7 +50,7 @@ const BookingActions: React.FC<BookingActionsProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-xl shadow-md border border-gray-200 p-6 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-md border border-gray-200 p-6 ${className}`}>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Manage Your Booking</h3>
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Print Button */}

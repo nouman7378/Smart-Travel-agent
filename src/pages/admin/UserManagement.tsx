@@ -9,14 +9,9 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { AdminUser, UserRole, UserStatus } from '@/types/admin';
+import { getAdminAuthHeaders } from '@/utils/adminAuth';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-
-const getAdminAuthHeader = (): string => {
-  const adminCreds = localStorage.getItem('admin_credentials');
-  if (adminCreds) return `Basic ${btoa(adminCreds)}`;
-  return '';
-};
 
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -35,13 +30,9 @@ const UserManagement: React.FC = () => {
         setLoading(true);
         setError(null);
         
-        const headers: Record<string, string> = {};
-        const authHeader = getAdminAuthHeader();
-        if (authHeader) headers['Authorization'] = authHeader;
-
         const response = await fetch(`${API_BASE_URL}/admin/users/`, {
           credentials: 'include',
-          headers,
+          headers: getAdminAuthHeaders(),
         });
 
         if (!response.ok) {
@@ -269,7 +260,7 @@ const UserManagement: React.FC = () => {
         )}
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div className="relative">
@@ -323,23 +314,23 @@ const UserManagement: React.FC = () => {
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Users</p>
             <p className="text-2xl font-bold text-gray-800 mt-1">{users.length}</p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Active Users</p>
             <p className="text-2xl font-bold text-green-600 mt-1">
               {users.filter((u) => u.status === 'active').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Agents</p>
             <p className="text-2xl font-bold text-blue-600 mt-1">
               {users.filter((u) => u.role === 'agent').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Travelers</p>
             <p className="text-2xl font-bold text-purple-600 mt-1">
               {users.filter((u) => u.role === 'traveler').length}
@@ -362,7 +353,7 @@ const UserManagement: React.FC = () => {
         {/* User Detail Modal */}
         {showUserModal && selectedUser && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-800">User Details</h2>
                 <button

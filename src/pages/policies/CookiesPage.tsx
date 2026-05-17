@@ -20,7 +20,7 @@ const CookiesPage: React.FC = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Cookie Policy</h1>
           <p className="text-gray-600 mb-8">Last updated: December 2024</p>
 
-          <div className="bg-white p-8 rounded-xl shadow-md space-y-8">
+          <div className="bg-white p-8 rounded-lg shadow-md space-y-8">
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">What Are Cookies?</h2>
               <p className="text-gray-700 leading-relaxed">

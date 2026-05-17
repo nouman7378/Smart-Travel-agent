@@ -76,7 +76,7 @@ const HowSiteWorksPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all"
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all"
               >
                 <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
                   {step.number}
@@ -87,7 +87,7 @@ const HowSiteWorksPage: React.FC = () => {
             ))}
           </div>
 
-          <div className="bg-blue-50 p-8 rounded-xl">
+          <div className="bg-blue-50 p-8 rounded-lg">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Need Help?</h2>
             <p className="text-gray-700 mb-4">
               Our customer support team is available 24/7 to assist you with any questions or

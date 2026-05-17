@@ -41,7 +41,7 @@ const CarHireFrancePage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
 
-          <div className="bg-white p-8 rounded-xl shadow-md">
+          <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Popular Pickup Locations</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {['Paris CDG', 'Paris Orly', 'Nice Airport', 'Lyon Airport'].map((location, index) => (

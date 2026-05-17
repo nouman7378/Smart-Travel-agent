@@ -212,7 +212,7 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
           onFocus={handleFocus}
           placeholder={placeholder}
           required={required}
-          className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-10 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 transition-all duration-200`}
+          className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-10 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 transition-all duration-200`}
           autoComplete="off"
         />
         
@@ -251,7 +251,7 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-200 max-h-80 overflow-y-auto"
+            className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-80 overflow-y-auto"
           >
             {cities.map((city, index) => (
               <button
@@ -296,7 +296,7 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-200 p-4 text-center"
+            className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-4 text-center"
           >
             <p className="text-gray-500">No cities or airports found</p>
             <p className="text-sm text-gray-400 mt-1">Try a different search term</p>

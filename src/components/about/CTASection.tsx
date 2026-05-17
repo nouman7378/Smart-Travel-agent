@@ -33,7 +33,7 @@ const CTASection: React.FC = () => {
             >
               <Link
                 to="/flights"
-                className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 Search Flights
               </Link>
@@ -44,7 +44,7 @@ const CTASection: React.FC = () => {
             >
               <Link
                 to="/hotels"
-                className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-2xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+                className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 Find Hotels
               </Link>

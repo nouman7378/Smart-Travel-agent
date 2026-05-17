@@ -42,7 +42,7 @@ const AffiliatePage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
 
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-xl mb-12">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-lg mb-12">
             <h2 className="text-3xl font-bold mb-4">Why Join Our Affiliate Program?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
@@ -63,7 +63,7 @@ const AffiliatePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md">
+          <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">How It Works</h2>
             <div className="space-y-6">
               <div className="flex items-start space-x-4">

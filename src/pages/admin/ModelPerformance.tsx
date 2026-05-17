@@ -140,7 +140,7 @@ const ModelPerformance: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`bg-white rounded-xl shadow-sm p-6 border-2 ${getStatusColor(
+                className={`bg-white rounded-lg shadow-sm p-6 border-2 ${getStatusColor(
                   metric.status
                 )}`}
               >
@@ -189,7 +189,7 @@ const ModelPerformance: React.FC = () => {
           {/* Training History Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Accuracy Chart */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
                 Training Accuracy
               </h2>
@@ -217,7 +217,7 @@ const ModelPerformance: React.FC = () => {
             </div>
 
             {/* Loss Chart */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
                 Training Loss
               </h2>
@@ -246,7 +246,7 @@ const ModelPerformance: React.FC = () => {
           </div>
 
           {/* Actions */}
-          <div className="mt-8 bg-white rounded-xl shadow-sm p-6">
+          <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Model Actions
             </h2>

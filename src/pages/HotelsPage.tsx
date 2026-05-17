@@ -9,6 +9,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
 import EmojiIcon from '../components/common/EmojiIcon';
+import Stats from '../components/common/Stats';
+import PopularDestinations from '../components/PopularDestinations';
+import TravelCategories from '../components/TravelCategories';
+import FeaturedHotels from '../components/FeaturedHotels';
 import { Banknote, Building, Star } from 'lucide-react';
 
 
@@ -16,7 +20,19 @@ const HotelsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with Hotel Search */}
-      <Hero className="min-h-[80vh]" />
+      <Hero className="!min-h-fit pt-30 pb-20" hideTag smallTitle hideStats />
+      
+      {/* Standalone Stats Section */}
+      <Stats />
+
+      {/* Popular Destinations Section */}
+      <PopularDestinations />
+
+      {/* Travel Categories Section */}
+      <TravelCategories />
+
+      {/* Featured Hotels Section */}
+      <FeaturedHotels />
       
       {/* Additional Hotel Content */}
       <section className="py-16 bg-gray-50">
@@ -58,7 +74,7 @@ const HotelsPage: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                 >
                   <div className="mb-4 text-blue-600">
                     <EmojiIcon icon={feature.icon} className="h-9 w-9" />

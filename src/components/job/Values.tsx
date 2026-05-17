@@ -71,9 +71,9 @@ const Values: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white p-6 md:p-8 rounded-2xl shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 text-center"
+              className="bg-white p-6 md:p-8 rounded-lg shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 text-center"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white mx-auto mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white mx-auto mb-6">
                 {value.icon}
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">{value.title}</h3>

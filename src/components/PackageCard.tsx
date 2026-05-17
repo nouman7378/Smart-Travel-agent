@@ -66,7 +66,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
   // Guard clause to prevent crashes when pkg is undefined
   if (!pkg) {
     return (
-      <div className={`bg-white rounded-xl shadow-md overflow-hidden ${className}`}>
+      <div className={`bg-white rounded-lg shadow-md overflow-hidden ${className}`}>
         <div className="p-5 text-center text-gray-500">
           Package data not available
         </div>
@@ -99,7 +99,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
+      className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
       onClick={onClick}
     >
       {/* Hotel Image */}

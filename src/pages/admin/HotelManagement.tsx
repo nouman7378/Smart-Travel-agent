@@ -40,16 +40,9 @@ interface Room {
   updated_at: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+import { getAdminAuthHeaders } from '@/utils/adminAuth';
 
-// Helper to get admin credentials from localStorage for API auth
-const getAdminAuthHeader = (): string => {
-  const adminCreds = localStorage.getItem('admin_credentials');
-  if (adminCreds) {
-    return `Basic ${btoa(adminCreds)}`;
-  }
-  return '';
-};
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 const HotelManagement: React.FC = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -134,15 +127,9 @@ const HotelManagement: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const headers: Record<string, string> = {};
-      const authHeader = getAdminAuthHeader();
-      if (authHeader) {
-        headers['Authorization'] = authHeader;
-      }
-      
       const response = await fetch(`${API_BASE_URL}/admin/hotels/`, {
         credentials: 'include',
-        headers,
+        headers: getAdminAuthHeaders(),
       });
       const data = await response.json();
       
@@ -285,16 +272,10 @@ const HotelManagement: React.FC = () => {
         ? `${API_BASE_URL}/admin/hotels/${selectedHotel?.id}/update/`
         : `${API_BASE_URL}/admin/hotels/create/`;
 
-      const headers: Record<string, string> = {};
-      const authHeader = getAdminAuthHeader();
-      if (authHeader) {
-        headers['Authorization'] = authHeader;
-      }
-
       const response = await fetch(url, {
         method: 'POST',
         credentials: 'include',
-        headers,
+        headers: getAdminAuthHeaders(),
         body: formDataToSend,
       });
 
@@ -322,16 +303,10 @@ const HotelManagement: React.FC = () => {
 
     setError(null);
     try {
-      const headers: Record<string, string> = {};
-      const authHeader = getAdminAuthHeader();
-      if (authHeader) {
-        headers['Authorization'] = authHeader;
-      }
-      
       const response = await fetch(`${API_BASE_URL}/admin/hotels/${hotelId}/delete/`, {
         method: 'POST',
         credentials: 'include',
-        headers,
+        headers: getAdminAuthHeaders(),
       });
 
       const data = await response.json();
@@ -357,15 +332,9 @@ const HotelManagement: React.FC = () => {
 
   const fetchHotelRooms = async (hotelId: number) => {
     try {
-      const headers: Record<string, string> = {};
-      const authHeader = getAdminAuthHeader();
-      if (authHeader) {
-        headers['Authorization'] = authHeader;
-      }
-      
       const response = await fetch(`${API_BASE_URL}/admin/hotels/${hotelId}/rooms/`, {
         credentials: 'include',
-        headers,
+        headers: getAdminAuthHeaders(),
       });
 
       const data = await response.json();
@@ -387,16 +356,10 @@ const HotelManagement: React.FC = () => {
 
     setError(null);
     try {
-      const headers: Record<string, string> = {};
-      const authHeader = getAdminAuthHeader();
-      if (authHeader) {
-        headers['Authorization'] = authHeader;
-      }
-      
       const response = await fetch(`${API_BASE_URL}/admin/rooms/${roomId}/delete/`, {
         method: 'DELETE',
         credentials: 'include',
-        headers,
+        headers: getAdminAuthHeaders(),
       });
 
       const data = await response.json();
@@ -439,19 +402,13 @@ const HotelManagement: React.FC = () => {
         formDataToSend.append('image', selectedRoomImage);
       }
       
-      const headers: Record<string, string> = {};
-      const authHeader = getAdminAuthHeader();
-      if (authHeader) {
-        headers['Authorization'] = authHeader;
-      }
-      
       let response;
       if (isEditingRoom && currentRoom) {
         // Update existing room
         response = await fetch(`${API_BASE_URL}/admin/rooms/${currentRoom.id}/update/`, {
           method: 'PUT',
           credentials: 'include',
-          headers,
+          headers: getAdminAuthHeaders(),
           body: formDataToSend,
         });
       } else {
@@ -459,7 +416,7 @@ const HotelManagement: React.FC = () => {
         response = await fetch(`${API_BASE_URL}/admin/hotels/${selectedHotelForRooms?.id}/rooms/create/`, {
           method: 'POST',
           credentials: 'include',
-          headers,
+          headers: getAdminAuthHeaders(),
           body: formDataToSend,
         });
       }
@@ -553,6 +510,7 @@ const HotelManagement: React.FC = () => {
       const response = await fetch(`${API_BASE_URL}/admin/hotels/${hotel.id}/update/`, {
         method: 'POST',
         credentials: 'include',
+        headers: getAdminAuthHeaders(),
         body: formDataToSend,
       });
 
@@ -745,7 +703,7 @@ const HotelManagement: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search */}
             <div className="relative">
@@ -786,23 +744,23 @@ const HotelManagement: React.FC = () => {
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Hotels</p>
             <p className="text-2xl font-bold text-gray-800 mt-1">{hotels.length}</p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Active Hotels</p>
             <p className="text-2xl font-bold text-green-600 mt-1">
               {hotels.filter((h) => h.is_active).length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Inactive Hotels</p>
             <p className="text-2xl font-bold text-red-600 mt-1">
               {hotels.filter((h) => !h.is_active).length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Avg Rating</p>
             <p className="text-2xl font-bold text-yellow-600 mt-1">
               {hotels.length > 0 
@@ -823,7 +781,7 @@ const HotelManagement: React.FC = () => {
         {/* Hotel Modal */}
         {showHotelModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-800">
                   {isEditing ? 'Edit Hotel' : 'Add New Hotel'}
@@ -1042,7 +1000,7 @@ const HotelManagement: React.FC = () => {
         {/* Room Management Modal */}
         {showRoomModal && selectedHotelForRooms && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
               <div className="p-6 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-purple-600 to-purple-700 text-white">
                 <div>
                   <h2 className="text-2xl font-bold">Manage Rooms</h2>
@@ -1152,7 +1110,7 @@ const HotelManagement: React.FC = () => {
         {/* Room Form Modal */}
         {showRoomFormModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-800">
                   {isEditingRoom ? 'Edit Room' : 'Add New Room'}

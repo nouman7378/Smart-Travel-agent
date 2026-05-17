@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import PageTransition from '../common/PageTransition';
@@ -16,15 +16,20 @@ interface LayoutWrapperProps {
 }
 
 const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ className = '' }) => {
+  const location = useLocation();
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
+  const isChatPage = location.pathname.startsWith('/chat');
+  const shouldHideLayout = isAuthPage || isChatPage;
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Header />
+      {!isAuthPage && <Header />}
       <main className={`flex-1 ${className}`}>
         <PageTransition>
           <Outlet />
         </PageTransition>
       </main>
-      <Footer />
+      {!isAuthPage && <Footer />}
     </div>
   );
 };

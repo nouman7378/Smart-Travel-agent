@@ -182,7 +182,7 @@ const QuickActionsPanel: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={action.action}
-                className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 cursor-pointer border border-gray-200 hover:border-blue-500"
+                className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow p-6 cursor-pointer border border-gray-200 hover:border-blue-500"
               >
                 <div
                   className={`${action.color} w-16 h-16 rounded-lg flex items-center justify-center text-white mb-4`}

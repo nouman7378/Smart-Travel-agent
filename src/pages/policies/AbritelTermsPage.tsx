@@ -38,7 +38,7 @@ const AbritelTermsPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
 
-          <div className="bg-white p-8 rounded-xl shadow-md space-y-8">
+          <div className="bg-white p-8 rounded-lg shadow-md space-y-8">
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Abritel Bookings</h2>
               <p className="text-gray-700 leading-relaxed">

@@ -85,7 +85,7 @@ const PriceBookingPanel: React.FC<PriceBookingPanelProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-6 sticky top-4 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-6 sticky top-4 ${className}`}>
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Your Fare</h2>
 
       {/* Ticket Type Selection */}

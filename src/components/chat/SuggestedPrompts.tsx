@@ -110,7 +110,7 @@ const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({
             whileTap={{ scale: 0.95 }}
             className={`
               flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5
-              bg-white border-2 border-gray-200 rounded-lg sm:rounded-xl
+              bg-white border-2 border-gray-200 rounded-lg sm:rounded-lg
               text-xs sm:text-sm font-medium text-gray-700
               hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50
               transition-all duration-200

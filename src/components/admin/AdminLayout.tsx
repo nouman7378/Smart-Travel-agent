@@ -147,7 +147,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
             {sidebarOpen ? (
               <Link to="/admin" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-lg">T</span>
                 </div>
                 <span className="text-xl font-bold text-gray-800">
@@ -155,7 +155,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 </span>
               </Link>
             ) : (
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg mx-auto">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg mx-auto">
                 <span className="text-white font-bold text-lg">T</span>
               </div>
             )}

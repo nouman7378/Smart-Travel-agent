@@ -48,7 +48,7 @@ const PartnershipsHero: React.FC = () => {
                 >
                   <Link
                     to="#get-started"
-                    className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Get Started
                   </Link>
@@ -59,7 +59,7 @@ const PartnershipsHero: React.FC = () => {
                 >
                   <Link
                     to="/list-property"
-                    className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-2xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+                    className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-300"
                   >
                     List Your Property
                   </Link>
@@ -75,10 +75,10 @@ const PartnershipsHero: React.FC = () => {
               className="hidden lg:block"
             >
               <div className="relative">
-                <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
                   <div className="grid grid-cols-2 gap-4">
                     {[1, 2, 3, 4].map((item) => (
-                      <div key={item} className="bg-white/20 rounded-xl p-4 aspect-square flex items-center justify-center">
+                      <div key={item} className="bg-white/20 rounded-lg p-4 aspect-square flex items-center justify-center">
                         <div className="text-4xl"><Building className="inline w-5 h-5" /></div>
                       </div>
                     ))}

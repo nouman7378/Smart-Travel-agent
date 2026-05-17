@@ -76,7 +76,7 @@ const DealsPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                className="bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden border border-gray-100 transition-all duration-300"
+                className="bg-white rounded-lg shadow-md hover:shadow-xl overflow-hidden border border-gray-100 transition-all duration-300"
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
@@ -96,7 +96,7 @@ const DealsPage: React.FC = () => {
                   <p className="text-gray-600 mb-4">{deal.description}</p>
                   <Link
                     to={`/${deal.category.toLowerCase()}`}
-                    className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300"
+                    className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300"
                   >
                     View Deals
                   </Link>

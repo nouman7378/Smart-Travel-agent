@@ -221,100 +221,10 @@ const ChatPage: React.FC = () => {
 
   return (
     <PageLayout skipHeaderFooter={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50">
-        <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="bg-white rounded-t-xl shadow-lg border-b-2 border-blue-100 p-4 sm:p-5 lg:p-6 mb-2">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-md flex-shrink-0">
-                <svg
-                  className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 tracking-tight truncate">
-                  AI Travel Assistant
-                </h1>
-                <p className="text-xs sm:text-sm text-gray-500 flex items-center gap-2 mt-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse flex-shrink-0"></span>
-                  <span className="truncate">Online • Ready to help</span>
-                </p>
-              </div>
-              <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
-                <button
-                  onClick={handleResetConversation}
-                  className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-1.5"
-                  title="Start New Conversation"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                  </svg>
-                  <span className="hidden sm:inline">Reset</span>
-                </button>
-                <button
-                  onClick={() => navigate('/chat/history')}
-                  className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  title="View Chat History"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => navigate('/packages')}
-                  className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  title="Browse Packages"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Messages Container */}
-          <div className="bg-white rounded-b-xl shadow-lg min-h-[400px] sm:min-h-[500px] max-h-[500px] sm:max-h-[600px] lg:max-h-[700px] overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4">
+      <div className="bg-white flex flex-col min-h-[calc(100vh-200px)]">
+        {/* Messages Section */}
+        <div className="flex-1 py-12">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
@@ -329,7 +239,7 @@ const ChatPage: React.FC = () => {
               />
             )}
 
-            {/* Suggested Prompts - Show when chat is empty (only onboarding message) */}
+            {/* Suggested Prompts */}
             {messages.length === 1 && !isTyping && (
               <SuggestedPrompts
                 onPromptClick={handleSuggestedPrompt}
@@ -341,14 +251,21 @@ const ChatPage: React.FC = () => {
 
             <div ref={messagesEndRef} />
           </div>
+        </div>
 
-          {/* Chat Input */}
-          <ChatInput
-            onSendMessage={handleSendMessage}
-            onSendLocation={handleLocationShare}
-            disabled={isTyping}
-            placeholder="Ask about destinations, budget trips, packages, or travel planning..."
-          />
+        {/* Chat Input Section - Relative to page flow, above footer */}
+        <div className="sticky bottom-0 bg-white/90 backdrop-blur-md py-6 border-t border-gray-50">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
+            <ChatInput
+              onSendMessage={handleSendMessage}
+              onSendLocation={handleLocationShare}
+              disabled={isTyping}
+              placeholder="Message AI Assistant..."
+            />
+            <p className="text-[10px] text-gray-400 text-center mt-3">
+              TravelHub AI can make mistakes. Check important info.
+            </p>
+          </div>
         </div>
       </div>
     </PageLayout>

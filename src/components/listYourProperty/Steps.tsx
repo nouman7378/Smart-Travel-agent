@@ -72,14 +72,14 @@ const Steps: React.FC = () => {
                 <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transform translate-x-6 z-0"></div>
               )}
 
-              <div className="relative z-10 bg-white p-6 md:p-8 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 text-center">
+              <div className="relative z-10 bg-white p-6 md:p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center">
                 {/* Step Number Badge */}
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                   {step.number}
                 </div>
 
                 {/* Icon */}
-                <div className="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mx-auto mb-6">
+                <div className="w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mx-auto mb-6">
                   {step.icon}
                 </div>
 

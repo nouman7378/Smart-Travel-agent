@@ -178,99 +178,60 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
   };
 
   return (
-    <section className={`py-16 md:py-20 lg:py-24 bg-white ${className}`}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Pakistan Tourism Banner - Featured Hotels Style */}
+    <section className={`py-12 md:py-16 bg-white ${className}`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Compact Tourism Banner */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 mb-16"
+          className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden mb-12"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2">
-            {/* Text Content - Left Side */}
-            <div className="p-8 md:p-12 lg:p-16">
-              {/* Main Heading */}
-              <motion.h1 
+          <div className="flex flex-col md:flex-row items-center">
+            {/* Text Side */}
+            <div className="p-8 md:p-10 lg:p-12 md:w-3/5">
+              <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
                 viewport={{ once: true }}
-                className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-6 leading-tight"
               >
-                Pakistan: <span className="font-semibold">'Tourism's Next Big Thing'</span>
-                <br />
-                <span className="text-lg md:text-xl text-gray-600 font-normal mt-2 block">– Lonely Planet</span>
-              </motion.h1>
-              
-              {/* Description */}
-              <motion.p 
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                viewport={{ once: true }}
-                className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed"
-              >
-                Travel with us to experience the beauty, culture, and hospitality of Pakistan!
-              </motion.p>
+                <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
+                  Pakistan: <span className="font-bold">Tourism's Next Big Thing</span>
+                </h2>
+                <p className="text-gray-500 text-sm mb-6">— Lonely Planet</p>
+                
+                <p className="text-gray-600 text-sm md:text-base mb-8 max-w-md">
+                  Experience the breathtaking beauty, vibrant culture, and legendary hospitality of Pakistan.
+                </p>
 
-              {/* Where to next section */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                viewport={{ once: true }}
-                className="mb-8"
-              >
-                <h2 className="text-xl md:text-2xl font-medium text-gray-900 mb-6">Where to next?</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {['Hunza', 'Skardu', 'Ghizer', 'Lahore', 'Bahawalpur', 'Karachi'].map((city, index) => (
-                    <motion.div
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {['Hunza', 'Skardu', 'Lahore', 'Karachi'].map((city) => (
+                    <span 
                       key={city}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.5 + index * 0.1 }}
-                      viewport={{ once: true }}
-                      whileHover={{ scale: 1.05, backgroundColor: "#f8fafc" }}
-                      className="bg-gray-50 hover:bg-gray-100 rounded-lg px-4 py-3 text-center cursor-pointer transition-all duration-200 border border-gray-200 hover:border-gray-300"
+                      className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-medium text-gray-600"
                     >
-                      <span className="font-normal text-gray-700 text-sm">{city}</span>
-                    </motion.div>
+                      {city}
+                    </span>
                   ))}
                 </div>
-              </motion.div>
 
-              {/* See All Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                <div className="w-24 h-px bg-gray-300 mb-6"></div>
-                <button className="text-gray-700 hover:text-gray-900 font-normal text-base transition-colors duration-200 flex items-center space-x-2 group">
-                  <span>See All</span>
+                <button className="text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center space-x-2 group">
+                  <span>Explore Pakistan</span>
                   <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
                 </button>
               </motion.div>
             </div>
 
-            {/* Image Section - Right Side */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="relative h-64 lg:h-auto min-h-[400px] bg-gray-100"
-            >
+            {/* Image Side - Smaller and cropped better */}
+            <div className="hidden md:block md:w-2/5 h-64 md:h-80 overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                src="https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?auto=format&fit=crop&w=800&q=80"
                 alt="Pakistan Landscape"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-white/10 to-transparent"></div>
-            </motion.div>
+            </div>
           </div>
         </motion.div>
 
@@ -365,7 +326,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
               disabled={currentIndex === 0}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-3 rounded-xl bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -376,7 +337,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
               disabled={currentIndex >= maxIndex}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-3 rounded-xl bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -428,7 +389,7 @@ const DestinationCard: React.FC<{ destination: Destination }> = ({ destination }
   return (
     <motion.div 
       whileHover={{ y: -4 }}
-      className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group cursor-pointer"
+      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group cursor-pointer"
       onClick={() => navigate(`/search/hotels?destination=${destination.name}`)}
     >
       {/* Image */}

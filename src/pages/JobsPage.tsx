@@ -89,7 +89,7 @@ const JobsPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer"
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer"
               >
                 <div className="text-4xl mb-4">{category.icon}</div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{category.title}</h3>
@@ -99,7 +99,7 @@ const JobsPage: React.FC = () => {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-xl">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-lg">
             <h2 className="text-3xl font-bold mb-4">Why Work at TravelHub?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

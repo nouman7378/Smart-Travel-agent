@@ -22,7 +22,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ isTyping }) => {
       exit={{ opacity: 0 }}
       className="flex justify-start mb-4"
     >
-      <div className="bg-blue-50 rounded-2xl rounded-tl-sm px-4 py-3">
+      <div className="bg-blue-50 rounded-lg rounded-tl-sm px-4 py-3">
         <div className="flex gap-1">
           {[0, 1, 2].map((index) => (
             <motion.div

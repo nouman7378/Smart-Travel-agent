@@ -103,7 +103,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
       className={`flex ${isBot ? 'justify-start' : 'justify-end'} mb-4`}
     >
       <div
-        className={`max-w-[75%] md:max-w-[60%] rounded-2xl px-4 py-3 ${
+        className={`max-w-[75%] md:max-w-[60%] rounded-lg px-4 py-3 ${
           isBot
             ? 'bg-blue-50 text-gray-800 rounded-tl-sm'
             : 'bg-blue-600 text-white rounded-tr-sm'

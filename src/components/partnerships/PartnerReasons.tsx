@@ -61,7 +61,7 @@ const PartnerReasons: React.FC = () => {
             >
               {/* Image */}
               <div className={reason.reverse ? 'lg:col-start-2' : ''}>
-                <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                <div className="relative rounded-lg overflow-hidden shadow-lg">
                   <img
                     src={reason.image}
                     alt={reason.title}

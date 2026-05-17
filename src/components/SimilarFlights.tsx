@@ -57,7 +57,7 @@ const SimilarFlights: React.FC<SimilarFlightsProps> = ({
           <div
             key={flight.id}
             onClick={() => onFlightClick?.(flight.id)}
-            className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+            className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
           >
             <div className="p-6">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">

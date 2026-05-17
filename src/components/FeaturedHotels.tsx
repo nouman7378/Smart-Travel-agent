@@ -110,7 +110,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
   const visibleHotels = hotels.slice(currentIndex, currentIndex + hotelsPerView);
 
   return (
-    <section className={`py-16 md:py-20 lg:py-24 bg-white ${className}`}>
+    <section className={`pt-8 md:pt-12 lg:pt-16 pb-16 md:pb-20 lg:pb-24 bg-white ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Centered */}
         <motion.div 
@@ -173,7 +173,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
               disabled={currentIndex === 0}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-3 rounded-xl bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -184,7 +184,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
               disabled={currentIndex >= maxIndex}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-3 rounded-xl bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -221,7 +221,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   return (
     <motion.div 
       whileHover={{ y: -4 }}
-      className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group cursor-pointer"
+      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group cursor-pointer"
     >
       {/* Image */}
       <div className="relative h-48 overflow-hidden">

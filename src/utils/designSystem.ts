@@ -117,9 +117,9 @@ export const spacing = {
 
 export const borderRadius = {
   sm: 'rounded-lg',
-  md: 'rounded-xl',
-  lg: 'rounded-2xl',
-  xl: 'rounded-3xl',
+  md: 'rounded-lg',
+  lg: 'rounded-lg',
+  xl: 'rounded-lg',
   full: 'rounded-full',
 };
 

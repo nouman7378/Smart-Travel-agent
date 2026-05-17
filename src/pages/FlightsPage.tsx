@@ -126,8 +126,24 @@ const FlightsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Search Bar */}
-      <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 text-white py-12 md:py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative text-white py-12 md:py-16">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden rounded-b-3xl sm:rounded-none">
+          <div
+            className="absolute inset-0 bg-cover bg-center transform scale-110 animate-zoom-in-out"
+            style={{
+              backgroundImage: 'url(https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&q=80)',
+            }}
+          ></div>
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+
+        {/* Floating Elements */}
+        <div className="absolute top-10 left-10 w-20 h-20 bg-blue-300/20 rounded-full blur-xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl animate-float-slow"></div>
+        <div className="absolute top-40 right-40 w-16 h-16 bg-blue-300/30 rounded-full blur-lg animate-pulse"></div>
+
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -167,7 +183,7 @@ const FlightsPage: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
                     whileHover={{ scale: 1.05, y: -5 }}
-                    className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
+                    className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
                   >
                     <div className="aspect-square relative overflow-hidden">
                       <img
@@ -205,7 +221,7 @@ const FlightsPage: React.FC = () => {
       {error && !isLoading && (
         <section className="py-8 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl shadow-md p-12 text-center">
+            <div className="bg-white rounded-lg shadow-md p-12 text-center">
               <div className="text-6xl mb-4"><Frown className="inline w-5 h-5" /></div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Oops!</h3>
               <p className="text-gray-600 mb-4">{error}</p>
@@ -283,7 +299,7 @@ const FlightsPage: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                    className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                   >
                     <div className="text-4xl mb-4">{feature.icon}</div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>

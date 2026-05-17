@@ -37,16 +37,9 @@ interface Package {
   updated_at: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+import { getAdminAuthHeaders } from '@/utils/adminAuth';
 
-// Helper to get admin credentials from localStorage for API auth
-const getAdminAuthHeader = (): string => {
-  const adminCreds = localStorage.getItem('admin_credentials');
-  if (adminCreds) {
-    return `Basic ${btoa(adminCreds)}`;
-  }
-  return '';
-};
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 const PackageManagement: React.FC = () => {
   const [packages, setPackages] = useState<Package[]>([]);
@@ -111,9 +104,7 @@ const PackageManagement: React.FC = () => {
         setError(null);
         
         const response = await fetch(`${API_BASE_URL}/admin/packages/`, {
-          headers: {
-            'Authorization': getAdminAuthHeader(),
-          },
+          headers: getAdminAuthHeaders(),
         });
         
         if (response.status === 401 || response.status === 403) {
@@ -209,9 +200,7 @@ const PackageManagement: React.FC = () => {
         method: 'POST',
         body: formDataToSend,
         credentials: 'include',  // Include cookies for session authentication
-        headers: {
-          'Authorization': getAdminAuthHeader(),
-        }
+        headers: getAdminAuthHeaders(),
       });
       
       const result = await response.json();
@@ -219,7 +208,7 @@ const PackageManagement: React.FC = () => {
       if (result.success) {
         // Refresh packages list
         const refreshResponse = await fetch(`${API_BASE_URL}/admin/packages/`, {
-          headers: { 'Authorization': getAdminAuthHeader() },
+          headers: getAdminAuthHeaders(),
         });
         const refreshData = await refreshResponse.json();
         if (refreshData.success) {
@@ -255,9 +244,7 @@ const PackageManagement: React.FC = () => {
     try {
       const response = await fetch(`${API_BASE_URL}/admin/packages/${packageId}/delete/`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': getAdminAuthHeader(),
-        },
+        headers: getAdminAuthHeaders(),
       });
       
       const result = await response.json();
@@ -265,7 +252,7 @@ const PackageManagement: React.FC = () => {
       if (result.success) {
         // Refresh packages list
         const refreshResponse = await fetch(`${API_BASE_URL}/admin/packages/`, {
-          headers: { 'Authorization': getAdminAuthHeader() },
+          headers: getAdminAuthHeaders(),
         });
         const refreshData = await refreshResponse.json();
         if (refreshData.success) {

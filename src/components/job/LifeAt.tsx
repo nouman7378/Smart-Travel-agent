@@ -56,7 +56,7 @@ const LifeAt: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 group"
+              className="bg-white rounded-lg shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 group"
             >
               <div className="relative h-48 overflow-hidden">
                 <img

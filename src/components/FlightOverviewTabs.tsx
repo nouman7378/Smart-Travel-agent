@@ -52,7 +52,7 @@ const FlightOverviewTabs: React.FC<FlightOverviewTabsProps> = ({
   ];
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 ${className}`}>
       {/* Tabs */}
       <div className="border-b border-gray-200">
         <div className="flex overflow-x-auto">

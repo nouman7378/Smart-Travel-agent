@@ -6,7 +6,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import logo from '../../assets/logo.png';
 import { useBooking } from '../../contexts/BookingContext';
+import { Plane, Building, Car, Palmtree, Bot, Ticket, Star } from 'lucide-react';
 
 interface HeaderProps {
   className?: string;
@@ -21,6 +23,15 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement | null>(null);
+  const navItems = [
+    { name: 'Flights', href: '/flights' },
+    { name: 'Hotels', href: '/hotels' },
+    { name: 'Cars', href: '/cars' },
+    { name: 'Packages', href: '/packages' },
+    { name: 'AI Chat', href: '/chat' },
+    { name: 'Booking', href: '/booking/demo' },
+    { name: 'Reviews', href: '/community' },
+  ];
 
   // Scroll effect for header
   useEffect(() => {
@@ -46,18 +57,6 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isProfileMenuOpen]);
 
-  // Navigation items
-  const navItems = [
-    { name: 'Flights', href: '/flights' },
-    { name: 'Hotels', href: '/hotels' },
-    { name: 'Cars', href: '/cars' },
-    { name: 'Packages', href: '/packages' },
-    { name: 'AI Chat', href: '/chat' },
-    { name: 'Itinerary', href: '/itinerary/builder' },
-    { name: 'Booking', href: '/booking/demo' },
-    { name: 'Reviews', href: '/community' },
-  ];
-
   return (
     <header 
       className={`
@@ -70,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         ${className}
       `}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-3 sm:px-3 lg:px-4">
         {/* Main Header */}
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -79,48 +78,38 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               to="/" 
               className="flex items-center group"
             >
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-lg">T</span>
-                </div>
-                <div>
-                  <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">
-                    Travel<span className="text-blue-600">Hub</span>
-                  </span>
-                  <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mt-0.5 sm:mt-1"></div>
-                </div>
+              <div className="flex items-center">
+                <img src={logo} alt="TravelHub Logo" className="h-16 w-auto" />
               </div>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`
-                  relative px-4 py-2 rounded-xl
-                  transition-all duration-200 ease-out
-                  ${location.pathname === item.href || location.pathname.startsWith(item.href + '/')
-                    ? 'text-blue-600 bg-blue-50 border border-blue-100 font-semibold' 
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-medium'
-                  }
-                `}
-              >
-                {item.name}
-                {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
-                  <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold">
-                    {itemCount}
-                  </span>
-                )}
-                
-                {/* Active indicator */}
-                {(location.pathname === item.href || location.pathname.startsWith(item.href + '/')) && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></div>
-                )}
-              </Link>
-            ))}
+          <nav className="hidden lg:flex items-center space-x-2">
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/');
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`
+                    relative px-5 py-3 rounded-full text-base font-bold
+                    transition-all duration-300 ease-in-out flex items-center group
+                    ${isActive
+                      ? 'text-blue-600 bg-white border-2 border-blue-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                    }
+                  `}
+                >
+                  <span>{item.name}</span>
+                  {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
+                    <span className="ml-2 inline-flex items-center justify-center min-w-[22px] h-5.5 px-2 rounded-full bg-blue-600 text-white text-[11px] font-bold">
+                      {itemCount}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right Side Actions */}
@@ -131,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 {user?.is_staff && (
                   <Link
                     to="/admin"
-                    className="hidden sm:flex items-center space-x-2 px-4 py-2.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl font-medium shadow-sm hover:bg-amber-100 transition-all duration-200"
+                    className="hidden sm:flex items-center space-x-2 px-4 py-2.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg font-medium shadow-sm hover:bg-amber-100 transition-all duration-200"
                   >
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -152,7 +141,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   </button>
 
                   {isProfileMenuOpen && (
-                    <div className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-50">
+                    <div className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50">
                       <div className="flex items-center space-x-3 pb-3 border-b border-gray-100">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-semibold">
                           {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
@@ -211,10 +200,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 </div>
               </>
             ) : (
-              /* Sign In Button with Glass Effect */
+              /* Sign In Button - Blue Background */
               <Link
                 to="/login"
-                className="hidden sm:flex items-center space-x-2 px-6 py-2.5 bg-white/80 backdrop-blur-md border border-white/20 text-gray-700 rounded-xl font-medium shadow-lg shadow-black/5 hover:bg-white hover:shadow-xl hover:shadow-black/10 transform hover:scale-105 transition-all duration-200"
+                className="hidden sm:flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -260,28 +249,32 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           <div className="flex flex-col space-y-3">
             {/* Mobile Navigation */}
             <div className="grid grid-cols-2 gap-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`
-                    p-3 rounded-xl text-sm font-medium text-center
-                    transition-all duration-200
-                    ${location.pathname === item.href || location.pathname.startsWith(item.href + '/')
-                      ? 'text-blue-600 bg-blue-50 border border-blue-100 font-semibold'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-medium'
-                    }
-                  `}
-                >
-                  {item.name}
-                  {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
-                    <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold">
-                      {itemCount}
-                    </span>
-                  )}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/');
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`
+                      p-3 rounded-full text-sm font-bold flex items-center justify-center space-x-2
+                      transition-all duration-200
+                      ${isActive
+                        ? 'text-blue-600 bg-white border-2 border-blue-600 shadow-sm'
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                      }
+                    `}
+                  >
+                    <span>{item.icon}</span>
+                    <span>{item.name}</span>
+                    {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
+                      <span className="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold">
+                        {itemCount}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Mobile Auth Button */}
@@ -291,7 +284,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   <Link
                     to="/admin"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center space-x-2 px-4 py-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl font-medium hover:bg-amber-100 transition-all duration-200"
+                    className="flex items-center justify-center space-x-2 px-4 py-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg font-medium hover:bg-amber-100 transition-all duration-200"
                   >
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -303,7 +296,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 <Link
                   to="/profile"
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-50 border border-blue-100 text-blue-700 rounded-xl font-medium hover:bg-blue-100 transition-all duration-200"
+                  className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-50 border border-blue-100 text-blue-700 rounded-lg font-medium hover:bg-blue-100 transition-all duration-200"
                 >
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                     {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
@@ -315,7 +308,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               <Link
                 to="/login"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center space-x-2 px-4 py-3 bg-white/80 backdrop-blur-md border border-white/20 text-gray-700 rounded-xl font-medium shadow-lg shadow-black/5 text-center hover:bg-white transition-all duration-200"
+                className="flex items-center justify-center space-x-2 px-4 py-3 bg-white/80 backdrop-blur-md border border-white/20 text-gray-700 rounded-lg font-medium shadow-lg shadow-black/5 text-center hover:bg-white transition-all duration-200"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path

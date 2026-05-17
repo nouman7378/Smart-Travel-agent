@@ -247,7 +247,7 @@ const BookingManagement: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div className="relative">
@@ -303,23 +303,23 @@ const BookingManagement: React.FC = () => {
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Bookings</p>
             <p className="text-2xl font-bold text-gray-800 mt-1">{bookings.length}</p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Pending</p>
             <p className="text-2xl font-bold text-yellow-600 mt-1">
               {bookings.filter((b) => b.status === 'pending').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Confirmed</p>
             <p className="text-2xl font-bold text-green-600 mt-1">
               {bookings.filter((b) => b.status === 'confirmed').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Revenue</p>
             <p className="text-2xl font-bold text-blue-600 mt-1">
               PKR {bookings.reduce((sum, b) => sum + b.totalAmount, 0).toLocaleString()}
@@ -342,7 +342,7 @@ const BookingManagement: React.FC = () => {
         {/* Booking Detail Modal */}
         {showBookingModal && selectedBooking && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-800">Booking Details</h2>
                 <button

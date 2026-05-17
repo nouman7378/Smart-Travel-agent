@@ -290,7 +290,7 @@ const PackagesManagement: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search */}
             <div className="relative">
@@ -333,23 +333,23 @@ const PackagesManagement: React.FC = () => {
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Packages</p>
             <p className="text-2xl font-bold text-gray-800 mt-1">{packages.length}</p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Active Packages</p>
             <p className="text-2xl font-bold text-green-600 mt-1">
               {packages.filter((p) => p.status === 'active').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Featured</p>
             <p className="text-2xl font-bold text-yellow-600 mt-1">
               {packages.filter((p) => p.featured).length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Bookings</p>
             <p className="text-2xl font-bold text-blue-600 mt-1">
               {packages.reduce((sum, p) => sum + p.bookings, 0)}
@@ -368,7 +368,7 @@ const PackagesManagement: React.FC = () => {
         {/* Package Modal */}
         {showPackageModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-800">
                   {isEditing ? 'Edit Package' : 'New Package'}

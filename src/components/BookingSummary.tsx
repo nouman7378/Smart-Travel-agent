@@ -63,7 +63,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-8 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-6 md:p-8 ${className}`}>
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Booking Summary</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">

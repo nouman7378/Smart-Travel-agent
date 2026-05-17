@@ -42,7 +42,7 @@ const HolidayRentalsFrancePage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
 
-          <div className="bg-white p-8 rounded-xl shadow-md">
+          <div className="bg-white p-8 rounded-lg shadow-md">
             <p className="text-gray-700 mb-6">
               Explore our wide selection of holiday rentals in France, from cozy Parisian
               apartments to luxurious villas on the French Riviera.

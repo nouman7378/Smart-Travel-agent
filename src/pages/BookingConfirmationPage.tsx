@@ -165,7 +165,7 @@ const BookingConfirmationPage: React.FC<BookingConfirmationPageProps> = ({
         </div>
 
         {/* Additional Information */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Important Information</h3>
           <ul className="space-y-2 text-sm text-gray-700">
             <li className="flex items-start">

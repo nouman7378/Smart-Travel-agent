@@ -80,7 +80,7 @@ const CarResultCard: React.FC<CarResultCardProps> = ({ car, className = '', onCl
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
+      className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
       onClick={onClick}
     >
       <div className="flex flex-col md:flex-row">

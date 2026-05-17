@@ -11,6 +11,7 @@
  */
 
 import React, { useState } from 'react';
+import DatePicker from './common/DatePicker';
 
 export interface CarFilters {
   pickupLocation: string;
@@ -135,11 +136,9 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Pick-up Date</label>
-              <input
-                type="date"
+              <DatePicker
                 value={filters.pickupDate}
                 onChange={(e) => updateFilters({ pickupDate: e.target.value })}
-                min={new Date().toISOString().split('T')[0]}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               />
             </div>
@@ -149,18 +148,16 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
                 type="time"
                 value={filters.pickupTime}
                 onChange={(e) => updateFilters({ pickupTime: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:hidden"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Drop-off Date</label>
-              <input
-                type="date"
+              <DatePicker
                 value={filters.dropoffDate}
                 onChange={(e) => updateFilters({ dropoffDate: e.target.value })}
-                min={filters.pickupDate || new Date().toISOString().split('T')[0]}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               />
             </div>
@@ -170,7 +167,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
                 type="time"
                 value={filters.dropoffTime}
                 onChange={(e) => updateFilters({ dropoffTime: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:hidden"
               />
             </div>
           </div>

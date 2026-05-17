@@ -11,6 +11,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 
 interface FooterProps {
   className?: string;
@@ -114,232 +115,65 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   };
 
   return (
-    <footer className={`bg-white text-gray-700 ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <div className="py-12 border-b border-gray-200">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12">
-            {/* About Section */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">About</h3>
-              <ul className="space-y-3">
-                {footerLinks.About.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="group flex items-start text-gray-600 hover:text-blue-600 transition-colors duration-200 text-sm leading-relaxed"
-                      onMouseEnter={() => setHoveredItem(link.name)}
-                      onMouseLeave={() => setHoveredItem(null)}
-                    >
-                      <span className={`w-1.5 h-1.5 bg-blue-500 rounded-full mr-2.5 mt-1.5 transition-all duration-300 flex-shrink-0 ${
-                        hoveredItem === link.name ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-                      }`}></span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+    <footer className={`bg-black text-gray-300 border-t border-gray-800 ${className}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          {/* Logo & Slogan */}
+          <div className="flex flex-col items-center md:items-start space-y-4">
+            <img src={logo} alt="TravelHub Logo" className="h-12 w-auto brightness-0 invert" />
+            <p className="text-gray-400 text-sm font-medium">Your trusted partner for amazing travel experiences.</p>
+            
+            {/* Social Icons - Minimal */}
+            <div className="flex space-x-4 pt-2">
+              {socialMedia.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  className="text-gray-500 hover:text-white transition-colors duration-200"
+                  aria-label={social.name}
+                >
+                  {social.icon}
+                </a>
+              ))}
             </div>
+          </div>
 
-            {/* Support Section */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Support</h3>
-              <ul className="space-y-3">
-                {footerLinks.Support.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="group flex items-start text-gray-600 hover:text-blue-600 transition-colors duration-200 text-sm leading-relaxed"
-                      onMouseEnter={() => setHoveredItem(link.name)}
-                      onMouseLeave={() => setHoveredItem(null)}
-                    >
-                      <span className={`w-1.5 h-1.5 bg-blue-500 rounded-full mr-2.5 mt-1.5 transition-all duration-300 flex-shrink-0 ${
-                        hoveredItem === link.name ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-                      }`}></span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Policies Section */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Policies</h3>
-              <ul className="space-y-3">
-                {footerLinks.Policies.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="group flex items-start text-gray-600 hover:text-blue-600 transition-colors duration-200 text-sm leading-relaxed"
-                      onMouseEnter={() => setHoveredItem(link.name)}
-                      onMouseLeave={() => setHoveredItem(null)}
-                    >
-                      <span className={`w-1.5 h-1.5 bg-blue-500 rounded-full mr-2.5 mt-1.5 transition-all duration-300 flex-shrink-0 ${
-                        hoveredItem === link.name ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-                      }`}></span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Travel Categories Section */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Travel</h3>
-              <ul className="space-y-3">
-                {footerLinks.Travel.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="group flex items-start text-gray-600 hover:text-blue-600 transition-colors duration-200 text-sm leading-relaxed"
-                      onMouseEnter={() => setHoveredItem(link.name)}
-                      onMouseLeave={() => setHoveredItem(null)}
-                    >
-                      <span className={`w-1.5 h-1.5 bg-blue-500 rounded-full mr-2.5 mt-1.5 transition-all duration-300 flex-shrink-0 ${
-                        hoveredItem === link.name ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-                      }`}></span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Explore Section */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Explore</h3>
-              <ul className="space-y-3">
-                {footerLinks.Explore.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="group flex items-start text-gray-600 hover:text-blue-600 transition-colors duration-200 text-sm leading-relaxed"
-                      onMouseEnter={() => setHoveredItem(link.name)}
-                      onMouseLeave={() => setHoveredItem(null)}
-                    >
-                      <span className={`w-1.5 h-1.5 bg-blue-500 rounded-full mr-2.5 mt-1.5 transition-all duration-300 flex-shrink-0 ${
-                        hoveredItem === link.name ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-                      }`}></span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">{link.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Brand & Social Media */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Connect</h3>
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-2 text-base">TravelHub</h4>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Your trusted partner for amazing travel experiences.
-                </p>
-              </div>
-              <div className="flex space-x-3">
-                {socialMedia.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    className="group p-2.5 rounded-lg bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:scale-110 hover:shadow-md"
-                    aria-label={social.name}
-                  >
-                    <div className="text-gray-500 group-hover:text-blue-600 transition-colors duration-300">
-                      {social.icon}
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
+          {/* Minimal Newsletter */}
+          <div className="w-full max-w-md">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-3 text-center md:text-left">Stay Updated</h3>
+            <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-white"
+                required
+              />
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-bold text-sm"
+              >
+                Join
+              </button>
+            </form>
           </div>
         </div>
 
-        {/* Newsletter Section */}
-        <div className="border-t border-gray-200 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-            <div className="lg:col-span-2">
-              <h3 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">WANT MORE UPDATES?</h3>
-              <p className="text-gray-600 text-sm mb-4">
-                Subscribe to our newsletter to get updates about new tours, travel tips, top destinations and more!
-              </p>
-            </div>
-            <div>
-              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    placeholder="First Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 sm:px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium text-sm whitespace-nowrap"
-                  >
-                    Subscribe
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="border-t border-gray-200 py-6 sm:py-8">
-          <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            {/* Copyright & Links */}
-            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs sm:text-sm text-gray-500 text-center sm:text-left">
-              <div>
-                © 2024 TravelHub. All Rights Reserved.
-              </div>
-            </div>
-
-            {/* Language & Currency */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <select 
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="bg-white border border-gray-300 rounded-lg px-2 sm:px-3 py-1.5 sm:py-1 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+        {/* Bottom Line */}
+        <div className="mt-12 pt-8 border-t border-gray-900 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-xs">© 2024 TravelHub. All Rights Reserved.</p>
+          
+          <div className="flex items-center space-x-6">
+            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
+              <Link 
+                key={item} 
+                to={`/policies/${item.toLowerCase().replace(/ /g, '-')}`} 
+                className="text-gray-500 hover:text-white text-xs font-medium transition-colors"
               >
-                <option value="EN">English</option>
-                <option value="UR">Urdu</option>
-                <option value="FR">French</option>
-                <option value="DE">German</option>
-              </select>
-              
-              <select 
-                value={selectedCurrency}
-                onChange={(e) => setSelectedCurrency(e.target.value)}
-                className="bg-white border border-gray-300 rounded-lg px-2 sm:px-3 py-1.5 sm:py-1 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-              >
-                <option value="USD">USD</option>
-                <option value="PKR">PKR</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-              </select>
-            </div>
+                {item}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

@@ -78,7 +78,7 @@ const ItineraryDetails: React.FC<ItineraryDetailsProps> = ({
 
       {/* Flight Card */}
       {flight && (
-        <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-semibold text-gray-900">Flight</h3>
             <div className="flex items-center space-x-2">
@@ -151,7 +151,7 @@ const ItineraryDetails: React.FC<ItineraryDetailsProps> = ({
 
       {/* Hotel Card */}
       {hotel && (
-        <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-semibold text-gray-900">Hotel</h3>
             <div className="flex items-center space-x-2">
@@ -216,7 +216,7 @@ const ItineraryDetails: React.FC<ItineraryDetailsProps> = ({
 
       {/* Car Card */}
       {car && (
-        <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-semibold text-gray-900">Car Rental</h3>
             <div className="flex items-center space-x-2">

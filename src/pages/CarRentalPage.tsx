@@ -72,7 +72,7 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('http://localhost:8000/api/cars/');
+        const response = await fetch('http://localhost:8001/api/cars/');
         const data = await response.json();
         
         if (data.success) {

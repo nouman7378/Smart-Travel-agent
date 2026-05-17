@@ -48,7 +48,7 @@ const FlightResultCard: React.FC<FlightResultCardProps> = ({
 }) => {
   return (
     <div
-      className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
+      className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
       onClick={onClick}
     >
       <div className="p-4 md:p-6">

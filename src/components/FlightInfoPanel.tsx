@@ -55,7 +55,7 @@ interface FlightInfoPanelProps {
 
 const FlightInfoPanel: React.FC<FlightInfoPanelProps> = ({ flight, className = '' }) => {
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-8 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-6 md:p-8 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-200">
         <div className="flex items-center space-x-4">

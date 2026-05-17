@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import AddToBookingButton from './common/AddToBookingButton';
 import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
+import DatePicker from './common/DatePicker';
 
 interface Room {
   id: number;
@@ -152,10 +153,10 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+            className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col"
           >
             {/* Header */}
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
               <div>
                 <h2 className="text-2xl font-bold">{hotel.name}</h2>
                 <p className="text-blue-100">{hotel.location}</p>
@@ -175,21 +176,17 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
-                  <input
-                    type="date"
+                  <DatePicker
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
-                    min={new Date().toISOString().split('T')[0]}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
-                  <input
-                    type="date"
+                  <DatePicker
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
-                    min={checkIn || new Date().toISOString().split('T')[0]}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -348,7 +345,7 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-gray-200 bg-gray-50 text-center text-sm text-gray-500">
+            <div className="p-4 border-t border-gray-200 bg-gray-50 text-center text-sm text-gray-500 rounded-b-lg">
               Prices include taxes and fees. Free cancellation available.
             </div>
           </motion.div>

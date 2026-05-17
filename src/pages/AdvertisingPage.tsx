@@ -40,7 +40,7 @@ const AdvertisingPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
 
-          <div className="bg-white p-8 rounded-xl shadow-md mb-8">
+          <div className="bg-white p-8 rounded-lg shadow-md mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Why Advertise with TravelHub?</h2>
             <p className="text-gray-700 mb-6">
               TravelHub reaches millions of travelers every month, making it the perfect platform to
@@ -67,7 +67,7 @@ const AdvertisingPage: React.FC = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white p-6 rounded-xl shadow-md"
+              className="bg-white p-6 rounded-lg shadow-md"
             >
               <h3 className="text-xl font-bold text-gray-900 mb-4">Display Advertising</h3>
               <p className="text-gray-700 mb-4">
@@ -80,7 +80,7 @@ const AdvertisingPage: React.FC = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white p-6 rounded-xl shadow-md"
+              className="bg-white p-6 rounded-lg shadow-md"
             >
               <h3 className="text-xl font-bold text-gray-900 mb-4">Sponsored Listings</h3>
               <p className="text-gray-700 mb-4">

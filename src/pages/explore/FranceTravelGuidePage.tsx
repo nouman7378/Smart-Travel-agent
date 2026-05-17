@@ -71,7 +71,7 @@ const FranceTravelGuidePage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.02, y: -5 }}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer"
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer"
               >
                 <img
                   src={dest.image}
@@ -86,7 +86,7 @@ const FranceTravelGuidePage: React.FC = () => {
             ))}
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md">
+          <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Travel Tips</h2>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">

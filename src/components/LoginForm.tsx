@@ -72,30 +72,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
   return (
     <form onSubmit={handleSubmit} className={className}>
       <div className="space-y-5">
-        {/* Email Field (sent as username to API) */}
+        {/* Email or Username Field (sent as username to API) */}
         <div>
-          <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email
+          <label htmlFor="login-username" className="block text-sm font-medium text-gray-700 mb-2">
+            Email or Username
           </label>
           <input
-            id="login-email"
-            type="email"
-            autoComplete="email"
+            id="login-username"
+            type="text"
+            autoComplete="username"
             value={formData.username}
             onChange={(e) => handleChange('username', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.username ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 ${
+              errors.username ? 'border-red-500 bg-red-50/30' : 'border-gray-200 bg-gray-50/50 hover:bg-white'
             }`}
-            placeholder="Enter your email"
+            placeholder="Enter your email or username"
           />
           {errors.username && (
-            <p className="mt-1 text-sm text-red-600">{errors.username}</p>
+            <p className="mt-1 text-xs text-red-600 font-medium">{errors.username}</p>
           )}
         </div>
 
         {/* Password Field */}
         <div>
-          <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="login-password" className="block text-sm font-semibold text-gray-700 mb-2">
             Password
           </label>
           <input
@@ -104,30 +104,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
             autoComplete="current-password"
             value={formData.password}
             onChange={(e) => handleChange('password', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-              errors.password ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 ${
+              errors.password ? 'border-red-500 bg-red-50/30' : 'border-gray-200 bg-gray-50/50 hover:bg-white'
             }`}
             placeholder="Enter your password"
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+            <p className="mt-1 text-xs text-red-600 font-medium">{errors.password}</p>
           )}
         </div>
 
         {/* Remember Me & Forgot Password */}
-        <div className="flex items-center justify-between">
-          <label className="flex items-center cursor-pointer">
+        <div className="flex items-center justify-between py-1">
+          <label className="flex items-center cursor-pointer group">
             <input
               type="checkbox"
               checked={formData.rememberMe}
               onChange={(e) => handleChange('rememberMe', e.target.checked)}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500/20 transition-all"
             />
-            <span className="ml-2 text-sm text-gray-700">Remember me</span>
+            <span className="ml-2 text-sm text-gray-600 group-hover:text-gray-900 transition-colors">Remember me</span>
           </label>
           <a
             href="#forgot-password"
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-blue-600 hover:text-blue-700 font-bold transition-colors"
           >
             Forgot password?
           </a>
@@ -137,7 +137,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:transform-none"
+          className="w-full px-4 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all duration-200 shadow-blue-200 shadow-lg hover:shadow-blue-300 transform hover:-translate-y-1 active:translate-y-0"
         >
           {isSubmitting ? 'Signing in...' : 'Sign In'}
         </button>

@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Report } from '@/types/admin';
+import DatePicker from '@/components/common/DatePicker';
 
 const ReportsAnalytics: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
@@ -125,7 +126,7 @@ const ReportsAnalytics: React.FC = () => {
         </div>
 
         {/* Generate Report Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Generate New Report</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -145,8 +146,7 @@ const ReportsAnalytics: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
-              <input
-                type="date"
+              <DatePicker
                 value={dateRange.start}
                 onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -154,8 +154,7 @@ const ReportsAnalytics: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
-              <input
-                type="date"
+              <DatePicker
                 value={dateRange.end}
                 onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -192,23 +191,23 @@ const ReportsAnalytics: React.FC = () => {
 
         {/* Analytics Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Total Reports</p>
             <p className="text-2xl font-bold text-gray-800 mt-1">{reports.length}</p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Bookings Reports</p>
             <p className="text-2xl font-bold text-blue-600 mt-1">
               {reports.filter((r) => r.type === 'bookings').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">Revenue Reports</p>
             <p className="text-2xl font-bold text-green-600 mt-1">
               {reports.filter((r) => r.type === 'revenue').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <p className="text-sm text-gray-600">User Reports</p>
             <p className="text-2xl font-bold text-purple-600 mt-1">
               {reports.filter((r) => r.type === 'users').length}
@@ -217,7 +216,7 @@ const ReportsAnalytics: React.FC = () => {
         </div>
 
         {/* Reports List */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-800">Generated Reports</h2>
           </div>

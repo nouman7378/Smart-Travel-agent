@@ -157,7 +157,7 @@ const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) =
 
 
   return (
-    <section className={`py-12 md:py-16 lg:py-20 bg-white ${className}`}>
+    <section className={`pt-12 md:pt-16 lg:pt-20 pb-0 bg-white ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div 
@@ -188,7 +188,7 @@ const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) =
               key={category.id}
               variants={itemVariants}
               whileHover="hover"
-              className={`group relative p-4 md:p-6 rounded-xl bg-gradient-to-br ${category.gradient} shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden`}
+              className={`group relative p-4 md:p-6 rounded-lg bg-gradient-to-br ${category.gradient} shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden`}
             >
               {/* Background Pattern */}
               <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-300"></div>
@@ -199,7 +199,7 @@ const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) =
               <div className="relative z-10 flex flex-col items-center text-center space-y-3">
                 {/* Icon Container with Animation */}
                 <motion.div 
-                  className={`p-3 rounded-xl bg-white/20 backdrop-blur-sm ${category.iconColor} group-hover:bg-white/30 transition-all duration-300`}
+                  className={`p-3 rounded-lg bg-white/20 backdrop-blur-sm ${category.iconColor} group-hover:bg-white/30 transition-all duration-300`}
                   whileHover={{ rotate: 5, scale: 1.1 }}
                   transition={{ duration: 0.2 }}
                 >
@@ -260,7 +260,7 @@ const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) =
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           viewport={{ once: true }}
-          className="text-center mt-8"
+          className="text-center mt-4"
         >
           <motion.button
             whileHover={{ scale: 1.05 }}

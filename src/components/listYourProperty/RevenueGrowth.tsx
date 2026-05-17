@@ -66,7 +66,7 @@ const RevenueGrowth: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-12 bg-white/10 backdrop-blur-sm rounded-2xl p-8 md:p-10"
+            className="mt-12 bg-white/10 backdrop-blur-sm rounded-lg p-8 md:p-10"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>

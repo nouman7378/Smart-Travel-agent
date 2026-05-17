@@ -159,7 +159,7 @@ const UserQueryTrends: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl shadow-sm p-6"
+                className="bg-white rounded-lg shadow-sm p-6"
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-gray-800">
@@ -228,7 +228,7 @@ const UserQueryTrends: React.FC = () => {
           </div>
 
           {/* Time Series Chart */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Query Volume Over Time
             </h2>

@@ -76,20 +76,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
   // Action buttons data
   const actionButtons = [
     {
-      name: 'voice',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-        </svg>
-      ),
-      component: (
-        <VoiceAssistant
-          onTranscript={(text) => setMessage(text)}
-          disabled={disabled}
-        />
-      )
-    },
-    {
       name: 'image',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,127 +98,89 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
   return (
     <motion.div
-      initial={{ y: 100, opacity: 0 }}
+      initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="bg-white/80 backdrop-blur-lg border-t border-gray-100/50 p-4"
+      className="p-4 bg-transparent"
     >
-      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-        <div className="flex items-end gap-3">
-          {/* Action Buttons */}
-          <div className="flex gap-1">
-            {actionButtons.map((button) => (
-              <motion.div
-                key={button.name}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {button.component ? (
-                  button.component
-                ) : (
-                  <button
-                    type="button"
-                    onClick={button.onClick}
-                    disabled={disabled}
-                    className="p-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed group"
-                    title={`${button.name.charAt(0).toUpperCase() + button.name.slice(1)}`}
-                  >
-                    <div className="relative">
-                      {button.icon}
-                      <div className="absolute -inset-1 bg-blue-200/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 blur-sm" />
-                    </div>
-                  </button>
-                )}
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Text Input */}
-          <div className="flex-1 relative">
+      <form 
+        onSubmit={handleSubmit} 
+        className="max-w-4xl mx-auto flex items-center gap-2 bg-white p-2 rounded-2xl border-2 border-gray-100 shadow-sm focus-within:border-blue-200 transition-all duration-200"
+      >
+        {/* Action Buttons */}
+        <div className="flex gap-0.5">
+          {actionButtons.map((button) => (
             <motion.div
-              animate={{
-                boxShadow: isFocused 
-                  ? '0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 20px rgba(0, 0, 0, 0.05)'
-                  : '0 2px 10px rgba(0, 0, 0, 0.03)'
-              }}
-              className="relative bg-white rounded-2xl border border-gray-200/80 transition-all duration-200"
+              key={button.name}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit(e);
-                  }
-                }}
-                placeholder={placeholder}
+              <button
+                type="button"
+                onClick={button.onClick}
                 disabled={disabled}
-                rows={1}
-                className="w-full px-5 py-4 bg-transparent focus:outline-none resize-none placeholder-gray-400 disabled:opacity-60 disabled:cursor-not-allowed rounded-2xl"
-                style={{ 
-                  minHeight: '56px', 
-                  maxHeight: '120px',
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none'
-                }}
-              />
-              
-              {/* Character count or typing indicator */}
-              <AnimatePresence>
-                {message.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className="absolute -top-2 right-3 bg-blue-500 text-white text-xs px-2 py-1 rounded-full"
-                  >
-                    {message.length}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </div>
-
-          {/* Send Button */}
-          <motion.button
-            type="submit"
-            disabled={!message.trim() || disabled}
-            whileHover={{ scale: message.trim() ? 1.05 : 1 }}
-            whileTap={{ scale: message.trim() ? 0.95 : 1 }}
-            className={`
-              p-4 rounded-2xl transition-all duration-300 flex items-center justify-center
-              ${message.trim() && !disabled
-                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              }
-            `}
-          >
-            <motion.div
-              animate={{ 
-                rotate: message.trim() ? 0 : 0,
-                scale: message.trim() ? 1.1 : 1
-              }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 disabled:opacity-40"
+                title={`${button.name.charAt(0).toUpperCase() + button.name.slice(1)}`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
-              </svg>
+                {button.icon}
+              </button>
             </motion.div>
-          </motion.button>
+          ))}
         </div>
 
+        {/* Text Input */}
+        <div className="flex-1 relative">
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+            placeholder={placeholder}
+            disabled={disabled}
+            rows={1}
+            className="w-full px-3 py-2 bg-transparent focus:outline-none resize-none placeholder-gray-400 disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:text-base"
+            style={{ 
+              minHeight: '44px', 
+              maxHeight: '120px',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          />
+        </div>
+
+        {/* Send Button */}
+        <motion.button
+          type="submit"
+          disabled={!message.trim() || disabled}
+          whileHover={{ scale: message.trim() ? 1.05 : 1 }}
+          whileTap={{ scale: message.trim() ? 0.95 : 1 }}
+          className={`
+            p-3 rounded-xl transition-all duration-300 flex items-center justify-center
+            ${message.trim() && !disabled
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+              : 'bg-gray-100 text-gray-300 cursor-not-allowed'
+            }
+          `}
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+            />
+          </svg>
+        </motion.button>
       </form>
 
       {/* Hidden file input */}

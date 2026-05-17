@@ -236,7 +236,7 @@ const BookingDemoPage: React.FC = () => {
                     className="space-y-6"
                   >
                     {/* Hotels Section */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <span className="text-2xl"><Building className="inline w-5 h-5" /></span>
                         Hotels
@@ -247,7 +247,7 @@ const BookingDemoPage: React.FC = () => {
                     </div>
 
                     {/* Flights Section */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <span className="text-2xl"><Plane className="inline w-5 h-5" /></span>
                         Flights
@@ -258,7 +258,7 @@ const BookingDemoPage: React.FC = () => {
                     </div>
 
                     {/* Bus Routes Section */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <span className="text-2xl"><Bus className="inline w-5 h-5" /></span>
                         Bus Routes
@@ -279,7 +279,7 @@ const BookingDemoPage: React.FC = () => {
                     className="space-y-6"
                   >
                     {/* Selected Items */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4">
                         Review Your Booking
                       </h2>
@@ -333,7 +333,7 @@ const BookingDemoPage: React.FC = () => {
                     </div>
 
                     {/* Guest Information */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4">
                         Guest Information
                       </h2>
@@ -417,7 +417,7 @@ const BookingDemoPage: React.FC = () => {
                     key="confirm"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white rounded-xl shadow-lg p-8 text-center"
+                    className="bg-white rounded-lg shadow-lg p-8 text-center"
                   >
                     <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-4xl"><Check className="inline w-5 h-5" /></span>
@@ -469,7 +469,7 @@ const BookingDemoPage: React.FC = () => {
             {/* Booking Summary Sidebar */}
             {bookingStep !== 'confirm' && (
               <div className="lg:col-span-1">
-                <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6">
+                <div className="bg-white rounded-lg shadow-lg p-6 sticky top-6">
                   <h2 className="text-xl font-bold text-gray-800 mb-4">
                     Booking Summary
                   </h2>

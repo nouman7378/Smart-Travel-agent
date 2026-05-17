@@ -56,7 +56,7 @@ const DomesticFlightsPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.02, y: -5 }}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all"
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div>

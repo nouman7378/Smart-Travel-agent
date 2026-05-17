@@ -83,14 +83,14 @@ const HowItWorks: React.FC = () => {
                   <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transform translate-x-4 z-0"></div>
                 )}
 
-                <div className="relative z-10 bg-white p-6 md:p-8 rounded-2xl shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300">
+                <div className="relative z-10 bg-white p-6 md:p-8 rounded-lg shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300">
                   {/* Step Number */}
                   <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
                     {step.number}
                   </div>
 
                   {/* Icon */}
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white mb-6">
                     {step.icon}
                   </div>
 

@@ -43,7 +43,7 @@ const HotelGallery: React.FC<HotelGalleryProps> = ({ images, hotelName = '', cla
   return (
     <div className={`relative ${className}`}>
       {/* Main Image Carousel */}
-      <div className="relative h-64 md:h-96 lg:h-[500px] overflow-hidden rounded-lg md:rounded-xl">
+      <div className="relative h-64 md:h-96 lg:h-[500px] overflow-hidden rounded-lg md:rounded-lg">
         <img
           src={images[currentIndex]}
           alt={`${hotelName} - Image ${currentIndex + 1}`}

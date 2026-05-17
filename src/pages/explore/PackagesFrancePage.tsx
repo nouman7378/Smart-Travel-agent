@@ -41,7 +41,7 @@ const PackagesFrancePage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
 
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-xl mb-8">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-lg mb-8">
             <h2 className="text-3xl font-bold mb-4">All-Inclusive France Packages</h2>
             <p className="text-lg mb-6">
               Combine flights and hotels for the best value. Perfect for your French adventure.

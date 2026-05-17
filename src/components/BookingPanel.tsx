@@ -13,6 +13,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DatePicker from './common/DatePicker';
 
 export interface RoomType {
   id: number;
@@ -95,28 +96,24 @@ const BookingPanel: React.FC<BookingPanelProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 sticky top-4 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-4 sm:p-6 sticky top-4 ${className}`}>
       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Book your stay</h2>
 
       {/* Check-in / Check-out */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Check-in</label>
-          <input
-            type="date"
+          <DatePicker
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
-            min={new Date().toISOString().split('T')[0]}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Check-out</label>
-          <input
-            type="date"
+          <DatePicker
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
-            min={checkIn || new Date().toISOString().split('T')[0]}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
           />
         </div>

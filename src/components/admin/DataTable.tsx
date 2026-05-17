@@ -30,7 +30,7 @@ function DataTable<T extends { id: string | number }>({
 }: DataTableProps<T>) {
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-12">
         <div className="flex flex-col items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
           <p className="text-gray-600">Loading data...</p>
@@ -41,7 +41,7 @@ function DataTable<T extends { id: string | number }>({
 
   if (data.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-12">
         <div className="flex flex-col items-center justify-center">
           <svg
             className="w-16 h-16 text-gray-400 mb-4"
@@ -63,7 +63,7 @@ function DataTable<T extends { id: string | number }>({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
       {/* Desktop Table View */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full min-w-[640px]">

@@ -116,7 +116,7 @@ const SupportPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all text-center"
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all text-center"
               >
                 <div className="text-4xl mb-4">{method.icon}</div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{method.title}</h3>
@@ -136,7 +136,7 @@ const SupportPage: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-xl shadow-md overflow-hidden"
+                  className="bg-white rounded-lg shadow-md overflow-hidden"
                 >
                   <button
                     onClick={() =>
@@ -177,7 +177,7 @@ const SupportPage: React.FC = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-8 rounded-xl shadow-md">
+          <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Still Need Help?</h2>
             <form className="space-y-6">
               <div>

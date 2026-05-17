@@ -45,7 +45,7 @@ const Partners: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
-                className="bg-gray-50 p-6 md:p-8 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center min-h-[120px]"
+                className="bg-gray-50 p-6 md:p-8 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center min-h-[120px]"
               >
                 <div className="text-4xl md:text-5xl mb-3">{partner.logo}</div>
                 <p className="text-sm md:text-base font-semibold text-gray-700 text-center">{partner.name}</p>

@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import CityAutocomplete, { City } from './CityAutocomplete';
 import { Plane, Target } from 'lucide-react';
+import DatePicker from '../common/DatePicker';
 
 
 type TripType = 'round-trip' | 'one-way' | 'multi-city';
@@ -89,9 +90,9 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="bg-white rounded-lg shadow-xl overflow-visible">
       {/* Tabs */}
-      <div className="flex border-b border-gray-200">
+      <div className="flex border-b border-gray-200 overflow-hidden rounded-t-lg">
         {[
           { id: 'round-trip' as TripType, label: 'Round trip' },
           { id: 'one-way' as TripType, label: 'One way' },
@@ -114,8 +115,8 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
       </div>
 
       {/* Search Form */}
-      <form onSubmit={handleSubmit} className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <form onSubmit={handleSubmit} className="p-6 overflow-visible">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 overflow-visible">
           {/* From */}
           <div className="lg:col-span-2">
             <CityAutocomplete
@@ -141,17 +142,15 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
           </div>
 
           {/* Dates and Passengers Row */}
-          <div className="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-4">
+          <div className="lg:col-span-2 grid grid-cols-2 gap-4">
             {/* Depart Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Departure</label>
-              <input
-                type="date"
+              <DatePicker
                 name="departDate"
                 value={formData.departDate}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               />
             </div>
 
@@ -159,13 +158,11 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
             {tripType === 'round-trip' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Return</label>
-                <input
-                  type="date"
+                <DatePicker
                   name="returnDate"
                   value={formData.returnDate}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-                  required
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 />
               </div>
             )}
@@ -180,7 +177,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               name="passengers"
               value={formData.passengers}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
                 <option key={num} value={num}>
@@ -196,7 +193,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               name="class"
               value={formData.class}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             >
               <option value="economy">Economy</option>
               <option value="premium">Premium</option>
@@ -211,7 +208,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               type="submit"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Search for flights
             </motion.button>

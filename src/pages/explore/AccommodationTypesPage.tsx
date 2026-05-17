@@ -59,7 +59,7 @@ const AccommodationTypesPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all text-center"
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all text-center"
               >
                 <div className="text-5xl mb-4">{type.icon}</div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{type.name}</h3>

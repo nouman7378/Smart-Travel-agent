@@ -22,7 +22,7 @@ const ConfirmationMessage: React.FC<ConfirmationMessageProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border-2 border-green-200 p-6 md:p-8 ${className}`}>
+    <div className={`bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border-2 border-green-200 p-6 md:p-8 ${className}`}>
       <div className="flex flex-col md:flex-row md:items-center gap-6">
         {/* Success Icon */}
         <div className="flex-shrink-0">

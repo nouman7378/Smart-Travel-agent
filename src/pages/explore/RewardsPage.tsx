@@ -65,7 +65,7 @@ const RewardsPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
 
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-xl mb-12">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 md:p-12 rounded-lg mb-12">
             <h2 className="text-3xl font-bold mb-4">Why Join One Key?</h2>
             <p className="text-lg mb-6">
               One Key is our unified rewards program that lets you earn and redeem points across
@@ -83,7 +83,7 @@ const RewardsPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all text-center"
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all text-center"
               >
                 <div className="text-4xl mb-4">{benefit.icon}</div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{benefit.title}</h3>

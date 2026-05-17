@@ -94,10 +94,6 @@ import ChatPage from './pages/chat/ChatPage';
 import ChatHistoryPage from './pages/chat/ChatHistoryPage';
 import QuickActionsPanel from './pages/chat/QuickActionsPanel';
 
-// Itinerary Pages (Frontend-only, no backend integration)
-import ItineraryBuilderPage from './pages/itinerary/ItineraryBuilderPage';
-import ItineraryDetailPage from './pages/itinerary/ItineraryDetailPage';
-import BudgetPlannerPage from './pages/itinerary/BudgetPlannerPage';
 
 // Integration Pages
 import BusRoutesPage from './pages/integrations/BusRoutesPage';
@@ -134,7 +130,7 @@ const App: React.FC = () => {
                         <Routes>
             <Route element={<LayoutWrapper />}>
           {/* Home Page */}
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<HotelsPage />} />
 
           {/* Search Results Pages */}
               <Route path="/search/hotels" element={<SearchResultsPage searchType="hotels" />} />
@@ -227,12 +223,7 @@ const App: React.FC = () => {
               <Route path="/chat/history" element={<ChatHistoryPage />} />
               <Route path="/chat/quick-actions" element={<QuickActionsPanel />} />
 
-          {/* Itinerary Pages */}
-              <Route path="/itinerary/builder" element={<ItineraryBuilderPage />} />
-              <Route path="/itinerary/build" element={<ItineraryBuilderPage />} />
-              <Route path="/itinerary/:id" element={<ItineraryDetailPage />} />
-              <Route path="/budget/planner" element={<BudgetPlannerPage />} />
-          
+
           {/* Integration Pages */}
               <Route path="/bus-routes" element={<BusRoutesPage />} />
               <Route path="/bus/routes" element={<BusRoutesPage />} />

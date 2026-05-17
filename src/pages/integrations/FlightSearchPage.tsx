@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
+import DatePicker from '../../components/common/DatePicker';
 
 interface Flight {
   id: string;
@@ -139,7 +140,7 @@ const FlightSearchPage: React.FC = () => {
           </div>
 
           {/* Search Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-8 border border-gray-100">
+          <div className="bg-white rounded-lg shadow-xl p-6 sm:p-8 mb-8 border border-gray-100">
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
@@ -178,9 +179,7 @@ const FlightSearchPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Departure Date
                   </label>
-                  <input
-                    type="date"
-                    required
+                  <DatePicker
                     value={searchParams.departureDate}
                     onChange={(e) =>
                       setSearchParams({
@@ -196,8 +195,7 @@ const FlightSearchPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Return Date (Optional)
                   </label>
-                  <input
-                    type="date"
+                  <DatePicker
                     value={searchParams.returnDate}
                     onChange={(e) =>
                       setSearchParams({
@@ -283,7 +281,7 @@ const FlightSearchPage: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                  className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
                 >
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex-1">
@@ -352,7 +350,7 @@ const FlightSearchPage: React.FC = () => {
           )}
 
           {!loading && flights.length === 0 && (
-            <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+            <div className="bg-white rounded-lg shadow-sm p-12 text-center">
               <p className="text-gray-600">
                 Enter your search criteria and click "Search Flights" to find
                 available flights.

@@ -72,7 +72,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, className = '', onClick }) => {
 
   return (
     <div
-      className={`bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
+      className={`bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${className}`}
       onClick={onClick}
     >
       {/* Image */}

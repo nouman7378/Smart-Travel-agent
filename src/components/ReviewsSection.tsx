@@ -53,7 +53,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         <h2 className="text-3xl font-bold text-gray-900 mb-4">Guest Reviews</h2>
         
         {/* Rating Summary */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 bg-gray-50 rounded-xl">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 bg-gray-50 rounded-lg">
           <div className="flex items-center space-x-4">
             <div className="text-center">
               <div className="text-5xl font-bold text-gray-900">{averageRating.toFixed(1)}</div>
@@ -108,7 +108,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         {displayedReviews.map((review) => (
           <div
             key={review.id}
-            className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+            className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
           >
             {/* Review Header */}
             <div className="flex items-start justify-between mb-4">

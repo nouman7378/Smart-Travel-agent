@@ -57,7 +57,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
           </div>
 
           {/* Payment Methods */}
-          <div className="bg-white dark:bg-dark-surface rounded-2xl shadow-xl p-6 sm:p-8 mb-6">
+          <div className="bg-white dark:bg-dark-surface rounded-lg shadow-xl p-6 sm:p-8 mb-6">
             <h2 className="text-xl font-bold text-gray-800 dark:text-dark-text mb-4">
               Select Payment Method
             </h2>
@@ -70,7 +70,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
                 <button
                   key={method.id}
                   onClick={() => setPaymentMethod(method.id as any)}
-                  className={`p-4 rounded-xl border-2 transition-all ${
+                  className={`p-4 rounded-lg border-2 transition-all ${
                     paymentMethod === method.id
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-dark-border hover:border-gray-300'
@@ -101,7 +101,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
                       const formatted = value.match(/.{1,4}/g)?.join(' ') || value;
                       setCardDetails({ ...cardDetails, number: formatted });
                     }}
-                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
+                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
                   />
                 </div>
                 <div>
@@ -115,7 +115,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
                     onChange={(e) =>
                       setCardDetails({ ...cardDetails, name: e.target.value })
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
+                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -135,7 +135,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
                         }
                         setCardDetails({ ...cardDetails, expiry: value });
                       }}
-                      className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
+                      className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
                     />
                   </div>
                   <div>
@@ -153,7 +153,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
                           cvv: e.target.value.replace(/\D/g, ''),
                         })
                       }
-                      className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
+                      className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
                     />
                   </div>
                 </div>
@@ -180,7 +180,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
                   <input
                     type="text"
                     placeholder="Enter bank name"
-                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
+                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
                   />
                 </div>
                 <div>
@@ -190,7 +190,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
                   <input
                     type="text"
                     placeholder="Enter account number"
-                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
+                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-dark-bg dark:text-dark-text"
                   />
                 </div>
               </div>
@@ -216,7 +216,7 @@ const PaymentGatewayDemoPage: React.FC = () => {
             <button
               onClick={handlePayment}
               disabled={isProcessing}
-              className="w-full mt-6 px-6 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-6 px-6 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? (
                 <span className="flex items-center justify-center gap-2">

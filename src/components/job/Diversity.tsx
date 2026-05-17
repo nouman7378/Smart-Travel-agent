@@ -29,7 +29,7 @@ const Diversity: React.FC = () => {
             an inclusive workplace where everyone can thrive, regardless of their background, identity, 
             or perspective.
           </p>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 text-left">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 md:p-8 text-left">
             <p className="text-lg text-blue-100 leading-relaxed mb-4">
               We are an equal opportunity employer. All qualified applicants will receive consideration 
               for employment without regard to race, color, religion, gender, gender identity or expression, 

@@ -49,7 +49,7 @@ const NearbyHotels: React.FC<NearbyHotelsProps> = ({
           <div
             key={hotel.id}
             onClick={() => onHotelClick?.(hotel.id)}
-            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
           >
             {/* Image */}
             <div className="relative h-48 overflow-hidden">

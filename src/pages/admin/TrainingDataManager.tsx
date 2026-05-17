@@ -142,7 +142,7 @@ const TrainingDataManager: React.FC = () => {
           </div>
 
           {/* Training Data Table */}
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
@@ -234,7 +234,7 @@ const TrainingDataManager: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white rounded-xl shadow-lg p-6 max-w-2xl w-full mx-4"
+                className="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full mx-4"
               >
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">
                   Add Training Data
