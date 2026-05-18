@@ -407,13 +407,11 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
-        <Header />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -421,7 +419,6 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
   if (error || !hotel) {
     return (
       <div className="min-h-screen bg-white">
-        <Header />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Hotel Not Found</h2>
@@ -434,16 +431,12 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
             </button>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <Header />
-
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         {/* Hotel Gallery */}
@@ -498,9 +491,6 @@ Book your stay today and discover why ${hotel.name} is the preferred choice for 
           className="border-t border-gray-200 mt-12"
         />
       </div>
-
-      {/* Footer */}
-      <Footer />
 
       {/* Room Selection Modal */}
       {hotel && (

@@ -44,12 +44,27 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
     class: 'economy',
   });
 
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${year}-${month}-${day}`;
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'passengers' ? parseInt(value) || 1 : value,
-    }));
+    setFormData((prev) => {
+      const nextData = {
+        ...prev,
+        [name]: name === 'passengers' ? parseInt(value) || 1 : value,
+      };
+
+      // Keep return date aligned if depart date is moved past the return date
+      if (name === 'departDate' && nextData.returnDate && nextData.returnDate < value) {
+        nextData.returnDate = value;
+      }
+
+      return nextData;
+    });
   };
 
   const handleFromChange = (value: string, city: City | null) => {
@@ -70,7 +85,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const searchData = {
       from: fromLocation.display,
       fromIataCode: fromLocation.iataCode,
@@ -81,7 +96,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
       ...formData,
       tripType,
     };
-    
+
     if (onSearch) {
       onSearch(searchData);
     } else {
@@ -90,9 +105,9 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl overflow-visible">
+    <div className="bg-blue-950 rounded-2xl shadow-2xl overflow-visible border border-blue-800/40 p-1">
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 overflow-hidden rounded-t-lg">
+      <div className="flex border-b border-blue-900/60 overflow-hidden rounded-t-xl bg-blue-950/40">
         {[
           { id: 'round-trip' as TripType, label: 'Round trip' },
           { id: 'one-way' as TripType, label: 'One way' },
@@ -103,11 +118,10 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
             onClick={() => setTripType(tab.id)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`flex-1 px-6 py-4 text-sm font-semibold transition-all duration-300 ${
-              tripType === tab.id
-                ? 'text-blue-600 bg-blue-50 border-b-2 border-blue-600'
-                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-            }`}
+            className={`flex-1 px-6 py-4 text-sm font-semibold transition-all duration-300 ${tripType === tab.id
+                ? 'text-white bg-blue-950/40 backdrop-blur-md border-b-2 border-blue-400 shadow-inner'
+                : 'text-blue-200 hover:text-white hover:bg-blue-900/30'
+              }`}
           >
             {tab.label}
           </motion.button>
@@ -124,8 +138,9 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               value={fromLocation.display}
               onChange={handleFromChange}
               placeholder="City or airport"
-              icon=<Plane className="w-5 h-5" />
+              icon=<Plane className="text-blue-300 w-5 h-5" />
               required
+              dark
             />
           </div>
 
@@ -136,8 +151,9 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               value={toLocation.display}
               onChange={handleToChange}
               placeholder="City or airport"
-              icon=<Target className="w-5 h-5" />
+              icon=<Target className="text-blue-300 w-5 h-5" />
               required
+              dark
             />
           </div>
 
@@ -145,24 +161,26 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
           <div className="lg:col-span-2 grid grid-cols-2 gap-4">
             {/* Depart Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Departure</label>
+              <label className="block text-sm font-medium text-blue-100 mb-2">Departure</label>
               <DatePicker
                 name="departDate"
                 value={formData.departDate}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                minDate={todayStr}
+                className="w-full px-4 py-3 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-white placeholder-blue-200/60 transition-all duration-200"
               />
             </div>
 
             {/* Return Date - Only show for round-trip */}
             {tripType === 'round-trip' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Return</label>
+                <label className="block text-sm font-medium text-blue-100 mb-2">Return</label>
                 <DatePicker
                   name="returnDate"
                   value={formData.returnDate}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                  minDate={formData.departDate || todayStr}
+                  className="w-full px-4 py-3 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-white placeholder-blue-200/60 transition-all duration-200"
                 />
               </div>
             )}
@@ -172,15 +190,15 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
         {/* Second Row: Passengers and Class */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Passengers</label>
+            <label className="block text-sm font-medium text-blue-100 mb-2">Passengers</label>
             <select
               name="passengers"
               value={formData.passengers}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              className="w-full px-4 py-3 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-white transition-all duration-200"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                <option key={num} value={num}>
+                <option key={num} value={num} className="bg-blue-950 text-white">
                   {num} {num === 1 ? 'passenger' : 'passengers'}
                 </option>
               ))}
@@ -188,17 +206,17 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
+            <label className="block text-sm font-medium text-blue-100 mb-2">Class</label>
             <select
               name="class"
               value={formData.class}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              className="w-full px-4 py-3 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-white transition-all duration-200"
             >
-              <option value="economy">Economy</option>
-              <option value="premium">Premium</option>
-              <option value="business">Business</option>
-              <option value="first">First</option>
+              <option value="economy" className="bg-blue-950 text-white">Economy</option>
+              <option value="premium" className="bg-blue-950 text-white">Premium</option>
+              <option value="business" className="bg-blue-950 text-white">Business</option>
+              <option value="first" className="bg-blue-950 text-white">First</option>
             </select>
           </div>
 
@@ -208,7 +226,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
               type="submit"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full px-8 py-3 bg-white hover:bg-blue-50 text-blue-900 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Search for flights
             </motion.button>

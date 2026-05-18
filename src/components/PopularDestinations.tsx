@@ -22,7 +22,7 @@ interface PopularDestinationsProps {
 const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '' }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'all' | 'national' | 'international'>('all');
-  
+
   const destinations: Destination[] = [
     // National Destinations (Pakistan)
     {
@@ -178,65 +178,11 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
   };
 
   return (
-    <section className={`py-12 md:py-16 bg-white ${className}`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Compact Tourism Banner */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden mb-12"
-        >
-          <div className="flex flex-col md:flex-row items-center">
-            {/* Text Side */}
-            <div className="p-8 md:p-10 lg:p-12 md:w-3/5">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
-                  Pakistan: <span className="font-bold">Tourism's Next Big Thing</span>
-                </h2>
-                <p className="text-gray-500 text-sm mb-6">— Lonely Planet</p>
-                
-                <p className="text-gray-600 text-sm md:text-base mb-8 max-w-md">
-                  Experience the breathtaking beauty, vibrant culture, and legendary hospitality of Pakistan.
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {['Hunza', 'Skardu', 'Lahore', 'Karachi'].map((city) => (
-                    <span 
-                      key={city}
-                      className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-medium text-gray-600"
-                    >
-                      {city}
-                    </span>
-                  ))}
-                </div>
-
-                <button className="text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center space-x-2 group">
-                  <span>Explore Pakistan</span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-                </button>
-              </motion.div>
-            </div>
-
-            {/* Image Side - Smaller and cropped better */}
-            <div className="hidden md:block md:w-2/5 h-64 md:h-80 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?auto=format&fit=crop&w=800&q=80"
-                alt="Pakistan Landscape"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </motion.div>
-
+    <section className={`py-16 md:py-20 lg:py-24 bg-white ${className}`}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      
         {/* Section Header - Featured Hotels Style */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -252,7 +198,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
         </motion.div>
 
         {/* Category Tabs - Centered */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -270,11 +216,10 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
                 setActiveTab(tab.id as any);
                 setCurrentIndex(0);
               }}
-              className={`px-6 py-2 rounded-lg font-normal transition-all duration-200 border ${
-                activeTab === tab.id
+              className={`px-6 py-2 rounded-lg font-normal transition-all duration-200 border ${activeTab === tab.id
                   ? 'bg-gray-900 text-white border-gray-900'
                   : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-              }`}
+                }`}
             >
               {tab.label}
             </button>
@@ -314,7 +259,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
           </div>
 
           {/* Navigation Buttons - Centered below content */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -387,7 +332,7 @@ const DestinationCard: React.FC<{ destination: Destination }> = ({ destination }
   const imageSrc = imageError ? getPlaceholderImage('destination') : destination.image;
 
   return (
-    <motion.div 
+    <motion.div
       whileHover={{ y: -4 }}
       className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group cursor-pointer"
       onClick={() => navigate(`/search/hotels?destination=${destination.name}`)}
@@ -409,16 +354,15 @@ const DestinationCard: React.FC<{ destination: Destination }> = ({ destination }
           onLoad={handleImageLoad}
           loading="lazy"
         />
-        
+
         {/* Type Badge */}
-        <div className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${
-          destination.type === 'national' 
-            ? 'bg-green-100 text-green-800 border border-green-200' 
+        <div className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${destination.type === 'national'
+            ? 'bg-green-100 text-green-800 border border-green-200'
             : 'bg-blue-100 text-blue-800 border border-blue-200'
-        }`}>
+          }`}>
           {destination.type === 'national' ? 'National' : 'International'}
         </div>
-        
+
         {/* Rating Badge */}
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center space-x-1">
           <svg className="h-3 w-3 text-yellow-500 fill-current" viewBox="0 0 20 20">
@@ -470,7 +414,7 @@ const DestinationCard: React.FC<{ destination: Destination }> = ({ destination }
             </span>
             <span className="text-gray-500 text-xs ml-1">per person</span>
           </div>
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-3 py-2 bg-gray-900 hover:bg-gray-800 text-white font-normal rounded-lg transition-colors text-xs"

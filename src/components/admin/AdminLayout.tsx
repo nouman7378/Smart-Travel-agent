@@ -8,6 +8,8 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import logo from '../../assets/logo.png';
+import logoClosed from '../../assets/Screenshot_2026-05-16_at_1.13.58_PM-removebg-preview.png';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -147,17 +149,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
             {sidebarOpen ? (
               <Link to="/admin" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-lg">T</span>
-                </div>
+                <img src={logo} alt="SmartTravel Logo" className="h-10 w-auto" />
                 <span className="text-xl font-bold text-gray-800">
                   Travel<span className="text-blue-600">Hub</span>
                 </span>
               </Link>
             ) : (
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg mx-auto">
-                <span className="text-white font-bold text-lg">T</span>
-              </div>
+              <Link to="/admin" className="flex items-center justify-center mx-auto">
+                <img src={logoClosed} alt="SmartTravel Logo" className="h-10 w-auto" />
+              </Link>
             )}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}

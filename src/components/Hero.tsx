@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Bot, Building, Car, Globe, Luggage, MapPin, Plane, Rocket, Star, Target } from 'lucide-react';
 import DatePicker from './common/DatePicker';
+import downloadBg from '../assets/download.png';
 
 
 interface HeroProps {
@@ -14,15 +15,15 @@ interface HeroProps {
 
 type SearchTab = 'flights' | 'hotels' | 'cars' | 'packages';
 
-const Hero: React.FC<HeroProps> = ({ 
-  className = '', 
-  hideTag = false, 
+const Hero: React.FC<HeroProps> = ({
+  className = '',
+  hideTag = false,
   smallTitle = false,
-  hideStats = false 
+  hideStats = false
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Determine active tab based on current route
   const getActiveTabFromRoute = (pathname: string): SearchTab => {
     if (pathname === '/hotels' || pathname.startsWith('/hotels')) return 'hotels';
@@ -104,7 +105,7 @@ const Hero: React.FC<HeroProps> = ({
           <div
             className="absolute inset-0 bg-cover bg-center transform scale-110 animate-zoom-in-out"
             style={{
-              backgroundImage: 'url(https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&q=80)',
+              backgroundImage: `url(${downloadBg})`,
             }}
           ></div>
           <div className="absolute inset-0 bg-black/40"></div>
@@ -117,27 +118,12 @@ const Hero: React.FC<HeroProps> = ({
       </div>
 
       <div className="relative container mx-auto px-4 sm:px-4 lg:px-4 py-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Heading */}
-          <div className="text-center mb-12">
-            {!hideTag && (
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-6 border border-white/20">
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                <span className="text-sm font-medium text-white/90">AI-Powered Travel Planning</span>
-              </div>
-            )}
-            <h1 className={`font-bold mb-4 sm:mb-6 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent ${smallTitle ? 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'}`}>
-              Explore The World
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 max-w-2xl mx-auto leading-relaxed px-4">
-              Smart travel planning with AI-powered itineraries, real-time deals, and seamless bookings
-            </p>
-          </div>
+        <div className={`max-w-6xl mx-auto relative z-20 ${className.includes('!min-h-fit') ? 'translate-y-4 md:translate-y-6 -mb-4 md:-mb-6' : 'translate-y-16 md:translate-y-24 -mb-16 md:-mb-24'}`}>
 
           {/* Search Container */}
-          <div className="bg-white rounded-lg shadow-2xl overflow-visible">
+          <div className="bg-blue-950 rounded-2xl shadow-2xl overflow-visible border border-blue-800/40 p-1">
             {/* Search Tabs */}
-            <div className="flex border-b border-gray-200 overflow-hidden rounded-t-lg">
+            <div className="flex border-b border-blue-900/60 overflow-hidden rounded-t-xl bg-blue-950/40">
               {([
                 { id: 'flights', icon: <Plane className="w-5 h-5" />, label: 'Flights' },
                 { id: 'hotels', icon: <Building className="w-5 h-5" />, label: 'Hotels' },
@@ -149,13 +135,12 @@ const Hero: React.FC<HeroProps> = ({
                   onClick={() => handleTabClick(tab.id)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`flex-1 px-6 py-4 text-sm md:text-base font-semibold transition-all duration-300 ${
-                    activeTab === tab.id
-                      ? 'text-blue-600 bg-blue-50 border-b-2 border-blue-600'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                  }`}
+                  className={`flex-1 px-6 py-4 text-sm md:text-base font-semibold transition-all duration-300 ${activeTab === tab.id
+                      ? 'text-white bg-blue-950/40 backdrop-blur-md border-b-2 border-blue-400 shadow-inner'
+                      : 'text-blue-200 hover:text-white hover:bg-blue-900/30'
+                    }`}
                 >
-                  <motion.span 
+                  <motion.span
                     className="flex items-center justify-center space-x-3"
                     animate={activeTab === tab.id ? { scale: 1.05 } : { scale: 1 }}
                     transition={{ duration: 0.2 }}
@@ -172,50 +157,50 @@ const Hero: React.FC<HeroProps> = ({
               {activeTab === 'flights' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
                   <div className="lg:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">From</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">From</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><MapPin className="inline w-5 h-5" /></span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><MapPin className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="from"
                         value={formData.from}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div className="lg:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">To</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">To</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Target className="inline w-5 h-5" /></span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><Target className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-2 lg:col-span-1">
                     <div>
-                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Departure</label>
+                      <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">Departure</label>
                       <DatePicker
                         name="checkIn"
                         value={formData.checkIn}
                         onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Return</label>
+                      <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">Return</label>
                       <DatePicker
                         name="checkOut"
                         value={formData.checkOut}
                         onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
@@ -225,47 +210,47 @@ const Hero: React.FC<HeroProps> = ({
               {activeTab === 'hotels' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Destination</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Destination</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Building className="inline w-5 h-5" /></span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><Building className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="City, hotel, or landmark"
-                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Check-in</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Check-in</label>
                     <DatePicker
                       name="checkIn"
                       value={formData.checkIn}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Check-out</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Check-out</label>
                     <DatePicker
                       name="checkOut"
                       value={formData.checkOut}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Rooms & Guests</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Rooms & Guests</label>
                     <select
                       name="rooms"
                       value={formData.rooms}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white transition-all duration-200"
                     >
                       {[1, 2, 3, 4, 5].map((num) => (
-                        <option key={num} value={num}>
+                        <option key={num} value={num} className="bg-blue-950 text-white">
                           {num} {num === 1 ? 'Room' : 'Rooms'}
                         </option>
                       ))}
@@ -277,49 +262,49 @@ const Hero: React.FC<HeroProps> = ({
               {activeTab === 'cars' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Pick-up</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Pick-up</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Car className="inline w-5 h-5" /></span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><Car className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="from"
                         value={formData.from}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Drop-off</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Drop-off</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><MapPin className="inline w-5 h-5" /></span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><MapPin className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="City or airport"
-                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">From</label>
+                    <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">From</label>
                     <DatePicker
                       name="checkIn"
                       value={formData.checkIn}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">To</label>
+                    <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">To</label>
                     <DatePicker
                       name="checkOut"
                       value={formData.checkOut}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -328,46 +313,46 @@ const Hero: React.FC<HeroProps> = ({
               {activeTab === 'packages' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Destination</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Destination</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-sm sm:text-base"><Globe className="inline w-5 h-5" /></span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><Globe className="inline w-5 h-5" /></span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="Where do you want to go?"
-                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 placeholder-gray-500 shadow-lg"
+                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Travel Dates</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Travel Dates</label>
                     <div className="grid grid-cols-2 gap-3 sm:gap-4">
                       <DatePicker
                         name="checkIn"
                         value={formData.checkIn}
                         onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                       <DatePicker
                         name="checkOut"
                         value={formData.checkOut}
                         onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm text-gray-900 shadow-lg"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">Travelers</label>
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Travelers</label>
                     <select
                       name="passengers"
                       value={formData.passengers}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 shadow-lg"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white transition-all duration-200"
                     >
                       {[1, 2, 3, 4, 5, 6].map((num) => (
-                        <option key={num} value={num}>
+                        <option key={num} value={num} className="bg-blue-950 text-white">
                           {num} {num === 1 ? 'Traveler' : 'Travelers'}
                         </option>
                       ))}
@@ -384,15 +369,13 @@ const Hero: React.FC<HeroProps> = ({
                     type="submit"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 group"
+                    className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-white hover:bg-blue-50 text-blue-900 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 group"
                   >
                     <span className="text-base">Search</span>
-                    <motion.span 
-                      className="text-lg"
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                    <motion.span
+                      className="text-lg animate-pulse"
                     >
-                      <Rocket className="inline w-5 h-5" />
+                      <Rocket className="inline w-5 h-5 text-blue-600" />
                     </motion.span>
                   </motion.button>
                 </div>

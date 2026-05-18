@@ -7,9 +7,10 @@ interface DatePickerProps {
   placeholder?: string;
   className?: string;
   name?: string;
+  minDate?: string;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 'dd/mm/yyyy', className = '', name }) => {
+const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 'dd/mm/yyyy', className = '', name, minDate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(value ? new Date(value) : new Date());
   const [tempSelectedDate, setTempSelectedDate] = useState<Date | null>(value ? new Date(value) : null);
@@ -66,6 +67,20 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
   }
 
   for (let day = 1; day <= daysInMonth; day++) {
+    const dayDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    let isDisabled = false;
+    if (minDate) {
+      const minParts = minDate.split('-');
+      if (minParts.length === 3) {
+        const minD = new Date(parseInt(minParts[0]), parseInt(minParts[1]) - 1, parseInt(minParts[2]));
+        minD.setHours(0, 0, 0, 0);
+        dayDate.setHours(0, 0, 0, 0);
+        if (dayDate < minD) {
+          isDisabled = true;
+        }
+      }
+    }
+
     const isSelected = tempSelectedDate?.getDate() === day && 
                        tempSelectedDate?.getMonth() === currentMonth.getMonth() && 
                        tempSelectedDate?.getFullYear() === currentMonth.getFullYear();
@@ -74,9 +89,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
       <button
         key={`day-${day}`}
         type="button"
+        disabled={isDisabled}
         onClick={() => handleDateClick(day)}
         className={`h-8 w-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors
-          ${isSelected ? 'bg-blue-600 text-white shadow-md' : 'text-gray-700 hover:bg-blue-50'}`}
+          ${isDisabled ? 'text-gray-300 cursor-not-allowed pointer-events-none hover:bg-transparent' : isSelected ? 'bg-blue-600 text-white shadow-md' : 'text-gray-700 hover:bg-blue-50'}`}
       >
         {day}
       </button>
@@ -99,7 +115,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
   return (
     <div className="relative w-full" ref={popoverRef}>
       <div 
-        className={`w-full flex items-center justify-between bg-white cursor-pointer ${className}`}
+        className={`w-full flex items-center justify-between cursor-pointer ${className}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <input
@@ -108,9 +124,9 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
           value={displayValue}
           placeholder={placeholder}
           name={name}
-          className="flex-1 bg-transparent outline-none cursor-pointer text-gray-900 pointer-events-none truncate"
+          className="flex-1 bg-transparent outline-none cursor-pointer text-inherit placeholder-inherit pointer-events-none truncate"
         />
-        <CalendarIcon className="w-5 h-5 text-gray-400 flex-shrink-0 ml-2" />
+        <CalendarIcon className="w-5 h-5 text-current flex-shrink-0 ml-2 opacity-70" />
       </div>
 
       {isOpen && (

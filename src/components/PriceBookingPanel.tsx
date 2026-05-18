@@ -85,60 +85,60 @@ const PriceBookingPanel: React.FC<PriceBookingPanelProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-6 sticky top-4 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-6 ${className}`}>
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Your Fare</h2>
 
-      {/* Ticket Type Selection */}
-      <div className="space-y-3 mb-6">
+      {/* Ticket Type Selection - Side-by-side pricing cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {ticketTypes.map((ticket) => (
           <button
             key={ticket.id}
             onClick={() => setSelectedTicketType(ticket)}
-            className={`w-full text-left p-4 border-2 rounded-lg transition-all ${
+            className={`w-full text-left p-6 border-2 rounded-xl transition-all flex flex-col justify-between h-full ${
               selectedTicketType.id === ticket.id
-                ? 'border-blue-600 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-blue-600 bg-blue-50/70 shadow-md'
+                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50/50'
             }`}
           >
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="font-semibold text-gray-900">{ticket.name}</h3>
-                  {ticket.refundable && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                      Refundable
-                    </span>
-                  )}
-                  {ticket.changeable && (
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
-                      Changeable
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600 mb-2">{ticket.description}</p>
-                <ul className="text-xs text-gray-600 space-y-1">
-                  {ticket.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <svg
-                        className="h-3 w-3 text-green-500 mr-2"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+            <div className="w-full flex-1 flex flex-col">
+              <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                <h3 className="font-bold text-gray-900 text-base">{ticket.name}</h3>
+                {ticket.refundable && (
+                  <span className="text-[10px] font-semibold bg-green-100 text-green-700 px-1.5 py-0.5 rounded">
+                    Refund
+                  </span>
+                )}
+                {ticket.changeable && (
+                  <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                    Flex
+                  </span>
+                )}
               </div>
-              <div className="ml-4 text-right">
-                <div className="text-2xl font-bold text-blue-600">PKR {(ticket.price * 300).toLocaleString()}</div>
-                <div className="text-xs text-gray-500">per person</div>
-              </div>
+              <p className="text-xs text-gray-500 mb-3">{ticket.description}</p>
+              
+              <ul className="text-xs text-gray-600 space-y-2 mb-4">
+                {ticket.features.map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <svg
+                      className="h-3.5 w-3.5 text-green-500 mr-2 flex-shrink-0 mt-0.5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="w-full pt-3 border-t border-gray-100 mt-auto">
+              <div className="text-xl font-black text-blue-600">PKR {(ticket.price * 300).toLocaleString()}</div>
+              <div className="text-[10px] font-medium text-gray-400">per person</div>
             </div>
           </button>
         ))}

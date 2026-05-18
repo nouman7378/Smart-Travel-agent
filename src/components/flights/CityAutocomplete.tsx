@@ -29,6 +29,7 @@ interface CityAutocompleteProps {
   icon?: React.ReactNode;
   required?: boolean;
   name?: string;
+  dark?: boolean;
 }
 
 const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
@@ -39,6 +40,7 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
   icon,
   required = false,
   name,
+  dark = false,
 }) => {
   const [inputValue, setInputValue] = useState(value);
   const [cities, setCities] = useState<City[]>([]);
@@ -189,9 +191,9 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
   return (
     <div className="relative" ref={dropdownRef}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className={`block text-sm font-medium mb-2 ${dark ? 'text-blue-100' : 'text-gray-700'}`}>
           {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          {required && <span className="text-red-400 ml-1">*</span>}
         </label>
       )}
       
@@ -212,14 +214,18 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
           onFocus={handleFocus}
           placeholder={placeholder}
           required={required}
-          className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-10 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 transition-all duration-200`}
+          className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-10 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 ${
+            dark
+              ? 'bg-blue-950/40 backdrop-blur-md border border-blue-400 text-white placeholder-blue-200/60'
+              : 'bg-white border border-gray-300 text-gray-900 placeholder-gray-500'
+          }`}
           autoComplete="off"
         />
         
         {/* Loading indicator */}
         {isLoading && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+            <div className={`animate-spin rounded-full h-5 w-5 border-b-2 ${dark ? 'border-blue-400' : 'border-blue-600'}`}></div>
           </div>
         )}
         
@@ -234,7 +240,9 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
               setCities([]);
               inputRef.current?.focus();
             }}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            className={`absolute right-3 top-1/2 transform -translate-y-1/2 transition-colors ${
+              dark ? 'text-blue-300 hover:text-blue-100' : 'text-gray-400 hover:text-gray-600'
+            }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -251,7 +259,11 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-80 overflow-y-auto"
+            className={`absolute z-50 w-full mt-2 rounded-lg shadow-2xl border max-h-80 overflow-y-auto ${
+              dark 
+                ? 'bg-blue-950 border-blue-800/80 text-white' 
+                : 'bg-white border-gray-200 text-gray-900'
+            }`}
           >
             {cities.map((city, index) => (
               <button
@@ -259,26 +271,34 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
                 type="button"
                 onClick={() => handleSelectCity(city)}
                 onMouseEnter={() => setHighlightedIndex(index)}
-                className={`w-full px-4 py-3 text-left transition-colors duration-150 border-b border-gray-100 last:border-b-0 ${
+                className={`w-full px-4 py-3 text-left transition-colors duration-150 border-b last:border-b-0 ${
+                  dark ? 'border-blue-900/40' : 'border-gray-100'
+                } ${
                   index === highlightedIndex
-                    ? 'bg-blue-50 border-blue-200'
-                    : 'hover:bg-gray-50'
+                    ? dark
+                      ? 'bg-blue-900/60 border-blue-700'
+                      : 'bg-blue-50 border-blue-200'
+                    : dark
+                      ? 'hover:bg-blue-900/30'
+                      : 'hover:bg-gray-50'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-gray-900 truncate">
+                      <span className={`font-semibold truncate ${dark ? 'text-white' : 'text-gray-900'}`}>
                         {city.name}
                       </span>
-                      <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded">
+                      <span className={`px-2 py-0.5 text-xs font-bold rounded ${
+                        dark ? 'bg-blue-900/60 text-blue-300' : 'bg-blue-100 text-blue-700'
+                      }`}>
                         {city.iata_code}
                       </span>
                     </div>
-                    <div className="text-sm text-gray-500 truncate mt-0.5">
+                    <div className={`text-sm truncate mt-0.5 ${dark ? 'text-blue-200/70' : 'text-gray-500'}`}>
                       {city.airport_name}
                     </div>
-                    <div className="text-xs text-gray-400 mt-0.5">
+                    <div className={`text-xs mt-0.5 ${dark ? 'text-blue-300/50' : 'text-gray-400'}`}>
                       {city.country}
                     </div>
                   </div>
@@ -296,10 +316,12 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-4 text-center"
+            className={`absolute z-50 w-full mt-2 rounded-lg shadow-2xl border p-4 text-center ${
+              dark ? 'bg-blue-950 border-blue-800 text-white' : 'bg-white border-gray-200 text-gray-900'
+            }`}
           >
-            <p className="text-gray-500">No cities or airports found</p>
-            <p className="text-sm text-gray-400 mt-1">Try a different search term</p>
+            <p className={`${dark ? 'text-blue-200/70' : 'text-gray-500'}`}>No cities or airports found</p>
+            <p className={`text-sm mt-1 ${dark ? 'text-blue-300/50' : 'text-gray-400'}`}>Try a different search term</p>
           </motion.div>
         )}
       </AnimatePresence>

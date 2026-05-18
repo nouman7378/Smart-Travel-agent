@@ -446,6 +446,54 @@ const BookingManagement: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Booked Items Section */}
+                {((selectedBooking as any).items && (selectedBooking as any).items.length > 0) && (
+                  <div className="pt-4 border-t border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Booked Details</h3>
+                    <div className="space-y-3">
+                      {(selectedBooking as any).items.map((item: any) => (
+                        <div key={item.id} className="bg-gray-50 border border-gray-100 rounded-lg p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold uppercase ${
+                                item.item_type === 'hotel_room' ? 'bg-blue-100 text-blue-800' :
+                                item.item_type === 'flight' ? 'bg-indigo-100 text-indigo-800' :
+                                item.item_type === 'car' ? 'bg-emerald-100 text-emerald-800' :
+                                'bg-purple-100 text-purple-800'
+                              }`}>
+                                {item.item_type === 'hotel_room' ? 'Hotel' : item.item_type}
+                              </span>
+                              <h4 className="font-bold text-gray-900">{item.title}</h4>
+                            </div>
+                            {item.subtitle && (
+                              <p className="text-sm text-gray-600 mt-1">{item.subtitle}</p>
+                            )}
+                            
+                            {/* Render dynamic metadata beautifully */}
+                            {item.metadata && Object.keys(item.metadata).length > 0 && (
+                              <div className="mt-2 text-xs text-gray-500 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 bg-white p-2.5 rounded border border-gray-100">
+                                {Object.entries(item.metadata).map(([k, v]) => (
+                                  <div key={k} className="capitalize">
+                                    <span className="font-medium text-gray-700">{k.replace(/([A-Z])/g, ' $1')}:</span> {String(v)}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-right flex md:flex-col justify-between w-full md:w-auto items-center md:items-end flex-shrink-0">
+                            <span className="text-xs text-gray-500">
+                              PKR {item.unit_price.toLocaleString()} x {item.quantity}
+                            </span>
+                            <span className="font-bold text-gray-800 text-sm md:text-base">
+                              PKR {item.line_total.toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Notes */}
                 {selectedBooking.notes && (
                   <div className="pt-4 border-t border-gray-200">

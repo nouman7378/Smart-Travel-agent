@@ -110,7 +110,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
   const visibleHotels = hotels.slice(currentIndex, currentIndex + hotelsPerView);
 
   return (
-    <section className={`pt-8 md:pt-12 lg:pt-16 pb-16 md:pb-20 lg:pb-24 bg-white ${className}`}>
+    <section className={`pt-8 md:pt-6 lg:pt-6 pb-6 md:pb-6 lg:pb-7 bg-white ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Centered */}
         <motion.div 

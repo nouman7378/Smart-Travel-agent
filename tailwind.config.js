@@ -8,6 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        blue: {
+          500: '#172554', // Solid deep navy color matching bg-blue-950
+          600: '#172554', // Solid deep navy color matching bg-blue-950
+          700: '#0f172a', // Elegant darker hover tone
+        },
         // Custom colors for dark mode
         dark: {
           bg: '#1a1a1a',
@@ -34,4 +39,3 @@ module.exports = {
   },
   plugins: [],
 }
-

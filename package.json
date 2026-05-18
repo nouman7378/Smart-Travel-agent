@@ -4,6 +4,8 @@
   "description": "Modern, professional Expedia.fr frontend clone for FYP",
   "private": true,
   "dependencies": {
+    "@stripe/react-stripe-js": "^6.3.0",
+    "@stripe/stripe-js": "^9.5.0",
     "framer-motion": "^10.16.16",
     "lucide-react": "^1.11.0",
     "react": "^18.2.0",

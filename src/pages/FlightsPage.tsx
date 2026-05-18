@@ -12,6 +12,8 @@ import FlightResults from '../components/flights/FlightResults';
 import { searchFlights, extractAirportCode, formatDate, Flight } from '../services/flightService';
 import { Banknote, Calendar, Frown, Star } from 'lucide-react';
 
+import downloadBg from '../assets/download.png';
+
 
 const FlightsPage: React.FC = () => {
   const [flights, setFlights] = useState<Flight[]>([]);
@@ -126,13 +128,13 @@ const FlightsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Search Bar */}
-      <div className="relative text-white py-12 md:py-16">
+      <div className="relative text-white pt-12 pb-12 md:pt-16 md:pb-16">
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden rounded-b-3xl sm:rounded-none">
           <div
             className="absolute inset-0 bg-cover bg-center transform scale-110 animate-zoom-in-out"
             style={{
-              backgroundImage: 'url(https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&q=80)',
+              backgroundImage: `url(${downloadBg})`,
             }}
           ></div>
           <div className="absolute inset-0 bg-black/40"></div>
@@ -148,15 +150,8 @@ const FlightsPage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-6xl mx-auto"
+            className="max-w-6xl mx-auto relative z-20 translate-y-16 md:translate-y-24 -mb-16 md:-mb-24"
           >
-            <div className="text-center mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">Search for flights</h1>
-              <p className="text-xl text-blue-100">
-                Compare prices from hundreds of airlines
-              </p>
-            </div>
-            
             {/* Flight Search Bar */}
             <FlightSearchBar onSearch={handleSearch} />
           </motion.div>
@@ -262,55 +257,7 @@ const FlightsPage: React.FC = () => {
         </section>
       )}
 
-      {/* Features Section (shown when no results) */}
-      {!showResults && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="max-w-6xl mx-auto"
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-                Why choose TravelHub for your flights?
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {[
-                  {
-                    icon: <Banknote className="w-5 h-5" />,
-                    title: 'Best prices',
-                    description: 'Compare prices from multiple airlines to get the best deals',
-                  },
-                  {
-                    icon: <Calendar className="w-5 h-5" />,
-                    title: 'Flexible dates',
-                    description: 'Check prices on different dates to find the cheapest options',
-                  },
-                  {
-                    icon: <Star className="w-5 h-5" />,
-                    title: 'Trusted airlines',
-                    description: 'Book with confidence from our network of partner airlines',
-                  },
-                ].map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                    className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <div className="text-4xl mb-4">{feature.icon}</div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-      )}
+    
     </div>
   );
 };

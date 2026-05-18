@@ -1,7 +1,7 @@
 import { API_PREFIX } from '../config/env.config';
 import { APP_CONFIG } from '../constants/config';
 
-export type BookingItemType = 'hotel_room' | 'car' | 'package';
+export type BookingItemType = 'hotel_room' | 'flight' | 'car' | 'package';
 
 export interface BookingCartItem {
   id: number;
