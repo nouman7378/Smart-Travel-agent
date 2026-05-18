@@ -6,7 +6,10 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { API_PREFIX } from '../config/env.config';
 import { APP_CONFIG } from '../constants/config';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+const stripePromise = loadStripe(
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ||
+  'pk_test_51TXRMIKV4d8RTSF1TmV6wop9FqNAxzFjePaPUQMbJbLzE3Q8zY8ub84swbzk4SeIQsAB29WuEwz0vgIXojQEbzoM00Oj5eFuQz'
+);
 
 interface GuestInfo {
   name: string;
