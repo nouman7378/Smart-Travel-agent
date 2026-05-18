@@ -11,7 +11,7 @@ import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { AdminPackage, TripStatus } from '@/types/admin';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
 
 const getAdminAuthHeader = (): string => {
   const adminCreds = localStorage.getItem('admin_credentials');

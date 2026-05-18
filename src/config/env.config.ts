@@ -17,7 +17,7 @@ export const API_BASE_URL = (() => {
   if (typeof raw.VITE_API_URL === 'string' && raw.VITE_API_URL.trim() !== '') {
     return raw.VITE_API_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
   }
-  return 'http://127.0.0.1:8001';
+  return 'https://smart-travel.fly.dev';
 })();
 
 /** Full API prefix URL (e.g. http://127.0.0.1:8001/api) */

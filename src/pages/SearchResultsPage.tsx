@@ -24,7 +24,7 @@ import { FlightResult } from '../components/FlightResultCard';
 import { CarResult } from '../components/CarResultCard';
 import RoomSelectionModal from '../components/RoomSelectionModal';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
 
 interface SearchResultsPageProps {
   searchType?: 'hotels' | 'flights' | 'cars';

@@ -25,7 +25,7 @@ import ReviewsSection, { Review } from '../components/ReviewsSection';
 import NearbyHotels, { NearbyHotel } from '../components/NearbyHotels';
 import RoomSelectionModal from '../components/RoomSelectionModal';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
 
 interface HotelDetailPageProps {
   hotelId?: number;

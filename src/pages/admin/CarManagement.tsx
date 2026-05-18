@@ -17,7 +17,7 @@ interface Car {
   car_image_url?: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
 
 const getMediaUrl = (url: string | undefined | null): string => {
   if (!url) return '';
@@ -90,6 +90,9 @@ const CarManagement: React.FC = () => {
       setFormData(prev => ({ ...prev, [name]: (e.target as HTMLInputElement).checked }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
+      if (name === 'car_image_url') {
+        setImagePreview(value || null);
+      }
     }
   };
 
@@ -307,11 +310,17 @@ const CarManagement: React.FC = () => {
                   <input type="text" name="features" value={(formData as any).features} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="e.g., GPS, Bluetooth" />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
-                  <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="block w-full text-sm text-gray-500" />
-                  {imagePreview && <img src={getMediaUrl(imagePreview)} alt="preview" className="mt-2 w-40 h-24 object-cover rounded" />}
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image File</label>
+                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="block w-full text-sm text-gray-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Or Enter Image URL</label>
+                    <input type="text" name="car_image_url" value={formData.car_image_url} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., https://images.unsplash.com/..." />
+                  </div>
                 </div>
+                {imagePreview && <img src={getMediaUrl(imagePreview)} alt="preview" className="mt-2 w-40 h-24 object-cover rounded" />}
 
                 <div className="flex items-center">
                   <input type="checkbox" name="is_available" checked={(formData as any).is_available} onChange={handleInputChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />

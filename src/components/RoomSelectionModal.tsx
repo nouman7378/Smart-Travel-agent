@@ -37,7 +37,7 @@ interface RoomSelectionModalProps {
   onBookRoom: (roomId: number) => void;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
 
 const getMediaUrl = (url: string | undefined | null): string => {
   if (!url) return '';

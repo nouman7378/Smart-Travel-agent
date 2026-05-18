@@ -42,7 +42,7 @@ interface Room {
 
 import { getAdminAuthHeaders } from '@/utils/adminAuth';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
 
 const getMediaUrl = (url: string | undefined | null): string => {
   if (!url) return '';
@@ -99,6 +99,7 @@ const HotelManagement: React.FC = () => {
     review_count: 0,
     distance_from_center: 0,
     is_active: true,
+    image_url: '',
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -166,6 +167,9 @@ const HotelManagement: React.FC = () => {
       setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
+      if (name === 'image_url') {
+        setImagePreview(value || null);
+      }
     }
   };
 
@@ -203,6 +207,7 @@ const HotelManagement: React.FC = () => {
       review_count: 0,
       distance_from_center: 0,
       is_active: true,
+      image_url: '',
     });
     setSelectedImage(null);
     setImagePreview(null);
@@ -229,6 +234,7 @@ const HotelManagement: React.FC = () => {
       review_count: hotel.review_count,
       distance_from_center: hotel.distance_from_center,
       is_active: hotel.is_active,
+      image_url: hotel.image_url || '',
     });
     setImagePreview(hotel.image_url);
     setSelectedImage(null);
@@ -269,6 +275,7 @@ const HotelManagement: React.FC = () => {
       formDataToSend.append('rating', formData.rating.toString());
       formDataToSend.append('review_count', formData.review_count.toString());
       formDataToSend.append('distance_from_center', formData.distance_from_center.toString());
+      formDataToSend.append('image_url', formData.image_url);
       
       if (isEditing) {
         formDataToSend.append('is_active', formData.is_active.toString());
@@ -398,12 +405,10 @@ const HotelManagement: React.FC = () => {
       
       // Add all room form data
       Object.entries(roomFormData).forEach(([key, value]) => {
-        if (key !== 'room_image_url') { // Exclude the image URL field
-          if (Array.isArray(value)) {
-            formDataToSend.append(key, JSON.stringify(value));
-          } else {
-            formDataToSend.append(key, value.toString());
-          }
+        if (Array.isArray(value)) {
+          formDataToSend.append(key, JSON.stringify(value));
+        } else {
+          formDataToSend.append(key, value !== undefined && value !== null ? value.toString() : '');
         }
       });
       
@@ -456,6 +461,9 @@ const HotelManagement: React.FC = () => {
         ? Number(value) 
         : value
     }));
+    if (name === 'room_image_url') {
+      setRoomImagePreview(value || null);
+    }
   };
 
   const handleAmenitiesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -819,13 +827,13 @@ const HotelManagement: React.FC = () => {
                   </div>
                 )}
 
-                {/* Image Upload */}
+                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Hotel Image
                   </label>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
                       {imagePreview ? (
                         <img
                           src={getMediaUrl(imagePreview)}
@@ -838,16 +846,30 @@ const HotelManagement: React.FC = () => {
                         </svg>
                       )}
                     </div>
-                    <div className="flex-1">
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                      />
+                    <div className="flex-1 w-full space-y-3">
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1 font-semibold">Upload Local Image File</label>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-1 font-semibold">Or Enter Image URL</label>
+                        <input
+                          type="text"
+                          name="image_url"
+                          value={formData.image_url}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                          placeholder="e.g., https://images.unsplash.com/..."
+                        />
+                      </div>
                       <p className="text-xs text-gray-500 mt-1">
-                        Upload an image of the hotel. Supported formats: JPG, PNG, WebP
+                        Supported formats: JPG, PNG, WebP
                       </p>
                     </div>
                   </div>
@@ -1245,12 +1267,12 @@ const HotelManagement: React.FC = () => {
                       required
                     />
                   </div>
-                  <div>
+                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Room Image
                     </label>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                      <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
                         {roomImagePreview ? (
                           <img
                             src={getMediaUrl(roomImagePreview)}
@@ -1263,16 +1285,30 @@ const HotelManagement: React.FC = () => {
                           </svg>
                         )}
                       </div>
-                      <div className="flex-1">
-                        <input
-                          ref={roomFileInputRef}
-                          type="file"
-                          accept="image/*"
-                          onChange={handleRoomImageChange}
-                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
-                        />
+                      <div className="flex-1 w-full space-y-3">
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1 font-semibold">Upload Local Image File</label>
+                          <input
+                            ref={roomFileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleRoomImageChange}
+                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1 font-semibold">Or Enter Image URL</label>
+                          <input
+                            type="text"
+                            name="room_image_url"
+                            value={roomFormData.room_image_url}
+                            onChange={handleRoomInputChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            placeholder="e.g., https://images.unsplash.com/..."
+                          />
+                        </div>
                         <p className="text-xs text-gray-500 mt-1">
-                          Upload an image of the room. Supported formats: JPG, PNG, WebP
+                          Supported formats: JPG, PNG, WebP
                         </p>
                       </div>
                     </div>
