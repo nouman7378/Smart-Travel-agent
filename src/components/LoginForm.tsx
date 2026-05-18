@@ -141,6 +141,25 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, className = '' }) => {
         >
           {isSubmitting ? 'Signing in...' : 'Sign In'}
         </button>
+
+        {/* Demo Presentation Logins */}
+        <div className="pt-4 border-t border-gray-100 mt-6">
+          <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+            Quick presentation logins
+          </p>
+          <div className="flex gap-3 justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                handleChange('username', 'admin@example.com');
+                handleChange('password', 'admin123');
+              }}
+              className="px-3.5 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors flex items-center gap-1.5"
+            >
+              🔒 Auto-fill Admin
+            </button>
+          </div>
+        </div>
       </div>
     </form>
   );

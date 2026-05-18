@@ -4,6 +4,7 @@ import CarList from '../components/CarList';
 import { Car } from '../components/CarCard';
 import CarSortBar from '../components/CarSortBar';
 import Pagination from '../components/Pagination';
+import { API_PREFIX, getMediaUrl } from '../config/env.config';
 
 interface CarRentalPageProps {
   initialFilters?: Partial<CarFilters>;
@@ -72,7 +73,7 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('http://localhost:8001/api/cars/');
+        const response = await fetch(`${API_PREFIX}/cars/`);
         const data = await response.json();
         
         if (data.success) {
@@ -81,7 +82,7 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
             id: car.id,
             model: car.model,
             type: car.type_display,
-            image: car.car_image_url || 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
+            image: getMediaUrl(car.car_image_url) || 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
             company: car.company,
             price: car.price_per_day,
             originalPrice: car.original_price,

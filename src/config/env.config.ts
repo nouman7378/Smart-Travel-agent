@@ -28,4 +28,18 @@ export const env = {
   API_PREFIX,
 } as const;
 
+/**
+ * Resolves a media URL, ensuring that relative URLs are prefixed with the active backend base URL.
+ */
+export function getMediaUrl(url: string | undefined | null): string {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
+  // Prepend backend base URL if it's a relative media URL
+  const baseUrl = API_BASE_URL.replace(/\/$/, '');
+  const relativePath = url.startsWith('/') ? url : `/${url}`;
+  return `${baseUrl}${relativePath}`;
+}
+
 export default env;

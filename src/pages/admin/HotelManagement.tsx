@@ -44,6 +44,16 @@ import { getAdminAuthHeaders } from '@/utils/adminAuth';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
+const getMediaUrl = (url: string | undefined | null): string => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
+  const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+  const relativePath = url.startsWith('/') ? url : `/${url}`;
+  return `${rootHost}${relativePath}`;
+};
+
 const HotelManagement: React.FC = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
@@ -275,7 +285,7 @@ const HotelManagement: React.FC = () => {
       const response = await fetch(url, {
         method: 'POST',
         credentials: 'include',
-        headers: getAdminAuthHeaders(),
+        headers: getAdminAuthHeaders(true),
         body: formDataToSend,
       });
 
@@ -408,7 +418,7 @@ const HotelManagement: React.FC = () => {
         response = await fetch(`${API_BASE_URL}/admin/rooms/${currentRoom.id}/update/`, {
           method: 'PUT',
           credentials: 'include',
-          headers: getAdminAuthHeaders(),
+          headers: getAdminAuthHeaders(true),
           body: formDataToSend,
         });
       } else {
@@ -416,7 +426,7 @@ const HotelManagement: React.FC = () => {
         response = await fetch(`${API_BASE_URL}/admin/hotels/${selectedHotelForRooms?.id}/rooms/create/`, {
           method: 'POST',
           credentials: 'include',
-          headers: getAdminAuthHeaders(),
+          headers: getAdminAuthHeaders(true),
           body: formDataToSend,
         });
       }
@@ -554,7 +564,7 @@ const HotelManagement: React.FC = () => {
           <div className="w-16 h-16 bg-gray-200 rounded-lg mr-3 flex-shrink-0 overflow-hidden">
             {hotel.image_url ? (
               <img
-                src={hotel.image_url}
+                src={getMediaUrl(hotel.image_url)}
                 alt={hotel.name}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -818,7 +828,7 @@ const HotelManagement: React.FC = () => {
                     <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                       {imagePreview ? (
                         <img
-                          src={imagePreview}
+                          src={getMediaUrl(imagePreview)}
                           alt="Preview"
                           className="w-full h-full object-cover"
                         />
@@ -1243,7 +1253,7 @@ const HotelManagement: React.FC = () => {
                       <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                         {roomImagePreview ? (
                           <img
-                            src={roomImagePreview}
+                            src={getMediaUrl(roomImagePreview)}
                             alt="Room Preview"
                             className="w-full h-full object-cover"
                           />

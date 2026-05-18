@@ -13,10 +13,11 @@ const STORAGE_KEYS = {
  * Generates an object containing all necessary headers for authenticated admin API requests.
  * Includes Basic Auth (if available) and X-User-ID fallback for local development.
  */
-export const getAdminAuthHeaders = (): Record<string, string> => {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
+export const getAdminAuthHeaders = (isMultipart = false): Record<string, string> => {
+  const headers: Record<string, string> = {};
+  if (!isMultipart) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   // 1. Try Basic Auth credentials (Username:Password)
   const adminCreds = localStorage.getItem(STORAGE_KEYS.ADMIN_CREDS);

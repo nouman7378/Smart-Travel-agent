@@ -112,32 +112,32 @@ class ChatService {
    */
   private async callBackend(userMessage: string): Promise<ChatResponse | null> {
     try {
-      const response = await fetch(`${API_PREFIX}/ai/chat/`, {
+      // Direct call to new RAG ChatView at /api/chat/
+      const response = await fetch(`${API_PREFIX}/chat/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: userMessage,
-          sessionId: this.sessionId,
+          question: userMessage,
+          session_id: this.sessionId ? parseInt(this.sessionId) : null,
         }),
         credentials: 'include',
       });
 
       const data = await response.json();
 
-      if (!response.ok || !data.success) {
+      if (!response.ok) {
         console.error('Backend AI chat error', data);
         return null;
       }
 
       const payload: ChatResponse = {
-        message: data.message,
-        quickReplies: data.quickReplies || [],
-        needsFollowUp: !!data.needsFollowUp,
-        context: (data.context || {}) as ConversationContext,
-        recommendations: data.recommendations,
-        sessionId: data.sessionId,
+        message: data.answer,
+        quickReplies: [],
+        needsFollowUp: false,
+        context: {},
+        sessionId: data.session_id ? String(data.session_id) : undefined,
       };
 
       return payload;

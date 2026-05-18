@@ -41,6 +41,16 @@ import { getAdminAuthHeaders } from '@/utils/adminAuth';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
+const getMediaUrl = (url: string | undefined | null): string => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
+  const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+  const relativePath = url.startsWith('/') ? url : `/${url}`;
+  return `${rootHost}${relativePath}`;
+};
+
 const PackageManagement: React.FC = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
@@ -200,7 +210,7 @@ const PackageManagement: React.FC = () => {
         method: 'POST',
         body: formDataToSend,
         credentials: 'include',  // Include cookies for session authentication
-        headers: getAdminAuthHeaders(),
+        headers: getAdminAuthHeaders(true),
       });
       
       const result = await response.json();
@@ -336,7 +346,7 @@ const PackageManagement: React.FC = () => {
       key: 'hotel_image_url',
       render: (pkg: any) => (
         <img 
-          src={pkg.hotel?.image || pkg.hotel_image_url || 'https://placehold.co/60x40?text=N/A'} 
+          src={getMediaUrl(pkg.hotel?.image || pkg.hotel_image_url) || 'https://placehold.co/60x40?text=N/A'} 
           alt={pkg.title} 
           className="w-12 h-8 object-cover rounded"
         />
@@ -450,7 +460,7 @@ const PackageManagement: React.FC = () => {
                       <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                         {imagePreview ? (
                           <img
-                            src={imagePreview}
+                            src={getMediaUrl(imagePreview)}
                             alt="Preview"
                             className="w-full h-full object-cover"
                           />

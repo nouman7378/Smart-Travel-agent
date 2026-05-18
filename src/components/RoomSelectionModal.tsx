@@ -39,6 +39,16 @@ interface RoomSelectionModalProps {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
+const getMediaUrl = (url: string | undefined | null): string => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
+  const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+  const relativePath = url.startsWith('/') ? url : `/${url}`;
+  return `${rootHost}${relativePath}`;
+};
+
 const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
   isOpen,
   onClose,
@@ -259,7 +269,7 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
                         <div className="w-full md:w-32 h-32 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
                           {room.room_image_url ? (
                             <img
-                              src={room.room_image_url}
+                              src={getMediaUrl(room.room_image_url)}
                               alt={room.room_type}
                               className="w-full h-full object-cover"
                             />

@@ -19,6 +19,16 @@ interface Car {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
+const getMediaUrl = (url: string | undefined | null): string => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
+  const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+  const relativePath = url.startsWith('/') ? url : `/${url}`;
+  return `${rootHost}${relativePath}`;
+};
+
 const getAdminAuthHeader = (): string => {
   const adminCreds = localStorage.getItem('admin_credentials');
   if (adminCreds) return `Basic ${btoa(adminCreds)}`;
@@ -196,7 +206,7 @@ const CarManagement: React.FC = () => {
     { header: 'Car', key: 'model', render: (car: Car) => (
       <div className="flex items-center">
         <div className="w-12 h-12 bg-gray-200 rounded mr-3 overflow-hidden">
-          {car.car_image_url ? <img src={car.car_image_url} alt={car.model} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-gray-100">—</div>}
+          {car.car_image_url ? <img src={getMediaUrl(car.car_image_url)} alt={car.model} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-gray-100">—</div>}
         </div>
         <div>
           <p className="font-medium text-gray-800">{car.model}</p>
@@ -300,7 +310,7 @@ const CarManagement: React.FC = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
                   <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="block w-full text-sm text-gray-500" />
-                  {imagePreview && <img src={imagePreview} alt="preview" className="mt-2 w-40 h-24 object-cover rounded" />}
+                  {imagePreview && <img src={getMediaUrl(imagePreview)} alt="preview" className="mt-2 w-40 h-24 object-cover rounded" />}
                 </div>
 
                 <div className="flex items-center">
