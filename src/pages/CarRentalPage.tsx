@@ -20,7 +20,7 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
     dropoffDate: initialFilters?.dropoffDate || '',
     dropoffTime: initialFilters?.dropoffTime || '10:00',
     carType: initialFilters?.carType || [],
-    priceRange: initialFilters?.priceRange || [0, 15000],
+    priceRange: initialFilters?.priceRange || [0, 100000],
     companies: initialFilters?.companies || [],
   });
   

@@ -44,7 +44,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
     dropoffDate: '',
     dropoffTime: '10:00',
     carType: [],
-    priceRange: [0, 200],
+    priceRange: [0, 100000],
     companies: [],
   });
 
@@ -181,14 +181,15 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
       <FilterSection title="Price Range" sectionKey="price">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span>${filters.priceRange[0]}</span>
-            <span>${filters.priceRange[1]}</span>
+            <span>PKR {filters.priceRange[0].toLocaleString()}</span>
+            <span>PKR {filters.priceRange[1].toLocaleString()}</span>
           </div>
           <div className="relative">
             <input
               type="range"
               min="0"
-              max="200"
+              max="100000"
+              step="1000"
               value={filters.priceRange[0]}
               onChange={(e) =>
                 updateFilters({ priceRange: [Number(e.target.value), filters.priceRange[1]] })
@@ -198,7 +199,8 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
             <input
               type="range"
               min="0"
-              max="200"
+              max="100000"
+              step="1000"
               value={filters.priceRange[1]}
               onChange={(e) =>
                 updateFilters({ priceRange: [filters.priceRange[0], Number(e.target.value)] })
@@ -259,7 +261,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
               dropoffDate: '',
               dropoffTime: '10:00',
               carType: [],
-              priceRange: [0, 200],
+              priceRange: [0, 100000],
               companies: [],
             };
             setFilters(resetFilters);
