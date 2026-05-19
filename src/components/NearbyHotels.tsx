@@ -9,6 +9,7 @@
  */
 
 import React from 'react';
+import { getMediaUrl } from '../config/env.config';
 
 export interface NearbyHotel {
   id: number;
@@ -54,7 +55,7 @@ const NearbyHotels: React.FC<NearbyHotelsProps> = ({
             {/* Image */}
             <div className="relative h-48 overflow-hidden">
               <img
-                src={hotel.image}
+                src={getMediaUrl(hotel.image)}
                 alt={hotel.name}
                 className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
               />

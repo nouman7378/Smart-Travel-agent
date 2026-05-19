@@ -11,6 +11,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getMediaUrl } from '../config/env.config';
 
 export interface HotelResult {
   id: number;
@@ -57,7 +58,7 @@ const HotelResultCard: React.FC<HotelResultCardProps> = ({ hotel, className = ''
         {/* Image */}
         <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0">
           <img
-            src={hotel.image}
+            src={getMediaUrl(hotel.image)}
             alt={hotel.name}
             className="w-full h-full object-cover"
           />

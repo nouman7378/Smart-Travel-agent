@@ -196,8 +196,24 @@ const PackageManagement: React.FC = () => {
       // Create FormData for multipart request (to support file upload)
       const formDataToSend = new FormData();
       
+      // Ensure defaults exist for required/numeric fields
+      const dataToSend = {
+        ...formData,
+        nights: formData.nights !== undefined && formData.nights !== '' ? formData.nights : 3,
+        package_type: formData.package_type || 'city',
+        status: formData.status || 'active',
+        hotel_stars: formData.hotel_stars !== undefined && formData.hotel_stars !== '' ? formData.hotel_stars : 3,
+        hotel_rating: formData.hotel_rating !== undefined && formData.hotel_rating !== '' ? formData.hotel_rating : '0.00',
+        hotel_review_count: formData.hotel_review_count !== undefined && formData.hotel_review_count !== '' ? formData.hotel_review_count : 0,
+        flight_stops: formData.flight_stops !== undefined && formData.flight_stops !== '' ? formData.flight_stops : 0,
+        availability: formData.availability !== undefined && formData.availability !== '' ? formData.availability : 0,
+        bookings: formData.bookings !== undefined && formData.bookings !== '' ? formData.bookings : 0,
+        is_featured: formData.is_featured || false,
+        is_popular: formData.is_popular || false,
+      };
+      
       // Add all form fields to FormData
-      Object.entries(formData).forEach(([key, value]) => {
+      Object.entries(dataToSend).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
             formDataToSend.append(key, JSON.stringify(value));
@@ -408,7 +424,21 @@ const PackageManagement: React.FC = () => {
           <button
             onClick={() => {
               setEditingPackage(null);
-              setFormData({});
+              setFormData({
+                nights: 3,
+                package_type: 'city',
+                status: 'active',
+                hotel_stars: 3,
+                hotel_rating: '0.00',
+                hotel_review_count: 0,
+                flight_stops: 0,
+                availability: 0,
+                bookings: 0,
+                is_featured: false,
+                is_popular: false,
+                highlights: [],
+                includes: [],
+              });
               setImagePreview(null);
               if (fileInputRef.current) {
                 fileInputRef.current.value = '';

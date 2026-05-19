@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AddToBookingButton from './common/AddToBookingButton';
 import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
+import { getMediaUrl } from '../config/env.config';
 
 export interface TravelPackage {
   id: number;
@@ -105,7 +106,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ package: pkg, className = '',
       {/* Hotel Image */}
       <div className="relative h-56 overflow-hidden">
         <img
-          src={pkg.hotel.image}
+          src={getMediaUrl(pkg.hotel.image)}
           alt={pkg.hotel.name}
           className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
         />

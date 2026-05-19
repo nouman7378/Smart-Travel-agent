@@ -24,6 +24,7 @@ import BookingPanel, { RoomType, BookingData } from '../components/BookingPanel'
 import ReviewsSection, { Review } from '../components/ReviewsSection';
 import NearbyHotels, { NearbyHotel } from '../components/NearbyHotels';
 import RoomSelectionModal from '../components/RoomSelectionModal';
+import { getMediaUrl } from '../config/env.config';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
 
@@ -134,7 +135,7 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
   };
   
   // Sample hotel data - Replace with actual API data
-  const hotelImages = hotel?.image_url ? [hotel.image_url] : [
+  const hotelImages = hotel?.image_url ? [getMediaUrl(hotel.image_url)] : [
     'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80',
     'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&q=80',
     'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80',

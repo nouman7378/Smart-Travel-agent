@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { getMediaUrl } from '../config/env.config';
 
 interface Hotel {
   id: number;
@@ -226,7 +227,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <motion.img
-          src={hotel.image}
+          src={getMediaUrl(hotel.image)}
           alt={hotel.name}
           className="w-full h-full object-cover"
           whileHover={{ scale: 1.05 }}
