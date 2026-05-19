@@ -21,12 +21,18 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.d
 
 const getMediaUrl = (url: string | undefined | null): string => {
   if (!url) return '';
+  let resolvedUrl = url;
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-    return url;
+    resolvedUrl = url;
+  } else {
+    const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+    const relativePath = url.startsWith('/') ? url : `/${url}`;
+    resolvedUrl = `${rootHost}${relativePath}`;
   }
-  const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
-  const relativePath = url.startsWith('/') ? url : `/${url}`;
-  return `${rootHost}${relativePath}`;
+  if (resolvedUrl.startsWith('http://res.cloudinary.com')) {
+    resolvedUrl = resolvedUrl.replace('http://', 'https://');
+  }
+  return resolvedUrl;
 };
 
 const getAdminAuthHeader = (): string => {

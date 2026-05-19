@@ -33,13 +33,19 @@ export const env = {
  */
 export function getMediaUrl(url: string | undefined | null): string {
   if (!url) return '';
+  let resolvedUrl = url;
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-    return url;
+    resolvedUrl = url;
+  } else {
+    // Prepend backend base URL if it's a relative media URL
+    const baseUrl = API_BASE_URL.replace(/\/$/, '');
+    const relativePath = url.startsWith('/') ? url : `/${url}`;
+    resolvedUrl = `${baseUrl}${relativePath}`;
   }
-  // Prepend backend base URL if it's a relative media URL
-  const baseUrl = API_BASE_URL.replace(/\/$/, '');
-  const relativePath = url.startsWith('/') ? url : `/${url}`;
-  return `${baseUrl}${relativePath}`;
+  if (resolvedUrl.startsWith('http://res.cloudinary.com')) {
+    resolvedUrl = resolvedUrl.replace('http://', 'https://');
+  }
+  return resolvedUrl;
 }
 
 export default env;
