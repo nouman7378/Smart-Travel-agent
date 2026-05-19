@@ -12,13 +12,13 @@ const Hero: React.FC = () => {
   return (
     <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800">
       {/* Background Pattern/Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center opacity-20"
         style={{
           backgroundImage: 'url(https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80)',
         }}
       ></div>
-      
+
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <motion.div
@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
             List Your Property with TravelHub
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 leading-relaxed max-w-3xl mx-auto mb-8">
-            Join thousands of property owners and reach millions of travelers worldwide. 
+            Join thousands of property owners and reach millions of travelers worldwide.
             Start earning more from your property today.
           </p>
           <motion.div

@@ -102,3 +102,13 @@ html {
   }
 }
 
+/* Premium animated travel hero background override for all footer-linked pages */
+.bg-gradient-to-br.from-blue-600.via-purple-600.to-indigo-800 {
+  position: relative;
+  background-image: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)), url('./assets/download.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  animation: zoom-in-out 30s ease-in-out infinite;
+}
+

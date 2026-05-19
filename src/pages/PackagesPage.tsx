@@ -188,7 +188,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ initialFilters }) => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
-            <PackageSearchFilters onFiltersChange={setFilters} />
+            <PackageSearchFilters filters={filters} onFiltersChange={setFilters} />
           </aside>
 
           {/* Results Section */}

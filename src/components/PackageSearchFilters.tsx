@@ -29,32 +29,23 @@ export interface PackageFilters {
 }
 
 interface PackageSearchFiltersProps {
+  filters: PackageFilters;
   onFiltersChange: (filters: PackageFilters) => void;
   className?: string;
 }
 
 const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
+  filters,
   onFiltersChange,
   className = '',
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<string[]>(['search', 'price']);
-  const [filters, setFilters] = useState<PackageFilters>({
-    destination: '',
-    checkIn: '',
-    checkOut: '',
-    adults: 2,
-    children: 0,
-    priceRange: [0, 5000],
-    starRating: [],
-    packageType: [],
-  });
 
   const packageTypes = ['Beach', 'City Break', 'Adventure', 'Romantic', 'Family', 'Luxury'];
 
   const updateFilters = (newFilters: Partial<PackageFilters>) => {
     const updated = { ...filters, ...newFilters };
-    setFilters(updated);
     onFiltersChange(updated);
   };
 
@@ -263,7 +254,6 @@ const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
               starRating: [],
               packageType: [],
             };
-            setFilters(resetFilters);
             onFiltersChange(resetFilters);
           }}
           className="w-full px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors"

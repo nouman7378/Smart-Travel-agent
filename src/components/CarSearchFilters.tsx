@@ -26,34 +26,24 @@ export interface CarFilters {
 }
 
 interface CarSearchFiltersProps {
+  filters: CarFilters;
   onFiltersChange: (filters: CarFilters) => void;
   className?: string;
 }
 
 const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
+  filters,
   onFiltersChange,
   className = '',
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<string[]>(['search', 'price']);
-  const [filters, setFilters] = useState<CarFilters>({
-    pickupLocation: '',
-    dropoffLocation: '',
-    pickupDate: '',
-    pickupTime: '10:00',
-    dropoffDate: '',
-    dropoffTime: '10:00',
-    carType: [],
-    priceRange: [0, 100000],
-    companies: [],
-  });
 
   const carTypes = ['Economy', 'Compact', 'Mid-size', 'Full-size', 'SUV', 'Luxury', 'Convertible'];
   const companies = ['Hertz', 'Avis', 'Enterprise', 'Budget', 'Alamo', 'National', 'Thrifty'];
 
   const updateFilters = (newFilters: Partial<CarFilters>) => {
     const updated = { ...filters, ...newFilters };
-    setFilters(updated);
     onFiltersChange(updated);
   };
 
@@ -148,7 +138,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
                 type="time"
                 value={filters.pickupTime}
                 onChange={(e) => updateFilters({ pickupTime: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:hidden"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:!hidden [&::-webkit-calendar-picker-indicator]:!appearance-none [&::-webkit-calendar-picker-indicator]:!w-0 [&::-webkit-calendar-picker-indicator]:!h-0 [&::-webkit-calendar-picker-indicator]:!p-0 [&::-webkit-calendar-picker-indicator]:!opacity-0 [&::-webkit-calendar-picker-indicator]:!absolute"
               />
             </div>
           </div>
@@ -167,7 +157,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
                 type="time"
                 value={filters.dropoffTime}
                 onChange={(e) => updateFilters({ dropoffTime: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:hidden"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:!hidden [&::-webkit-calendar-picker-indicator]:!appearance-none [&::-webkit-calendar-picker-indicator]:!w-0 [&::-webkit-calendar-picker-indicator]:!h-0 [&::-webkit-calendar-picker-indicator]:!p-0 [&::-webkit-calendar-picker-indicator]:!opacity-0 [&::-webkit-calendar-picker-indicator]:!absolute"
               />
             </div>
           </div>
@@ -264,7 +254,6 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
               priceRange: [0, 100000],
               companies: [],
             };
-            setFilters(resetFilters);
             onFiltersChange(resetFilters);
           }}
           className="w-full px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors"

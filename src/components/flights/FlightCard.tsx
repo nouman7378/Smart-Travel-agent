@@ -1,15 +1,7 @@
-/**
- * FlightCard Component
- * 
- * Individual flight result card (Expedia.fr style)
- */
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import type { Flight } from '../../services/flightService';
-import { Circle, Plane } from 'lucide-react';
-
 
 interface FlightCardProps {
   flight: Flight;
@@ -23,8 +15,6 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
     return `${stops} stops`;
   };
 
-  // Convert price to PKR (approximate conversion rate: 1 EUR = 300 PKR)
-  // You can update this rate or make it dynamic
   const EUR_TO_PKR_RATE = 300;
   const priceInPKR = Math.round(parseFloat(flight.price) * EUR_TO_PKR_RATE).toLocaleString();
 
@@ -33,60 +23,76 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
-      whileHover={{ y: -4, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
-      className="bg-white rounded-lg shadow-md border border-gray-200 p-6 mb-4 transition-all duration-300"
+      whileHover={{ y: -3, boxShadow: '0 8px 20px rgba(0,0,0,0.04)' }}
+      className="bg-white rounded-lg border border-gray-200 p-6 mb-4 hover:border-blue-500 transition-all duration-350 cursor-pointer"
     >
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         {/* Left Section: Airline & Flight Info */}
         <div className="flex-1">
-          <div className="flex items-center gap-4 mb-4">
-            {/* Airline Logo */}
-            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><Plane className="inline w-5 h-5" /></span>
+          {/* Airline Block */}
+          <div className="flex items-center gap-3.5 mb-5">
+            <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-250">
+              <span className="text-blue-600 text-lg font-black">✈️</span>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{flight.airline_name}</h3>
-              <p className="text-sm text-gray-500">{flight.flight_number} • {getStopsText(flight.stops)}</p>
+              <h3 className="font-bold text-gray-955 text-sm tracking-tight">{flight.airline_name}</h3>
+              <p className="text-[10px] font-bold text-gray-700 uppercase tracking-wider mt-0.5">
+                {flight.flight_number} • {getStopsText(flight.stops)}
+              </p>
             </div>
           </div>
 
-          {/* Flight Times */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* Flight Times & Sleek Minimalist Timeline */}
+          <div className="grid grid-cols-1 sm:grid-cols-7 gap-4 items-center">
             {/* Departure */}
-            <div>
-              <div className="text-2xl font-bold text-gray-900">{flight.departure_time}</div>
-              <div className="text-sm text-gray-600">Departure</div>
+            <div className="sm:col-span-2">
+              <div className="text-2xl font-black text-gray-950 tracking-tight">
+                {flight.departure_time}
+              </div>
+              <div className="text-[10px] font-bold text-blue-700 uppercase tracking-wider mt-0.5">
+                Departure
+              </div>
             </div>
 
-            {/* Duration & Stops */}
-            <div className="text-center">
-              <div className="text-sm text-gray-500 mb-1">{flight.duration}</div>
-              <div className="relative">
-                <div className="h-px bg-gray-300"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2">
-                  <span className="text-xs text-gray-400"><Circle className="inline w-5 h-5" /></span>
+            {/* Journey Timeline */}
+            <div className="sm:col-span-3 flex flex-col items-center px-2">
+              <div className="text-[10px] font-extrabold text-gray-800 uppercase tracking-wide mb-1">
+                {flight.duration}
+              </div>
+              <div className="relative w-full flex items-center justify-center">
+                <div className="absolute left-0 right-0 h-[1.5px] bg-gray-200"></div>
+                <div className="relative z-10 bg-white px-2 text-[10px] font-bold text-gray-800">
+                  {flight.stops === 0 ? (
+                    <span className="text-gray-955 font-black">Nonstop</span>
+                  ) : (
+                    <span className="text-orange-600 font-black">{flight.stops} {flight.stops === 1 ? 'stop' : 'stops'}</span>
+                  )}
                 </div>
               </div>
-              <div className="text-xs text-gray-500 mt-1">{getStopsText(flight.stops)}</div>
             </div>
 
             {/* Arrival */}
-            <div className="text-right">
-              <div className="text-2xl font-bold text-gray-900">{flight.arrival_time}</div>
-              <div className="text-sm text-gray-600">Arrival</div>
+            <div className="sm:col-span-2 text-left sm:text-right">
+              <div className="text-2xl font-black text-gray-950 tracking-tight">
+                {flight.arrival_time}
+              </div>
+              <div className="text-[10px] font-bold text-blue-700 uppercase tracking-wider mt-0.5">
+                Arrival
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Right Section: Price & CTA */}
-        <div className="lg:border-l lg:border-gray-200 lg:pl-6 flex flex-col items-center lg:items-end justify-between min-w-[140px]">
+        {/* Right Section: Price & CTA with exactly 8px radius */}
+        <div className="lg:border-l lg:border-gray-200 lg:pl-6 flex flex-col items-center lg:items-end justify-between min-w-[170px]">
           <div className="text-center lg:text-right mb-4">
-            <div className="text-3xl font-bold text-gray-900">PKR {priceInPKR}</div>
-            <div className="text-sm text-gray-500">per person</div>
+            <div className="text-2xl font-black text-blue-600 tracking-tight">PKR {priceInPKR}</div>
+            <div className="text-[10px] font-bold text-gray-700 uppercase mt-0.5 tracking-wide">per person</div>
           </div>
           <Link
             to={`/flight/${flight.flight_number}`}
-            className="w-full lg:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-center"
+            state={{ flight }}
+            className="w-full lg:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-lg text-xs uppercase tracking-wider transition-all shadow-sm text-center"
           >
             Book Now
           </Link>
@@ -97,4 +103,3 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, index = 0 }) => {
 };
 
 export default FlightCard;
-

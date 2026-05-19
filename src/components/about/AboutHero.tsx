@@ -21,7 +21,7 @@ const AboutHero: React.FC = () => {
             About TravelHub
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 leading-relaxed max-w-3xl mx-auto">
-            We power global travel for everyone, everywhere. Our mission is to make travel accessible, 
+            We power global travel for everyone, everywhere. Our mission is to make travel accessible,
             enjoyable, and memorable for millions of travelers around the world.
           </p>
         </motion.div>

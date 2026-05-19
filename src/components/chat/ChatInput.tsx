@@ -104,7 +104,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
     >
       <form 
         onSubmit={handleSubmit} 
-        className="max-w-4xl mx-auto flex items-center gap-2 bg-white p-2 rounded-2xl border-2 border-gray-100 shadow-sm focus-within:border-blue-200 transition-all duration-200"
+        className="w-full max-w-none flex items-center gap-2 bg-white p-2 rounded-lg border-2 border-blue-200 shadow-sm focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-50/50 transition-all duration-200"
       >
         {/* Action Buttons */}
         <div className="flex gap-0.5">

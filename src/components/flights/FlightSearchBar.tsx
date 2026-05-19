@@ -16,6 +16,12 @@ type TripType = 'round-trip' | 'one-way' | 'multi-city';
 
 interface FlightSearchBarProps {
   onSearch?: (searchData: any) => void;
+  prefilledSearch?: {
+    from: { display: string; iataCode: string };
+    to: { display: string; iataCode: string };
+    departDate: string;
+    returnDate: string;
+  } | null;
 }
 
 interface LocationData {
@@ -24,7 +30,7 @@ interface LocationData {
   city: City | null;
 }
 
-const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
+const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch, prefilledSearch }) => {
   const navigate = useNavigate();
   const [tripType, setTripType] = useState<TripType>('round-trip');
   const [fromLocation, setFromLocation] = useState<LocationData>({
@@ -43,6 +49,46 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch }) => {
     passengers: 1,
     class: 'economy',
   });
+
+  // Listen to prefilled search changes from parent cards
+  React.useEffect(() => {
+    if (prefilledSearch) {
+      setFromLocation({
+        display: prefilledSearch.from.display,
+        iataCode: prefilledSearch.from.iataCode,
+        city: null,
+      });
+      setToLocation({
+        display: prefilledSearch.to.display,
+        iataCode: prefilledSearch.to.iataCode,
+        city: null,
+      });
+      setFormData((prev) => ({
+        ...prev,
+        departDate: prefilledSearch.departDate,
+        returnDate: prefilledSearch.returnDate,
+      }));
+
+      // Call search immediately
+      const searchData = {
+        from: prefilledSearch.from.display,
+        fromIataCode: prefilledSearch.from.iataCode,
+        fromCity: null,
+        to: prefilledSearch.to.display,
+        toIataCode: prefilledSearch.to.iataCode,
+        toCity: null,
+        departDate: prefilledSearch.departDate,
+        returnDate: prefilledSearch.returnDate,
+        passengers: formData.passengers,
+        class: formData.class,
+        tripType,
+      };
+
+      if (onSearch) {
+        onSearch(searchData);
+      }
+    }
+  }, [prefilledSearch]);
 
   const today = new Date();
   const year = today.getFullYear();

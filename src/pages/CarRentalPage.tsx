@@ -168,7 +168,7 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
-            <CarSearchFilters onFiltersChange={setFilters} />
+            <CarSearchFilters filters={filters} onFiltersChange={setFilters} />
           </aside>
 
           {/* Results Section */}

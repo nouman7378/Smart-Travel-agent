@@ -31,7 +31,7 @@ const FlightDetailPage: React.FC<FlightDetailPageProps> = ({ flightId: _flightId
   const location = useLocation();
   const { addItemToBooking } = useBooking();
   const { isAuthenticated } = useAuth();
-  
+
   const stateFlight = location.state?.flight;
 
   const defaultFlight = {
@@ -217,10 +217,30 @@ const FlightDetailPage: React.FC<FlightDetailPageProps> = ({ flightId: _flightId
     },
   ];
 
+  const [modal, setModal] = useState<{
+    isOpen: boolean;
+    type: 'success' | 'info' | 'error';
+    title: string;
+    message: string;
+    onAction?: () => void;
+  }>({
+    isOpen: false,
+    type: 'success',
+    title: '',
+    message: '',
+  });
+
   const handleBookFlight = async (bookingData: BookingData) => {
     if (!isAuthenticated) {
-      alert('Please log in to add items to your booking cart.');
-      navigate('/login');
+      setModal({
+        isOpen: true,
+        type: 'info',
+        title: 'Authentication Required',
+        message: 'Please log in to add flights to your booking cart.',
+        onAction: () => {
+          navigate('/login');
+        }
+      });
       return;
     }
 
@@ -240,11 +260,23 @@ const FlightDetailPage: React.FC<FlightDetailPageProps> = ({ flightId: _flightId
           ticketType: bookingData.ticketType,
         }
       });
-      
-      alert('Flight successfully added to your booking cart!');
-      navigate('/booking/demo');
+
+      setModal({
+        isOpen: true,
+        type: 'success',
+        title: 'Booking Confirmed',
+        message: 'Your flight has been successfully added to your travel cart!',
+        onAction: () => {
+          navigate('/booking/demo');
+        }
+      });
     } catch (err: any) {
-      alert(err.message || 'Failed to add flight to booking.');
+      setModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Booking Failed',
+        message: err.message || 'We could not add this flight to your cart. Please try again.',
+      });
     }
   };
 
@@ -351,6 +383,56 @@ All refunds will be processed to the original form of payment within 7-14 busine
           className="border-t border-gray-200"
         />
       </div>
+
+      {/* Beautiful, High-End Minimalist Custom Dialog Modal */}
+      {modal.isOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg border border-gray-200 shadow-xl max-w-sm w-full p-6 text-center transform scale-100 transition-all duration-300">
+            {modal.type === 'success' && (
+              <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-100">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            )}
+            {modal.type === 'info' && (
+              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-100">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            )}
+            {modal.type === 'error' && (
+              <div className="w-16 h-16 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+            )}
+
+            <h3 className="text-lg font-bold text-gray-950 mb-2">{modal.title}</h3>
+            <p className="text-xs text-gray-800 font-semibold mb-6 leading-relaxed">{modal.message}</p>
+
+            <button
+              type="button"
+              onClick={() => {
+                setModal(prev => ({ ...prev, isOpen: false }));
+                if (modal.onAction) {
+                  modal.onAction();
+                }
+              }}
+              className={`w-full py-3 ${modal.type === 'success'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200'
+                  : modal.type === 'error'
+                    ? 'bg-rose-600 hover:bg-rose-700 shadow-rose-200'
+                    : 'bg-blue-600 hover:bg-blue-700 shadow-blue-200'
+                } text-white font-extrabold rounded-lg text-xs uppercase tracking-wider transition-colors shadow-md`}
+            >
+              {modal.type === 'info' ? 'Log In Now' : modal.type === 'success' ? 'Go to Cart' : 'Okay'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

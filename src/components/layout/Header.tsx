@@ -21,16 +21,29 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const { itemCount } = useBooking();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isShopTravelOpen, setIsShopTravelOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
   const profileMenuRef = useRef<HTMLDivElement | null>(null);
+  const shopTravelRef = useRef<HTMLDivElement | null>(null);
+
   const navItems = [
-    { name: 'Flights', href: '/flights' },
-    { name: 'Hotels', href: '/hotels' },
-    { name: 'Cars', href: '/cars' },
-    { name: 'Packages', href: '/packages' },
-    { name: 'AI Chat', href: '/chat' },
-    { name: 'Booking', href: '/booking/demo' },
-    { name: 'Reviews', href: '/community' },
+    { name: 'Flights', href: '/flights', icon: <Plane className="w-4 h-4" /> },
+    { name: 'Hotels', href: '/hotels', icon: <Building className="w-4 h-4" /> },
+    { name: 'Cars', href: '/cars', icon: <Car className="w-4 h-4" /> },
+    { name: 'Packages', href: '/packages', icon: <Palmtree className="w-4 h-4" /> },
+    { name: 'AI Chat', href: '/chat', icon: <Bot className="w-4 h-4" /> },
+    { name: 'Booking', href: '/booking/demo', icon: <Ticket className="w-4 h-4" /> },
+    { name: 'Reviews', href: '/community', icon: <Star className="w-4 h-4" /> },
+  ];
+
+  const shopTravelItems = [
+    { name: 'Flights', href: '/flights', icon: <Plane className="w-5 h-5 text-blue-600" />, desc: 'Compare and book flight deals' },
+    { name: 'Hotels', href: '/hotels', icon: <Building className="w-5 h-5 text-indigo-600" />, desc: 'Luxury resorts & cozy apartments' },
+    { name: 'Cars', href: '/cars', icon: <Car className="w-5 h-5 text-emerald-600" />, desc: 'Premium car rentals & hire' },
+    { name: 'Packages', href: '/packages', icon: <Palmtree className="w-5 h-5 text-amber-600" />, desc: 'Save big bundling flight + hotel' },
+    { name: 'AI Chat', href: '/chat', icon: <Bot className="w-5 h-5 text-purple-600" />, desc: 'Plan with smart AI chatbot' },
+    { name: 'Reviews', href: '/community', icon: <Star className="w-5 h-5 text-rose-600" />, desc: 'Real stories & traveler reviews' },
   ];
 
   // Scroll effect for header
@@ -51,78 +64,106 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
       ) {
         setIsProfileMenuOpen(false);
       }
+      if (
+        isShopTravelOpen &&
+        shopTravelRef.current &&
+        !shopTravelRef.current.contains(event.target as Node)
+      ) {
+        setIsShopTravelOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isProfileMenuOpen]);
+  }, [isProfileMenuOpen, isShopTravelOpen]);
 
   return (
-    <header 
+    <header
       className={`
         sticky top-0 z-50 
         transition-all duration-300 ease-in-out
-        ${isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100' 
-          : 'bg-white border-b border-gray-100'
+        ${isScrolled
+          ? 'bg-blue-600 shadow-md border-b border-blue-700/50'
+          : 'bg-blue-600 border-b border-blue-700/30'
         }
         ${className}
       `}
     >
-      <div className="w-full px-3 sm:px-3 lg:px-4">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Main Header */}
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link 
-              to="/" 
-              className="flex items-center group"
-            >
-              <div className="flex items-center">
-                <img src={logo} alt="TravelHub Logo" className="h-16 w-auto" />
-              </div>
-            </Link>
+          {/* Left Side: Logo */}
+          <div className="flex items-center">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Link
+                to="/"
+                className="flex items-center group"
+              >
+                <div className="flex items-center">
+                  <img src={logo} alt="TravelHub Logo" className="h-14 w-auto filter brightness-0 invert" />
+                </div>
+              </Link>
+            </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-2">
-            {navItems.map((item) => {
+          {/* Right Side Actions & Core Navigation Menu */}
+          <div className="hidden lg:flex items-center space-x-6">
+            {/* Travel Menus */}
+            {shopTravelItems.map((item) => {
               const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/');
               return (
                 <Link
                   key={item.name}
                   to={item.href}
                   className={`
-                    relative px-5 py-3 rounded-full text-base font-bold
-                    transition-all duration-300 ease-in-out flex items-center group
-                    ${isActive
-                      ? 'text-blue-600 bg-white border-2 border-blue-600 shadow-sm' 
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                    }
+                    relative py-1.5 text-lg font-normal transition-colors duration-150
+                    ${isActive ? 'text-white font-medium' : 'text-blue-100 hover:text-white'}
                   `}
                 >
                   <span>{item.name}</span>
-                  {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
-                    <span className="ml-2 inline-flex items-center justify-center min-w-[22px] h-5.5 px-2 rounded-full bg-blue-600 text-white text-[11px] font-bold">
-                      {itemCount}
-                    </span>
-                  )}
+                  {/* Underline indicator */}
+                  <span
+                    className={`absolute -bottom-1.5 left-0 right-0 h-[2.5px] rounded-full bg-white transition-transform duration-200 origin-left
+                      ${isActive ? 'scale-x-100' : 'scale-x-0'}
+                    `}
+                  />
                 </Link>
               );
             })}
-          </nav>
 
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
+            {/* Divider line */}
+            <span className="h-5 w-px bg-white/20" />
+
+            {/* Support */}
+            <Link
+              to="/support"
+              className="text-white hover:text-blue-100 font-normal text-lg transition-colors duration-150"
+            >
+              Support
+            </Link>
+
+            {/* Feedback / Chat Icon */}
+            <Link
+              to="/chat"
+              className="text-white hover:text-blue-100 transition-colors duration-150 p-1.5 rounded-lg hover:bg-white/10"
+              aria-label="AI Chat"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </Link>
+
+            {/* Auth / Admin actions */}
             {isAuthenticated ? (
               <>
                 {/* Admin link – only for superadmin/staff */}
                 {user?.is_staff && (
                   <Link
                     to="/admin"
-                    className="hidden sm:flex items-center space-x-2 px-4 py-2.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg font-medium shadow-sm hover:bg-amber-100 transition-all duration-200"
+                    className="flex items-center space-x-1.5 px-3 py-2 bg-blue-700/50 border border-blue-500/30 text-white rounded-lg font-medium shadow-sm hover:bg-blue-800/30 transition-all duration-200"
                   >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-4.5 w-4.5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -130,109 +171,137 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   </Link>
                 )}
                 {/* User Info */}
-                <div className="relative hidden sm:block" ref={profileMenuRef}>
+                <div className="relative" ref={profileMenuRef}>
                   <button
                     type="button"
                     aria-label="Open profile menu"
                     onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md transition-all duration-200 bg-gradient-to-br from-blue-500 to-purple-600 hover:scale-105"
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md transition-all duration-200 bg-gradient-to-br from-blue-500 to-purple-600 hover:scale-105"
                   >
                     {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
-                  </button>
-
-                  {isProfileMenuOpen && (
-                    <div className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50">
-                      <div className="flex items-center space-x-3 pb-3 border-b border-gray-100">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-semibold">
-                          {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-gray-900 truncate">
-                            {user?.username || 'User'}
-                          </p>
-                          <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-                        </div>
+                  </button>                  {isProfileMenuOpen && (
+                    <div className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-lg shadow-[0_15px_50px_rgba(0,0,0,0.1)] overflow-hidden z-50">
+                      {/* Top Gradient Banner with decorative blur nodes */}
+                      <div className="h-20 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative">
+                        <div className="absolute -right-3 -top-3 w-12 h-12 rounded-full bg-white/10 blur-sm"></div>
+                        <div className="absolute left-1/3 bottom-1 w-8 h-8 rounded-full bg-white/10 blur-xs"></div>
                       </div>
 
-                      <div className="pt-3 space-y-3">
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="bg-gray-50 rounded-lg px-3 py-2">
-                            <p className="text-[10px] uppercase tracking-wide text-gray-500">Username</p>
-                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.username || '-'}</p>
+                      {/* Overlapping Profile Avatar */}
+                      <div className="relative px-5 pt-12 pb-4">
+                        <div className="absolute -top-10 left-5 w-16 h-16 rounded-full bg-white p-1 shadow-md">
+                          <div className="w-full h-full rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black text-xl shadow-inner">
+                            {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                           </div>
-                          <div className="bg-gray-50 rounded-lg px-3 py-2">
-                            <p className="text-[10px] uppercase tracking-wide text-gray-500">Role</p>
-                            <p className="text-sm font-semibold text-gray-900">
-                              {user?.is_staff ? 'Admin' : 'Traveler'}
-                            </p>
+                        </div>
+
+                        {/* User Primary Header */}
+                        <div className="mb-4">
+                          <h4 className="text-base font-black text-gray-950 tracking-tight leading-tight">
+                            {user?.full_name || user?.username || 'Traveler'}
+                          </h4>
+                          <p className="text-[11px] text-gray-500 font-semibold tracking-wide truncate mt-0.5">{user?.email}</p>
+                        </div>
+
+                        {/* Sleek Theme-Border Fields - No Icons */}
+                        <div className="space-y-3 pb-4 border-b border-gray-100">
+                          {/* Username */}
+                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2">
+                            <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Username</p>
+                            <p className="text-xs font-bold text-gray-950 truncate mt-0.5">{user?.username || '-'}</p>
                           </div>
-                          <div className="bg-gray-50 rounded-lg px-3 py-2">
-                            <p className="text-[10px] uppercase tracking-wide text-gray-500">User ID</p>
-                            <p className="text-sm font-semibold text-gray-900">{user?.id ?? '-'}</p>
-                          </div>
-                          <div className="bg-gray-50 rounded-lg px-3 py-2">
-                            <p className="text-[10px] uppercase tracking-wide text-gray-500">Name</p>
-                            <p className="text-sm font-semibold text-gray-900 truncate">
+
+                          {/* Full Name */}
+                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2">
+                            <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Full Name</p>
+                            <p className="text-xs font-bold text-gray-955 truncate mt-0.5">
                               {user?.full_name || user?.username || '-'}
                             </p>
                           </div>
+
+                          {/* Email Address */}
+                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2">
+                            <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Email Address</p>
+                            <p className="text-xs font-bold text-gray-955 truncate mt-0.5">{user?.email || '-'}</p>
+                          </div>
                         </div>
 
-                        <div className="bg-gray-50 rounded-lg px-3 py-2">
-                          <p className="text-[10px] uppercase tracking-wide text-gray-500">Email</p>
-                          <p className="text-sm font-semibold text-gray-900 break-all">{user?.email || '-'}</p>
+                        {/* Interactive Travel Shortcuts */}
+                        <div className="py-2.5">
+                          <Link
+                            to="/booking/demo"
+                            onClick={() => setIsProfileMenuOpen(false)}
+                            className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors text-[10px] font-black text-gray-800 uppercase tracking-wider"
+                          >
+                            <span className="flex items-center space-x-2">
+                              <span>🎫</span>
+                              <span>My Bookings</span>
+                            </span>
+                            <span className="text-gray-400 text-xs">➔</span>
+                          </Link>
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={() => {
-                            logout();
-                            setIsProfileMenuOpen(false);
-                            navigate('/login');
-                          }}
-                          className="w-full px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm font-semibold"
-                        >
-                          Logout
-                        </button>
+                        {/* Premium Logout Button - exactly 8px radius */}
+                        <div className="border-t border-gray-100 pt-3.5">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              logout();
+                              setIsProfileMenuOpen(false);
+                              navigate('/login');
+                            }}
+                            className="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/50 font-black rounded-lg text-xs tracking-wider transition-all flex items-center justify-center space-x-2 shadow-sm active:scale-98"
+                          >
+                            <span>🚪</span>
+                            <span>Logout Account</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
                 </div>
               </>
             ) : (
-              /* Sign In Button - Blue Background */
+              /* Sign In Button - Simple Link just like Expedia */
               <Link
                 to="/login"
-                className="hidden sm:flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                className="text-white hover:text-blue-100 font-semibold text-[15px] transition-colors duration-150"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                <span>Sign in</span>
+                Sign in
               </Link>
             )}
+          </div>
 
-            {/* Mobile Menu Button */}
+          {/* Mobile Actions and Hamburger Button */}
+          <div className="flex lg:hidden items-center space-x-3">
+            {isAuthenticated && (
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  type="button"
+                  aria-label="Open profile menu"
+                  onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md transition-all duration-200 bg-gradient-to-br from-blue-500 to-purple-600"
+                >
+                  {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                </button>
+              </div>
+            )}
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 text-gray-600 hover:text-blue-600 focus:outline-none transition-colors duration-200"
+              className="p-2 text-white hover:text-blue-100 focus:outline-none transition-colors duration-200"
             >
               <div className="relative w-6 h-6">
                 <span className={`
-                  absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ease-out
+                  absolute block w-5 h-0.5 bg-white transform transition-all duration-300 ease-out
                   ${isMenuOpen ? 'rotate-45 top-3' : 'top-1'}
                 `}></span>
                 <span className={`
-                  absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ease-out
+                  absolute block w-5 h-0.5 bg-white transform transition-all duration-300 ease-out
                   ${isMenuOpen ? 'opacity-0' : 'opacity-100 top-3'}
                 `}></span>
                 <span className={`
-                  absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ease-out
+                  absolute block w-5 h-0.5 bg-white transform transition-all duration-300 ease-out
                   ${isMenuOpen ? '-rotate-45 top-3' : 'top-5'}
                 `}></span>
               </div>

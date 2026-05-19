@@ -224,7 +224,7 @@ const ChatPage: React.FC = () => {
       <div className="bg-white flex flex-col min-h-[calc(100vh-200px)]">
         {/* Messages Section */}
         <div className="flex-1 py-12">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
@@ -255,7 +255,7 @@ const ChatPage: React.FC = () => {
 
         {/* Chat Input Section - Relative to page flow, above footer */}
         <div className="sticky bottom-0 bg-white/90 backdrop-blur-md py-6 border-t border-gray-50">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <ChatInput
               onSendMessage={handleSendMessage}
               onSendLocation={handleLocationShare}

@@ -8,8 +8,6 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
-import logo from '../../assets/logo.png';
-import logoClosed from '../../assets/Screenshot_2026-05-16_at_1.13.58_PM-removebg-preview.png';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -141,30 +139,38 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         className={`
           ${sidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full lg:translate-x-0'}
           ${sidebarOpen ? 'lg:w-64' : 'lg:w-20'}
-          bg-white border-r border-gray-200 fixed h-screen transition-all duration-300 z-50 lg:z-30
+          bg-zinc-950 border-r border-zinc-900 fixed h-screen transition-all duration-300 z-50 lg:z-30
         `}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+          <div className="h-16 flex items-center justify-between px-4 border-b border-zinc-900">
             {sidebarOpen ? (
               <Link to="/admin" className="flex items-center space-x-2">
-                <img src={logo} alt="SmartTravel Logo" className="h-10 w-auto" />
-                <span className="text-xl font-bold text-gray-800">
-                  Travel<span className="text-blue-600">Hub</span>
+                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                  </svg>
+                </div>
+                <span className="text-lg font-bold text-white tracking-wide">
+                  Travel<span className="text-blue-500">Hub</span>
                 </span>
               </Link>
             ) : (
               <Link to="/admin" className="flex items-center justify-center mx-auto">
-                <img src={logoClosed} alt="SmartTravel Logo" className="h-10 w-auto" />
+                <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20 transition-all hover:scale-105">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                  </svg>
+                </div>
               </Link>
             )}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="hidden lg:block p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              className="hidden lg:block p-1.5 rounded-lg hover:bg-zinc-900 text-zinc-400 transition-colors"
             >
               <svg
-                className="w-5 h-5 text-gray-600"
+                className="w-5 h-5 text-zinc-400 hover:text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -180,10 +186,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             {/* Mobile Close Button */}
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              className="lg:hidden p-1.5 rounded-lg hover:bg-zinc-900 text-zinc-400 transition-colors"
             >
               <svg
-                className="w-5 h-5 text-gray-600"
+                className="w-5 h-5 text-zinc-400 hover:text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -202,23 +208,21 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center ${
-                      sidebarOpen ? 'justify-start px-4' : 'justify-center px-2'
-                    } py-3 rounded-lg transition-colors ${
-                      active
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className={`flex items-center ${sidebarOpen ? 'justify-start px-4' : 'justify-center px-2'
+                      } py-3 rounded-lg transition-all duration-200 ${active
+                        ? 'bg-gradient-to-r from-blue-600/10 to-transparent text-white font-medium border-l-2 border-blue-500 rounded-none'
+                        : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+                      }`}
                     title={!sidebarOpen ? item.name : undefined}
                   >
-                    <span className={active ? 'text-blue-600' : 'text-gray-500'}>
+                    <span className={active ? 'text-blue-500' : 'text-zinc-500 group-hover:text-zinc-300'}>
                       {item.icon}
                     </span>
                     {sidebarOpen && (
                       <>
                         <span className="ml-3 flex-1">{item.name}</span>
                         {item.badge && (
-                          <span className="ml-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                          <span className="ml-2 bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
                             {item.badge}
                           </span>
                         )}
@@ -231,7 +235,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           </nav>
 
           {/* User Section */}
-          <div className="border-t border-gray-200 p-4">
+          <div className="border-t border-zinc-900 p-4">
             <div className={`flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
               {sidebarOpen ? (
                 <>
@@ -242,15 +246,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate">
+                      <p className="text-sm font-medium text-white truncate">
                         {user?.full_name || user?.username || 'Admin'}
                       </p>
-                      <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                      <p className="text-xs text-zinc-500 truncate">{user?.email}</p>
                     </div>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-900 rounded-lg transition-colors"
                     title="Logout"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -266,7 +270,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               ) : (
                 <button
                   onClick={handleLogout}
-                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-900 rounded-lg transition-colors"
                   title="Logout"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

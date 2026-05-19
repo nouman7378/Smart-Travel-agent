@@ -114,7 +114,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
     <section className={`pt-8 md:pt-6 lg:pt-6 pb-6 md:pb-6 lg:pb-7 bg-white ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Centered */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -162,7 +162,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
           </div>
 
           {/* Navigation Buttons - Centered below content */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -220,9 +220,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
 // Hotel Card Component
 const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
   return (
-    <motion.div 
+    <motion.div
       whileHover={{ y: -4 }}
-      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group cursor-pointer"
+      className="bg-gradient-to-br from-white/80 to-white/40 backdrop-blur-md rounded-xl border border-white/70 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden hover:shadow-[0_8px_30px_rgba(59,130,246,0.06)] hover:bg-white/90 hover:border-blue-200/50 transition-all duration-300 group cursor-pointer"
     >
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
@@ -233,10 +233,10 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         />
-        
+
         {/* Discount Badge */}
         {hotel.discount && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
@@ -283,9 +283,8 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
             {[...Array(5)].map((_, i) => (
               <svg
                 key={i}
-                className={`h-3 w-3 ${
-                  i < Math.floor(hotel.rating) ? 'text-yellow-500 fill-current' : 'text-gray-300'
-                }`}
+                className={`h-3 w-3 ${i < Math.floor(hotel.rating) ? 'text-yellow-500 fill-current' : 'text-gray-300'
+                  }`}
                 viewBox="0 0 20 20"
               >
                 <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
@@ -307,7 +306,7 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
             </span>
             <span className="text-gray-500 text-xs ml-1">/night</span>
           </div>
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-3 py-2 bg-gray-900 hover:bg-gray-800 text-white font-normal rounded-lg transition-colors text-xs"

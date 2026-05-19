@@ -115,44 +115,29 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   };
 
   return (
-    <footer className={`bg-black text-gray-300 border-t border-gray-800 ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          {/* Logo & Slogan */}
-          <div className="flex flex-col items-center md:items-start space-y-4">
-            <img src={logo} alt="TravelHub Logo" className="h-12 w-auto brightness-0 invert" />
-            <p className="text-gray-400 text-sm font-medium">Your trusted partner for amazing travel experiences.</p>
-            
-            {/* Social Icons - Minimal */}
-            <div className="flex space-x-4 pt-2">
-              {socialMedia.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  className="text-gray-500 hover:text-white transition-colors duration-200"
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
+    <footer className={`bg-gradient-to-b from-blue-950 to-zinc-950 text-blue-100 border-t border-blue-900/50 ${className}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
+        {/* Top Newsletter Banner */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-12">
+          <div className="max-w-xl">
+            <h2 className="text-2xl font-bold text-white tracking-tight mb-2">Join our travel club</h2>
+            <p className="text-blue-200/80 text-sm leading-relaxed">
+              Get weekly updates on exclusive flight deals, luxury resort packages, and customized travel itineraries.
+            </p>
           </div>
-
-          {/* Minimal Newsletter */}
-          <div className="w-full max-w-md">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-3 text-center md:text-left">Stay Updated</h3>
+          <div className="w-full lg:w-auto lg:min-w-[400px]">
             <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
               <input
                 type="email"
-                placeholder="Email Address"
+                placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm text-white"
+                className="w-full px-4 py-2.5 bg-blue-900/30 border border-blue-800/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20 text-sm text-white placeholder-blue-300/40"
                 required
               />
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-bold text-sm"
+                className="bg-white text-blue-950 hover:bg-blue-50 px-6 py-2.5 rounded-lg transition-all font-bold text-sm shrink-0 shadow-lg shadow-white/5 active:scale-95"
               >
                 Join
               </button>
@@ -160,18 +145,119 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           </div>
         </div>
 
+        {/* 5-Column Navigation Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 py-12 border-t border-blue-900/30 border-b border-blue-900/30">
+          {/* Column 1: Brand */}
+          <div className="col-span-2 md:col-span-1 space-y-4">
+            <img src={logo} alt="TravelHub Logo" className="h-10 w-auto filter brightness-0 invert" />
+            <p className="text-blue-200/70 text-sm leading-relaxed">
+              Your ultimate companion for seamless flights, premium hotels, and unforgettable holidays.
+            </p>
+            <div className="flex space-x-3 pt-2">
+              {socialMedia.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  className="w-8 h-8 rounded-full bg-blue-900/20 border border-blue-800/40 flex items-center justify-center text-blue-200 hover:text-white hover:bg-blue-800/40 hover:scale-110 hover:border-blue-700/60 transition-all duration-300"
+                  aria-label={social.name}
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+          
+          {/* Column 2: Book Travel */}
+          <div>
+            <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4">Book Travel</h3>
+            <ul className="space-y-2">
+              {footerLinks.Travel.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-blue-200/75 hover:text-white text-sm transition-all duration-200 inline-block hover:translate-x-1"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Column 3: Discover */}
+          <div>
+            <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4">Discover</h3>
+            <ul className="space-y-2">
+              {footerLinks.Explore.slice(0, 5).map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-blue-200/75 hover:text-white text-sm transition-all duration-200 inline-block hover:translate-x-1"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Column 4: Company */}
+          <div>
+            <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4">Company</h3>
+            <ul className="space-y-2">
+              {footerLinks.About.slice(0, 5).map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-blue-200/75 hover:text-white text-sm transition-all duration-200 inline-block hover:translate-x-1"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Column 5: Support */}
+          <div>
+            <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4">Support</h3>
+            <ul className="space-y-2">
+              {footerLinks.Support.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-blue-200/75 hover:text-white text-sm transition-all duration-200 inline-block hover:translate-x-1"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+              {footerLinks.Policies.slice(5, 7).map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-blue-200/75 hover:text-white text-sm transition-all duration-200 inline-block hover:translate-x-1"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
         {/* Bottom Line */}
-        <div className="mt-12 pt-8 border-t border-gray-900 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-xs">© 2024 TravelHub. All Rights Reserved.</p>
+        <div className="mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-blue-300/50 text-xs">© {new Date().getFullYear()} TravelHub. All Rights Reserved.</p>
           
           <div className="flex items-center space-x-6">
-            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
+            {footerLinks.Policies.slice(0, 4).map((link) => (
               <Link 
-                key={item} 
-                to={`/policies/${item.toLowerCase().replace(/ /g, '-')}`} 
-                className="text-gray-500 hover:text-white text-xs font-medium transition-colors"
+                key={link.name} 
+                to={link.href} 
+                className="text-blue-300/50 hover:text-white text-xs font-medium transition-colors"
               >
-                {item}
+                {link.name}
               </Link>
             ))}
           </div>

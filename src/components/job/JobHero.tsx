@@ -11,7 +11,7 @@ const JobHero: React.FC = () => {
   return (
     <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: 'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80)',
@@ -32,7 +32,7 @@ const JobHero: React.FC = () => {
             Build your future with us
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 leading-relaxed max-w-3xl mx-auto mb-8">
-            Join a team that's shaping the future of travel. Explore opportunities to grow your career 
+            Join a team that's shaping the future of travel. Explore opportunities to grow your career
             and make an impact on millions of travelers worldwide.
           </p>
         </motion.div>

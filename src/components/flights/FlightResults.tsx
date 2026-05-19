@@ -1,14 +1,7 @@
-/**
- * FlightResults Component
- * 
- * Displays flight search results with sorting options
- */
-
 import React, { useState } from 'react';
 import FlightCard from './FlightCard';
 import type { Flight } from '../../services/flightService';
 import { Plane } from 'lucide-react';
-
 
 interface FlightResultsProps {
   flights: Flight[];
@@ -28,21 +21,21 @@ const FlightResults: React.FC<FlightResultsProps> = ({ flights, onSortChange }) 
   return (
     <div>
       {/* Results Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 pb-4 border-b border-gray-200 gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-xl font-extrabold text-gray-950 tracking-tight uppercase">
             {flights.length} {flights.length === 1 ? 'flight found' : 'flights found'}
           </h2>
-          <p className="text-sm text-gray-600 mt-1">Price per person, taxes included</p>
+          <p className="text-xs text-gray-700 font-semibold mt-0.5">Price per person, taxes and fees included</p>
         </div>
 
         {/* Sort Options */}
-        <div className="mt-4 sm:mt-0">
-          <label className="text-sm font-medium text-gray-700 mr-2">Sort by:</label>
+        <div className="flex items-center">
+          <label className="text-[10px] font-black text-gray-800 mr-2.5 uppercase tracking-wider">Sort by:</label>
           <select
             value={sortBy}
             onChange={(e) => handleSortChange(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            className="px-3.5 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-bold text-gray-800 bg-white"
           >
             <option value="price">Price (ascending)</option>
             <option value="duration">Duration</option>
@@ -51,17 +44,19 @@ const FlightResults: React.FC<FlightResultsProps> = ({ flights, onSortChange }) 
         </div>
       </div>
 
-      {/* Flight Cards */}
-      <div>
+      {/* Flight Cards List */}
+      <div className="space-y-4">
         {flights.length > 0 ? (
           flights.map((flight, index) => (
             <FlightCard key={`${flight.flight_number}-${index}`} flight={flight} index={index} />
           ))
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <div className="text-6xl mb-4"><Plane className="inline w-5 h-5" /></div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No flights found</h3>
-            <p className="text-gray-600">No flights available for selected date. Try modifying your search criteria.</p>
+          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center shadow-sm">
+            <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mx-auto mb-4 border border-blue-200">
+              <Plane className="w-6 h-6 text-blue-600" />
+            </div>
+            <h3 className="text-base font-bold text-gray-955 mb-1.5">No flights found</h3>
+            <p className="text-xs text-gray-700 font-semibold">We couldn't find any flights for the selected date. Try modifying your search filters or dates.</p>
           </div>
         )}
       </div>
@@ -70,4 +65,3 @@ const FlightResults: React.FC<FlightResultsProps> = ({ flights, onSortChange }) 
 };
 
 export default FlightResults;
-

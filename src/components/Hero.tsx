@@ -97,7 +97,7 @@ const Hero: React.FC<HeroProps> = ({
   };
 
   return (
-    <section className={`relative min-h-screen flex items-center justify-center ${className}`}>
+    <section className={`relative ${className.includes('!min-h-fit') ? '' : 'min-h-screen flex items-center justify-center'} ${className}`}>
       {/* Background and floating elements wrapper with overflow hidden */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Animated Background */}
@@ -108,17 +108,18 @@ const Hero: React.FC<HeroProps> = ({
               backgroundImage: `url(${downloadBg})`,
             }}
           ></div>
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-950 via-blue-900/70 to-blue-800/40 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-600/20 via-transparent to-white"></div>
         </div>
 
         {/* Floating Elements */}
         <div className="absolute left-10 w-20 h-20 bg-blue-300/20 rounded-full blur-xl animate-float"></div>
         <div className="absolute bottom-20 right-20 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl animate-float-slow"></div>
-        <div className="absolute top-40 right-40 w-16 h-16 bg-blue-300/30 rounded-full blur-lg animate-pulse"></div>
+        <div className="absolute top-40 right-40 w-16 h-16 bg-blue-300/30 rounded-full blur-lg"></div>
       </div>
 
-      <div className="relative container mx-auto px-4 sm:px-4 lg:px-4 py-4">
-        <div className={`max-w-6xl mx-auto relative z-20 ${className.includes('!min-h-fit') ? 'translate-y-4 md:translate-y-6 -mb-4 md:-mb-6' : 'translate-y-16 md:translate-y-24 -mb-16 md:-mb-24'}`}>
+      <div className={`relative container mx-auto px-4 sm:px-4 lg:px-4 ${className.includes('!min-h-fit') ? 'py-0' : 'py-4'}`}>
+        <div className="max-w-6xl mx-auto relative z-20 translate-y-16 md:translate-y-24 -mb-16 md:-mb-24">
 
           {/* Search Container */}
           <div className="bg-blue-950 rounded-2xl shadow-2xl overflow-visible border border-blue-800/40 p-1">
@@ -136,8 +137,8 @@ const Hero: React.FC<HeroProps> = ({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`flex-1 px-6 py-4 text-sm md:text-base font-semibold transition-all duration-300 ${activeTab === tab.id
-                      ? 'text-white bg-blue-950/40 backdrop-blur-md border-b-2 border-blue-400 shadow-inner'
-                      : 'text-blue-200 hover:text-white hover:bg-blue-900/30'
+                    ? 'text-white bg-blue-950/40 backdrop-blur-md border-b-2 border-blue-400 shadow-inner'
+                    : 'text-blue-200 hover:text-white hover:bg-blue-900/30'
                     }`}
                 >
                   <motion.span
@@ -362,41 +363,26 @@ const Hero: React.FC<HeroProps> = ({
               )}
 
               {/* Action Buttons - Professional Layout */}
-              <div className="flex flex-col sm:flex-row justify-between items-center mt-8 gap-4">
-                {/* Search Button - Centered */}
-                <div className="flex-1 flex justify-center">
-                  <motion.button
-                    type="submit"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-white hover:bg-blue-50 text-blue-900 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3 group"
-                  >
-                    <span className="text-base">Search</span>
-                    <motion.span
-                      className="text-lg animate-pulse"
-                    >
-                      <Rocket className="inline w-5 h-5 text-blue-600" />
-                    </motion.span>
-                  </motion.button>
-                </div>
+              <div className="flex justify-end items-center mt-5 gap-4">
+                {/* Search Button */}
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.03, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="px-6 sm:px-10 py-2.5 sm:py-3 bg-white hover:bg-blue-50 text-blue-900 font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base"
+                >
+                  Search
+                </motion.button>
 
-                {/* AI Assistant Button - Right Corner */}
-                <div className="flex justify-end">
-                  <motion.button
-                    type="button"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 border border-green-400/30 text-sm sm:text-base"
-                  >
-                    <motion.span
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                    >
-                      <Bot className="inline w-5 h-5" />
-                    </motion.span>
-                    <span>Ask AI Assistant</span>
-                  </motion.button>
-                </div>
+                {/* AI Assistant Button */}
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.03, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="px-5 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base border border-violet-500/25"
+                >
+                  Ask AI Assistant
+                </motion.button>
               </div>
             </form>
           </div>

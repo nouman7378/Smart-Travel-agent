@@ -14,7 +14,7 @@ const PartnershipsHero: React.FC = () => {
   return (
     <div className="relative min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: 'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&q=80)',
@@ -38,7 +38,7 @@ const PartnershipsHero: React.FC = () => {
                 Partner with TravelHub and grow your business
               </h1>
               <p className="text-xl md:text-2xl text-blue-100 leading-relaxed mb-8">
-                Join thousands of partners who trust TravelHub to reach millions of travelers 
+                Join thousands of partners who trust TravelHub to reach millions of travelers
                 worldwide. Expand your reach, increase bookings, and grow your revenue.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
