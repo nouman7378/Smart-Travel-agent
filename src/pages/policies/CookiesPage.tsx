@@ -1,71 +1,65 @@
-/**
- * CookiesPage Component
- * 
- * This page is part of the Expedia.fr Footer Pages replication for our FYP.
- */
-
 import React from 'react';
-import { motion } from 'framer-motion';
 import PageLayout from '../../components/PageLayout';
+import MinimalPageHero from '../../components/common/MinimalPageHero';
+import InfoPageContent, { infoPage } from '../../components/common/InfoPageContent';
 
 const CookiesPage: React.FC = () => {
   return (
     <PageLayout skipHeaderFooter={true}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Cookie Policy</h1>
-          <p className="text-gray-600 mb-8">Last updated: December 2024</p>
-
-          <div className="bg-white p-8 rounded-lg shadow-md space-y-8">
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">What Are Cookies?</h2>
-              <p className="text-gray-700 leading-relaxed">
-                Cookies are small text files that are placed on your device when you visit our
-                website. They help us provide you with a better experience and improve our services.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Types of Cookies We Use</h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Essential Cookies</h3>
-                  <p className="text-gray-700">
-                    Required for the website to function properly. These cannot be disabled.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Analytics Cookies</h3>
-                  <p className="text-gray-700">
-                    Help us understand how visitors interact with our website to improve performance.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Marketing Cookies</h3>
-                  <p className="text-gray-700">
-                    Used to deliver relevant advertisements and track campaign effectiveness.
-                  </p>
-                </div>
+      <MinimalPageHero
+        eyebrow="Support"
+        title="Cookie Policy"
+        subtitle="How we use cookies and similar technologies on TravelHub."
+      />
+      <InfoPageContent narrow>
+        <p className={`${infoPage.body} text-center mb-10`}>Last updated: December 2024</p>
+        <div className={`${infoPage.card} space-y-10`}>
+          <section>
+            <h2 className={infoPage.h2}>What are cookies?</h2>
+            <p className={infoPage.body}>
+              Cookies are small text files placed on your device when you visit our website. They
+              help us remember your preferences, keep you signed in, and understand how you use our
+              platform so we can improve it.
+            </p>
+          </section>
+          <section>
+            <h2 className={infoPage.h2}>Types of cookies we use</h2>
+            <div className="space-y-6 mt-4">
+              <div>
+                <h3 className={infoPage.h3}>Essential cookies</h3>
+                <p className={infoPage.body}>
+                  Required for the website to function—for example, login sessions, security, and
+                  shopping cart. These cannot be disabled.
+                </p>
               </div>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Managing Cookies</h2>
-              <p className="text-gray-700 leading-relaxed">
-                You can control and manage cookies through your browser settings. However, disabling
-                certain cookies may affect the functionality of our website.
-              </p>
-            </section>
-          </div>
-        </motion.div>
-      </div>
+              <div>
+                <h3 className={infoPage.h3}>Analytics cookies</h3>
+                <p className={infoPage.body}>
+                  Help us understand how visitors interact with pages and features so we can improve
+                  performance and usability.
+                </p>
+              </div>
+              <div>
+                <h3 className={infoPage.h3}>Marketing cookies</h3>
+                <p className={infoPage.body}>
+                  Used to deliver relevant advertisements and measure campaign effectiveness. You
+                  can opt out through your browser or our cookie preferences where available.
+                </p>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2 className={infoPage.h2}>Managing cookies</h2>
+            <p className={infoPage.body}>
+              You can control and delete cookies through your browser settings. Disabling essential
+              cookies may prevent you from signing in or completing bookings. For questions, contact
+              privacy@travelhub.com.
+            </p>
+          </section>
+        </div>
+      </InfoPageContent>
     </PageLayout>
   );
 };
 
 export default CookiesPage;
-

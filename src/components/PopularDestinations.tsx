@@ -177,61 +177,7 @@ const PopularDestinations: React.FC<PopularDestinationsProps> = ({ className = '
     setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   };
 
-  return (
-    <section className={`py-12 md:py-16 bg-white ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Popular Destinations</h2>
-          <div className="flex flex-wrap gap-2">
-            {(['all', 'national', 'international'] as const).map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => {
-                  setActiveTab(tab);
-                  setCurrentIndex(0);
-                }}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeTab === tab
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {tab === 'all' ? 'All' : tab === 'national' ? 'Pakistan' : 'International'}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="flex items-center justify-end gap-2 mb-6">
-          <button
-            type="button"
-            onClick={prevSlide}
-            className="p-2 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
-            aria-label="Previous destinations"
-          >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={nextSlide}
-            className="p-2 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
-            aria-label="Next destinations"
-          >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleDestinations.map((destination) => (
-            <DestinationCard key={destination.id} destination={destination} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+
 };
 
 // Destination Card Component - Featured Hotels Style

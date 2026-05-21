@@ -1,82 +1,79 @@
-/**
- * HotelsFrancePage Component
- * 
- * This page is part of the Expedia.fr Footer Pages replication for our FYP.
- */
-
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout';
+import MinimalPageHero from '../../components/common/MinimalPageHero';
+import InfoPageContent, { infoPage } from '../../components/common/InfoPageContent';
+
+const cities = [
+  { name: 'Paris', count: 2500, highlight: 'Boutique hotels, luxury stays, and apartments near major sights.' },
+  { name: 'Nice', count: 450, highlight: 'Beachfront resorts and Riviera properties with sea views.' },
+  { name: 'Lyon', count: 320, highlight: 'City hotels perfect for food lovers and business travel.' },
+  { name: 'Marseille', count: 380, highlight: 'Harbor views and access to Calanques day trips.' },
+  { name: 'Bordeaux', count: 280, highlight: 'Wine country hotels and historic city-center stays.' },
+  { name: 'Strasbourg', count: 190, highlight: 'Alsace charm near the German border and Christmas markets.' },
+];
 
 const HotelsFrancePage: React.FC = () => {
-  const cities = [
-    { name: 'Paris', count: 2500, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80' },
-    { name: 'Nice', count: 450, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80' },
-    { name: 'Lyon', count: 320, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80' },
-    { name: 'Marseille', count: 380, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80' },
-    { name: 'Bordeaux', count: 280, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80' },
-    { name: 'Strasbourg', count: 190, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80' },
-  ];
-
   return (
     <PageLayout skipHeaderFooter={true}>
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 text-white py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Hotels in France</h1>
-            <p className="text-xl md:text-2xl text-blue-100">
-              Discover thousands of hotels across France. From luxury Parisian hotels to charming countryside inns.
-            </p>
-          </motion.div>
-        </div>
-      </div>
+      <MinimalPageHero
+        eyebrow="Discover"
+        title="Hotels in France"
+        subtitle="Thousands of properties across cities, coastlines, and countryside—from budget to luxury."
+      />
+      <InfoPageContent>
+        <p className={infoPage.lead}>
+          Whether you are planning a weekend in Paris or a week on the Côte d&apos;Azur, compare
+          hotels, apartments, and resorts with real-time availability and transparent pricing.
+        </p>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cities.map((city, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
+        <section className={`${infoPage.section} mt-12`}>
+          <h2 className={infoPage.h2}>Popular cities</h2>
+          <div className={`${infoPage.grid3} mt-6`}>
+            {cities.map((city) => (
+              <Link
+                key={city.name}
+                to={`/search/hotels?destination=${city.name}`}
+                className={`${infoPage.card} hover:border-blue-400 hover:shadow-md transition-all block`}
               >
-                <Link
-                  to={`/search/hotels?destination=${city.name}`}
-                  className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all"
-                >
-                  <img src={city.image} alt={city.name} className="w-full h-48 object-cover" />
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{city.name}</h3>
-                    <p className="text-gray-600">{city.count.toLocaleString()} hotels available</p>
-                  </div>
-                </Link>
-              </motion.div>
+                <h3 className={infoPage.h3}>{city.name}</h3>
+                <p className="text-blue-800 font-medium mt-1">
+                  {city.count.toLocaleString()}+ properties
+                </p>
+                <p className={`${infoPage.body} mt-3`}>{city.highlight}</p>
+              </Link>
             ))}
           </div>
-        </motion.div>
-      </div>
+        </section>
+
+        <section className={infoPage.section}>
+          <h2 className={infoPage.h2}>Why book hotels with us</h2>
+          <div className={infoPage.grid}>
+            <div className={infoPage.card}>
+              <h3 className={infoPage.h3}>Wide selection</h3>
+              <p className={infoPage.body}>
+                From international chains to independent B&Bs, filter by price, rating, amenities,
+                and cancellation policy.
+              </p>
+            </div>
+            <div className={infoPage.card}>
+              <h3 className={infoPage.h3}>Best price guarantee</h3>
+              <p className={infoPage.body}>
+                We compare rates across partners so you can book with confidence. Member deals and
+                seasonal promotions apply on select stays.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="text-center">
+          <Link to="/hotels" className={infoPage.btn}>
+            Search all hotels
+          </Link>
+        </div>
+      </InfoPageContent>
     </PageLayout>
   );
 };
 
 export default HotelsFrancePage;
-

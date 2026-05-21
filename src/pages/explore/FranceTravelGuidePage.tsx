@@ -1,117 +1,110 @@
-/**
- * FranceTravelGuidePage Component
- * 
- * This page is part of the Expedia.fr Footer Pages replication for our FYP.
- */
-
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout';
+import MinimalPageHero from '../../components/common/MinimalPageHero';
+import InfoPageContent, { infoPage } from '../../components/common/InfoPageContent';
+
+const destinations = [
+  {
+    name: 'Paris',
+    description:
+      'The capital offers world-class museums, iconic landmarks like the Eiffel Tower and Louvre, charming neighborhoods, and exceptional dining. Ideal for first-time visitors to France.',
+  },
+  {
+    name: 'Provence',
+    description:
+      'Lavender fields, hilltop villages, and regional markets define this sun-drenched region. Perfect for slow travel, wine tasting, and countryside stays.',
+  },
+  {
+    name: 'French Riviera',
+    description:
+      'From Nice to Cannes, enjoy Mediterranean beaches, luxury resorts, and vibrant coastal towns. Peak season runs June through August.',
+  },
+  {
+    name: 'Loire Valley',
+    description:
+      'Explore Renaissance châteaux, scenic bike routes, and vineyards along the Loire River. A favorite for history lovers and wine enthusiasts.',
+  },
+  {
+    name: 'Normandy',
+    description:
+      'Historic D-Day beaches, Mont-Saint-Michel, and fresh seafood. Best visited in late spring or early autumn for mild weather.',
+  },
+  {
+    name: 'Alsace',
+    description:
+      'Half-timbered villages, Christmas markets, and a unique blend of French and German culture along the wine route.',
+  },
+];
 
 const FranceTravelGuidePage: React.FC = () => {
-  const destinations = [
-    {
-      name: 'Paris',
-      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80',
-      description: 'The City of Light, famous for the Eiffel Tower and world-class museums',
-    },
-    {
-      name: 'Provence',
-      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80',
-      description: 'Lavender fields, charming villages, and Mediterranean cuisine',
-    },
-    {
-      name: 'French Riviera',
-      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80',
-      description: 'Stunning coastline, glamorous resorts, and beautiful beaches',
-    },
-    {
-      name: 'Loire Valley',
-      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80',
-      description: 'Magnificent châteaux and picturesque countryside',
-    },
-  ];
-
   return (
     <PageLayout skipHeaderFooter={true}>
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 text-white py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-              </svg>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">France Travel Guide</h1>
-            <p className="text-xl md:text-2xl text-blue-100">
-              Discover the beauty, culture, and charm of France. Your complete guide to planning the perfect French adventure.
-            </p>
-          </motion.div>
-        </div>
-      </div>
+      <MinimalPageHero
+        eyebrow="Discover"
+        title="France Travel Guide"
+        subtitle="Plan your trip with destination highlights, seasonal tips, and practical advice for traveling across France."
+      />
+      <InfoPageContent>
+        <p className={infoPage.lead}>
+          France remains one of Europe&apos;s most visited countries—from Paris city breaks to
+          countryside escapes. Use this guide to choose where to go, when to visit, and how to get
+          around.
+        </p>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            {destinations.map((dest, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer"
-              >
-                <img
-                  src={dest.image}
-                  alt={dest.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{dest.name}</h3>
-                  <p className="text-gray-600">{dest.description}</p>
-                </div>
-              </motion.div>
+        <section className={`${infoPage.section} mt-12`}>
+          <h2 className={infoPage.h2}>Top destinations</h2>
+          <div className={`${infoPage.grid3} mt-6`}>
+            {destinations.map((dest) => (
+              <div key={dest.name} className={infoPage.card}>
+                <h3 className={infoPage.h3}>{dest.name}</h3>
+                <p className={infoPage.body}>{dest.description}</p>
+              </div>
             ))}
           </div>
+        </section>
 
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Travel Tips</h2>
-            <ul className="space-y-3 text-gray-700">
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <span>Best time to visit: Spring (April-June) and Fall (September-October)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <span>Currency: Euro (EUR)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <span>Language: French (English widely spoken in tourist areas)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <span>Transportation: Excellent train network (TGV) and public transport</span>
-              </li>
-            </ul>
+        <section className={infoPage.section}>
+          <h2 className={infoPage.h2}>Travel essentials</h2>
+          <div className={infoPage.grid}>
+            <div className={infoPage.card}>
+              <h3 className={infoPage.h3}>When to visit</h3>
+              <ul className={infoPage.list}>
+                <li>Spring (Apr–Jun): mild weather, fewer crowds</li>
+                <li>Summer (Jul–Aug): peak season, book early</li>
+                <li>Autumn (Sep–Oct): harvest season, comfortable temperatures</li>
+                <li>Winter: ski resorts in the Alps; quieter cities</li>
+              </ul>
+            </div>
+            <div className={infoPage.card}>
+              <h3 className={infoPage.h3}>Good to know</h3>
+              <ul className={infoPage.list}>
+                <li>Currency: Euro (EUR)</li>
+                <li>Language: French; English common in tourist areas</li>
+                <li>Transport: TGV high-speed rail connects major cities</li>
+                <li>EU citizens: valid ID; others may need a Schengen visa</li>
+              </ul>
+            </div>
           </div>
-        </motion.div>
-      </div>
+        </section>
+
+        <section className={`${infoPage.card} text-center`}>
+          <h2 className={infoPage.h2}>Ready to book?</h2>
+          <p className={`${infoPage.body} mt-2 max-w-xl mx-auto`}>
+            Search hotels, flights, and car hire for your French adventure.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 mt-6">
+            <Link to="/explore/hotels-france" className={infoPage.btn}>
+              Hotels in France
+            </Link>
+            <Link to="/flights" className={`${infoPage.link} self-center`}>
+              Search flights
+            </Link>
+          </div>
+        </section>
+      </InfoPageContent>
     </PageLayout>
   );
 };
 
 export default FranceTravelGuidePage;
-

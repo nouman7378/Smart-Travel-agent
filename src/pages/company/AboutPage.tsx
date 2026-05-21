@@ -1,29 +1,46 @@
-/**
- * AboutPage Component
- * 
- * This page is part of the Expedia.fr Footer Pages replication for our FYP.
- */
-
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout';
+import MinimalPageHero from '../../components/common/MinimalPageHero';
+import InfoPageContent, { infoPage } from '../../components/common/InfoPageContent';
 
-const AboutPage: React.FC = () => {
+const CompanyAboutPage: React.FC = () => {
   return (
-    <PageLayout useNewFooter={true}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">About</h1>
-          <p className="text-xl text-gray-600">Learn more about our company and mission.</p>
-        </motion.div>
-      </div>
+    <PageLayout skipHeaderFooter={true}>
+      <MinimalPageHero
+        eyebrow="Company"
+        title="About"
+        subtitle="Learn more about TravelHub, our mission, and how we help travelers worldwide."
+      />
+      <InfoPageContent>
+        <p className={infoPage.lead}>
+          TravelHub connects travelers with flights, hotels, car rentals, and packages in one place.
+          We focus on clear pricing, reliable bookings, and support when you need it.
+        </p>
+        <section className={`${infoPage.section} mt-12`}>
+          <div className={infoPage.grid}>
+            <div className={infoPage.card}>
+              <h3 className={infoPage.h3}>Our story</h3>
+              <p className={infoPage.body}>
+                We started with a simple goal: make travel planning less stressful. Today we partner
+                with suppliers around the world to offer real inventory and competitive rates.
+              </p>
+            </div>
+            <div className={infoPage.card}>
+              <h3 className={infoPage.h3}>Contact</h3>
+              <p className={infoPage.body}>
+                For general inquiries, partnerships, or press, visit our main About page or Support
+                center.
+              </p>
+              <Link to="/about" className={`${infoPage.link} mt-4 inline-block`}>
+                Full about page →
+              </Link>
+            </div>
+          </div>
+        </section>
+      </InfoPageContent>
     </PageLayout>
   );
 };
 
-export default AboutPage;
-
+export default CompanyAboutPage;

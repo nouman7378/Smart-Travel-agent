@@ -1,87 +1,75 @@
-/**
- * DomesticFlightsPage Component
- * 
- * This page is part of the Expedia.fr Footer Pages replication for our FYP.
- */
-
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout';
+import MinimalPageHero from '../../components/common/MinimalPageHero';
+import InfoPageContent, { infoPage } from '../../components/common/InfoPageContent';
+
+const routes = [
+  { from: 'Paris', to: 'Nice', duration: '1h 30m', price: 89, note: 'Coastal gateway to the Riviera' },
+  { from: 'Paris', to: 'Lyon', duration: '1h 10m', price: 75, note: 'Food capital and business hub' },
+  { from: 'Paris', to: 'Marseille', duration: '1h 25m', price: 82, note: 'Port city and Provence access' },
+  { from: 'Paris', to: 'Bordeaux', duration: '1h 15m', price: 78, note: 'Wine region and Atlantic coast' },
+  { from: 'Paris', to: 'Toulouse', duration: '1h 20m', price: 72, note: 'Pink city in the southwest' },
+  { from: 'Lyon', to: 'Nice', duration: '1h 05m', price: 65, note: 'Cross-country without Paris' },
+];
 
 const DomesticFlightsPage: React.FC = () => {
-  const routes = [
-    { from: 'Paris', to: 'Nice', duration: '1h 30m', price: 89 },
-    { from: 'Paris', to: 'Lyon', duration: '1h 10m', price: 75 },
-    { from: 'Paris', to: 'Marseille', duration: '1h 25m', price: 82 },
-    { from: 'Paris', to: 'Bordeaux', duration: '1h 15m', price: 78 },
-  ];
-
   return (
     <PageLayout skipHeaderFooter={true}>
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 text-white py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Domestic Flights in France</h1>
-            <p className="text-xl md:text-2xl text-blue-100">
-              Fast and convenient domestic flights connecting major French cities.
-            </p>
-          </motion.div>
-        </div>
-      </div>
+      <MinimalPageHero
+        eyebrow="Discover"
+        title="Domestic Flights"
+        subtitle="Quick connections between major French cities—compare airlines, times, and fares in one search."
+      />
+      <InfoPageContent>
+        <p className={infoPage.lead}>
+          Flying within France saves time on longer routes. Paris to Nice by air takes under two
+          hours versus six or more by train or car. Browse popular routes below or search all
+          domestic flights.
+        </p>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {routes.map((route, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all"
-              >
-                <div className="flex items-center justify-between mb-4">
+        <section className={`${infoPage.section} mt-12`}>
+          <h2 className={infoPage.h2}>Popular routes</h2>
+          <div className={`${infoPage.grid} mt-6`}>
+            {routes.map((route) => (
+              <div key={`${route.from}-${route.to}`} className={infoPage.card}>
+                <div className="flex justify-between items-start gap-4">
                   <div>
-                    <div className="text-xl font-bold text-gray-900">{route.from}</div>
-                    <div className="text-gray-600">→ {route.to}</div>
+                    <p className="text-lg font-semibold text-slate-900">{route.from}</p>
+                    <p className="text-slate-500">→ {route.to}</p>
+                    <p className={`${infoPage.body} mt-2`}>{route.note}</p>
                   </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-blue-600">€{route.price}</div>
-                    <div className="text-sm text-gray-600">{route.duration}</div>
+                  <div className="text-right shrink-0">
+                    <p className="text-xl font-bold text-blue-800">from €{route.price}</p>
+                    <p className="text-sm text-slate-500">{route.duration}</p>
                   </div>
                 </div>
-                <Link
-                  to="/flights"
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  Search flights →
+                <Link to="/flights" className={`${infoPage.link} mt-4 inline-block`}>
+                  Search this route →
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
-      </div>
+        </section>
+
+        <section className={infoPage.section}>
+          <h2 className={infoPage.h2}>Booking tips</h2>
+          <ul className={infoPage.list}>
+            <li>Book 2–3 weeks ahead for better fares on busy routes</li>
+            <li>Compare Paris CDG and Orly for capital departures</li>
+            <li>Check baggage allowances—low-cost carriers may charge extra</li>
+            <li>Allow time for airport security on domestic flights</li>
+          </ul>
+        </section>
+
+        <div className="text-center">
+          <Link to="/flights" className={infoPage.btn}>
+            Search all domestic flights
+          </Link>
+        </div>
+      </InfoPageContent>
     </PageLayout>
   );
 };
 
 export default DomesticFlightsPage;
-
