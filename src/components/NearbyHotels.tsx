@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { getMediaUrl } from '../config/env.config';
+import SafeImage from './SafeImage';
 
 export interface NearbyHotel {
   id: number;
@@ -54,8 +54,8 @@ const NearbyHotels: React.FC<NearbyHotelsProps> = ({
           >
             {/* Image */}
             <div className="relative h-48 overflow-hidden">
-              <img
-                src={getMediaUrl(hotel.image)}
+              <SafeImage
+                src={hotel.image}
                 alt={hotel.name}
                 className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
               />

@@ -29,23 +29,28 @@ export const env = {
 } as const;
 
 /**
- * Resolves a media URL, ensuring that relative URLs are prefixed with the active backend base URL.
+ * Resolves a media URL for use in <img src>.
+ * Handles S3 HTTPS URLs, relative /media paths, and legacy Cloudinary URLs.
  */
 export function getMediaUrl(url: string | undefined | null): string {
-  if (!url) return '';
-  let resolvedUrl = url;
-  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-    resolvedUrl = url;
-  } else {
-    // Prepend backend base URL if it's a relative media URL
-    const baseUrl = API_BASE_URL.replace(/\/$/, '');
-    const relativePath = url.startsWith('/') ? url : `/${url}`;
-    resolvedUrl = `${baseUrl}${relativePath}`;
+  if (!url || !url.trim()) return '';
+
+  const trimmed = url.trim();
+
+  if (trimmed.startsWith('data:')) return trimmed;
+  if (trimmed.startsWith('//')) return `https:${trimmed}`;
+  if (trimmed.startsWith('https://')) return trimmed;
+  if (trimmed.startsWith('http://')) {
+    return trimmed.replace('http://', 'https://');
   }
-  if (resolvedUrl.startsWith('http://res.cloudinary.com')) {
-    resolvedUrl = resolvedUrl.replace('http://', 'https://');
+
+  if (trimmed.includes('amazonaws.com') || trimmed.includes('res.cloudinary.com')) {
+    return `https://${trimmed.replace(/^\/+/, '')}`;
   }
-  return resolvedUrl;
+
+  const baseUrl = API_BASE_URL.replace(/\/$/, '');
+  const relativePath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+  return `${baseUrl}${relativePath}`;
 }
 
 export default env;

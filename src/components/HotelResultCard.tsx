@@ -11,7 +11,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { getMediaUrl } from '../config/env.config';
+import SafeImage from './SafeImage';
 
 export interface HotelResult {
   id: number;
@@ -57,8 +57,8 @@ const HotelResultCard: React.FC<HotelResultCardProps> = ({ hotel, className = ''
       <div className="flex flex-col md:flex-row">
         {/* Image */}
         <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0">
-          <img
-            src={getMediaUrl(hotel.image)}
+          <SafeImage
+            src={hotel.image}
             alt={hotel.name}
             className="w-full h-full object-cover"
           />

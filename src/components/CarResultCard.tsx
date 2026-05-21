@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import SafeImage from './SafeImage';
 import AddToBookingButton from './common/AddToBookingButton';
 import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
@@ -86,7 +87,7 @@ const CarResultCard: React.FC<CarResultCardProps> = ({ car, className = '', onCl
       <div className="flex flex-col md:flex-row">
         {/* Image */}
         <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0">
-          <img src={car.image} alt={car.model} className="w-full h-full object-cover" />
+          <SafeImage src={car.image} alt={car.model} className="w-full h-full object-cover" />
           {car.originalPrice && (
             <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
               Save {Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)}%

@@ -11,6 +11,7 @@
 
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import SafeImage from './SafeImage';
 import AddToBookingButton from './common/AddToBookingButton';
 import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
@@ -77,7 +78,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, className = '', onClick }) => {
     >
       {/* Image */}
       <div className="relative h-36 sm:h-40 overflow-hidden bg-gray-50">
-        <img
+        <SafeImage
           src={car.image}
           alt={car.model}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
