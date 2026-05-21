@@ -14,6 +14,13 @@ interface HeaderProps {
   className?: string;
 }
 
+/** First letter for avatar circles; username/email may be non-string from API. */
+function getUserInitial(user: { username?: string; email?: string } | null): string {
+  const source = String(user?.username || user?.email || 'U').trim();
+  const letter = source.charAt(0);
+  return letter ? letter.toUpperCase() : 'U';
+}
+
 const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,18 +32,14 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const [isEditingUsername, setIsEditingUsername] = useState(false);
-  const [isEditingFullName, setIsEditingFullName] = useState(false);
   const [tempUsername, setTempUsername] = useState('');
-  const [tempFullName, setTempFullName] = useState('');
 
   useEffect(() => {
     if (user) {
       setTempUsername(user.username || '');
-      setTempFullName(user.full_name || user.username || '');
     }
   }, [user, isProfileMenuOpen]);
 
-  const profileMenuRef = useRef<HTMLDivElement | null>(null);
   const shopTravelRef = useRef<HTMLDivElement | null>(null);
 
   const navItems = [
@@ -68,14 +71,23 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    setIsProfileMenuOpen(false);
+    setIsEditingUsername(false);
+    navigate('/login', { replace: true });
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
       if (
         isProfileMenuOpen &&
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target as Node)
+        !target.closest('[data-profile-menu]') &&
+        !target.closest('[data-profile-trigger]')
       ) {
         setIsProfileMenuOpen(false);
+        setIsEditingUsername(false);
       }
       if (
         isShopTravelOpen &&
@@ -191,16 +203,21 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   </Link>
                 )}
                 {/* User Info */}
-                <div className="relative" ref={profileMenuRef}>
+                <div className="relative hidden lg:block">
                   <button
                     type="button"
+                    data-profile-trigger
                     aria-label="Open profile menu"
                     onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                     className="w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md transition-all duration-200 bg-gradient-to-br from-blue-500 to-purple-600 hover:scale-105"
                   >
-                    {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
-                  </button>                  {isProfileMenuOpen && (
-                    <div className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-lg shadow-[0_15px_50px_rgba(0,0,0,0.1)] overflow-hidden z-50">
+                    {getUserInitial(user)}
+                  </button>
+                  {isProfileMenuOpen && (
+                    <div
+                      data-profile-menu
+                      className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-lg shadow-[0_15px_50px_rgba(0,0,0,0.1)] overflow-hidden z-50"
+                    >
                       {/* Top Gradient Banner with decorative blur nodes */}
                       <div className="h-20 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative">
                         <div className="absolute -right-3 -top-3 w-12 h-12 rounded-full bg-white/10 blur-sm"></div>
@@ -211,7 +228,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                       <div className="relative px-5 pt-12 pb-4">
                         <div className="absolute -top-10 left-5 w-16 h-16 rounded-full bg-white p-1 shadow-md">
                           <div className="w-full h-full rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black text-xl shadow-inner">
-                            {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                            {getUserInitial(user)}
                           </div>
                         </div>
 
@@ -226,7 +243,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                           {/* Username */}
                           <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2 relative group/field">
                             <div className="flex items-center justify-between">
-                              <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Username</p>
+                              <p className="text-[9px]  tracking-wider font-extrabold text-blue-600">Username</p>
                               {!isEditingUsername ? (
                                 <button
                                   type="button"
@@ -234,7 +251,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                                     setTempUsername(user?.username || '');
                                     setIsEditingUsername(true);
                                   }}
-                                  className="text-[9px] font-black text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wider"
+                                  className="text-[9px] font-black text-blue-600 hover:text-blue-800 transition-colors  tracking-wider"
                                 >
                                   Edit
                                 </button>
@@ -248,7 +265,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                                       }
                                       setIsEditingUsername(false);
                                     }}
-                                    className="text-[9px] font-black text-emerald-600 hover:text-emerald-800 transition-colors uppercase tracking-wider"
+                                    className="text-[9px] font-black text-emerald-600 hover:text-emerald-800 transition-colors  tracking-wider"
                                   >
                                     Save
                                   </button>
@@ -256,7 +273,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                                   <button
                                     type="button"
                                     onClick={() => setIsEditingUsername(false)}
-                                    className="text-[9px] font-black text-gray-500 hover:text-gray-700 transition-colors uppercase tracking-wider"
+                                    className="text-[9px] font-black text-gray-500 hover:text-gray-700 transition-colors  tracking-wider"
                                   >
                                     Cancel
                                   </button>
@@ -276,64 +293,17 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                             )}
                           </div>
 
-                          {/* Full Name */}
-                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2 relative group/field">
-                            <div className="flex items-center justify-between">
-                              <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Full Name</p>
-                              {!isEditingFullName ? (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setTempFullName(user?.full_name || user?.username || '');
-                                    setIsEditingFullName(true);
-                                  }}
-                                  className="text-[9px] font-black text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wider"
-                                >
-                                  Edit
-                                </button>
-                              ) : (
-                                <div className="flex space-x-1.5">
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      if (tempFullName.trim()) {
-                                        updateUser({ full_name: tempFullName.trim() });
-                                      }
-                                      setIsEditingFullName(false);
-                                    }}
-                                    className="text-[9px] font-black text-emerald-600 hover:text-emerald-800 transition-colors uppercase tracking-wider"
-                                  >
-                                    Save
-                                  </button>
-                                  <span className="text-gray-300 text-[9px] font-bold">|</span>
-                                  <button
-                                    type="button"
-                                    onClick={() => setIsEditingFullName(false)}
-                                    className="text-[9px] font-black text-gray-500 hover:text-gray-700 transition-colors uppercase tracking-wider"
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                            {!isEditingFullName ? (
-                              <p className="text-xs font-bold text-gray-955 truncate mt-0.5">
-                                {user?.full_name || user?.username || '-'}
-                              </p>
-                            ) : (
-                              <input
-                                type="text"
-                                value={tempFullName}
-                                onChange={(e) => setTempFullName(e.target.value)}
-                                className="w-full text-xs font-bold text-gray-955 bg-white border border-blue-300 rounded px-2 py-1 mt-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                autoFocus
-                              />
-                            )}
+                          {/* Full Name (read-only) */}
+                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2">
+                            <p className="text-[9px]  tracking-wider font-extrabold text-blue-600">Full Name</p>
+                            <p className="text-xs font-bold text-gray-955 truncate mt-0.5">
+                              {user?.full_name || user?.username || '-'}
+                            </p>
                           </div>
 
                           {/* Email Address */}
                           <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2">
-                            <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Email Address</p>
+                            <p className="text-[9px]  tracking-wider font-extrabold text-blue-600">Email Address</p>
                             <p className="text-xs font-bold text-gray-955 truncate mt-0.5">{user?.email || '-'}</p>
                           </div>
                         </div>
@@ -343,7 +313,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                           <Link
                             to="/booking/demo"
                             onClick={() => setIsProfileMenuOpen(false)}
-                            className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors text-[10px] font-black text-gray-800 uppercase tracking-wider"
+                            className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors text-[10px] font-black text-gray-800  tracking-wider"
                           >
                             <span className="flex items-center space-x-2">
                               <span>🎫</span>
@@ -357,11 +327,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                         <div className="border-t border-gray-100 pt-3.5">
                           <button
                             type="button"
-                            onClick={() => {
-                              logout();
-                              setIsProfileMenuOpen(false);
-                              window.location.href = '/login';
-                            }}
+                            onClick={handleLogout}
                             className="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/50 font-black rounded-lg text-xs tracking-wider transition-all flex items-center justify-center space-x-2 shadow-sm active:scale-98"
                           >
                             <span>🚪</span>
@@ -387,15 +353,85 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           {/* Mobile Actions and Hamburger Button */}
           <div className="flex lg:hidden items-center space-x-3">
             {isAuthenticated && (
-              <div className="relative" ref={profileMenuRef}>
+              <div className="relative lg:hidden">
                 <button
                   type="button"
+                  data-profile-trigger
                   aria-label="Open profile menu"
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                   className="w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md transition-all duration-200 bg-gradient-to-br from-blue-500 to-purple-600"
                 >
-                  {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                  {getUserInitial(user)}
                 </button>
+                {isProfileMenuOpen && (
+                  <div
+                    data-profile-menu
+                    className="absolute right-0 mt-3 w-72 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-[0_15px_50px_rgba(0,0,0,0.1)] overflow-hidden z-50"
+                  >
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-bold text-gray-900 truncate">{user?.full_name || user?.username}</p>
+                      <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                    </div>
+                    <div className="p-3 border-b border-gray-100">
+                      <p className="text-[9px]  tracking-wider font-extrabold text-blue-600 mb-1">Username</p>
+                      {!isEditingUsername ? (
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-xs font-bold text-gray-900 truncate">{user?.username || '-'}</p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setTempUsername(user?.username || '');
+                              setIsEditingUsername(true);
+                            }}
+                            className="text-[9px] font-black text-blue-600  shrink-0"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            value={tempUsername}
+                            onChange={(e) => setTempUsername(e.target.value)}
+                            className="w-full text-xs font-bold border border-blue-300 rounded px-2 py-1"
+                            autoFocus
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (tempUsername.trim()) {
+                                  updateUser({ username: tempUsername.trim() });
+                                }
+                                setIsEditingUsername(false);
+                              }}
+                              className="text-[9px] font-black text-emerald-600 "
+                            >
+                              Save
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIsEditingUsername(false)}
+                              className="text-[9px] font-black text-gray-500 "
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/50 font-black rounded-lg text-xs tracking-wider"
+                      >
+                        Logout Account
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -480,7 +516,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-50 border border-blue-100 text-blue-700 rounded-lg font-medium hover:bg-blue-100 transition-all duration-200"
                 >
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                    {user?.username?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                    {getUserInitial(user)}
                   </div>
                   <span>Profile</span>
                 </Link>

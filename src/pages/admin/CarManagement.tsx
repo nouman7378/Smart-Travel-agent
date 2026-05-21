@@ -211,7 +211,16 @@ const CarManagement: React.FC = () => {
     { header: 'Car', key: 'model', render: (car: Car) => (
       <div className="flex items-center">
         <div className="w-12 h-12 bg-gray-200 rounded mr-3 overflow-hidden">
-          {car.car_image_url ? <img src={resolveImageSrc(car.car_image_url)} alt={car.model} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-gray-100">—</div>}
+          {car.car_image_url ? (
+            <img
+              src={resolveImageSrc(car.car_image_url)}
+              alt={car.model}
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-100 text-xs text-gray-400">—</div>
+          )}
         </div>
         <div>
           <p className="font-medium text-gray-800">{car.model}</p>
