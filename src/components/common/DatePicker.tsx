@@ -5,17 +5,31 @@ interface DatePickerProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  /** Visual styles for the trigger (border, bg, text colors) */
   className?: string;
   name?: string;
   minDate?: string;
+  showIcon?: boolean;
+  /** Shorter placeholder + smaller icon for narrow fields (hero, sidebar) */
+  compact?: boolean;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 'dd/mm/yyyy', className = '', name, minDate }) => {
+const DatePicker: React.FC<DatePickerProps> = ({
+  value,
+  onChange,
+  placeholder,
+  className = '',
+  name,
+  minDate,
+  showIcon = true,
+  compact = false,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(value ? new Date(value) : new Date());
   const [tempSelectedDate, setTempSelectedDate] = useState<Date | null>(value ? new Date(value) : null);
-  
+
   const popoverRef = useRef<HTMLDivElement>(null);
+  const resolvedPlaceholder = placeholder ?? (compact ? 'dd/mm/yy' : 'dd/mm/yyyy');
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -27,7 +41,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Update temp state when value changes
   useEffect(() => {
     if (value) {
       setTempSelectedDate(new Date(value));
@@ -40,8 +53,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
   const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
 
-  const handlePrevMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
-  const handleNextMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+  const handlePrevMonth = () =>
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+  const handleNextMonth = () =>
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
 
   const handleDateClick = (day: number) => {
     const selected = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
@@ -53,10 +68,13 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
     setIsOpen(false);
   };
 
-  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const dayNames = ["S", "M", "T", "W", "T", "F", "S"];
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+  const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-  const days = [];
+  const days: React.ReactNode[] = [];
   for (let i = 0; i < firstDayOfMonth; i++) {
     const prevMonthDays = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 0).getDate();
     days.push(
@@ -81,10 +99,11 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
       }
     }
 
-    const isSelected = tempSelectedDate?.getDate() === day && 
-                       tempSelectedDate?.getMonth() === currentMonth.getMonth() && 
-                       tempSelectedDate?.getFullYear() === currentMonth.getFullYear();
-    
+    const isSelected =
+      tempSelectedDate?.getDate() === day &&
+      tempSelectedDate?.getMonth() === currentMonth.getMonth() &&
+      tempSelectedDate?.getFullYear() === currentMonth.getFullYear();
+
     days.push(
       <button
         key={`day-${day}`}
@@ -100,8 +119,8 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
   }
 
   const totalCells = days.length;
-  const remainingCells = 42 - totalCells; // 6 rows * 7 cols
-  for(let i = 1; i <= remainingCells; i++) {
+  const remainingCells = 42 - totalCells;
+  for (let i = 1; i <= remainingCells; i++) {
     days.push(
       <div key={`next-empty-${i}`} className="h-8 w-8 flex items-center justify-center text-gray-300 text-sm">
         {i}
@@ -109,29 +128,40 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
     );
   }
 
-  // Format to dd/mm/yyyy
-  const displayValue = value ? new Date(value).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+  const displayValue = value
+    ? new Date(value).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: compact ? '2-digit' : 'numeric',
+      })
+    : '';
+
+  const defaultTriggerClass =
+    'border border-gray-300 rounded-lg bg-white text-gray-900 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent';
+  const triggerClass = className.trim() || defaultTriggerClass;
 
   return (
-    <div className="relative w-full" ref={popoverRef}>
-      <div 
-        className={`w-full flex items-center justify-between cursor-pointer ${className}`}
+    <div className="relative w-full min-w-0" ref={popoverRef}>
+      <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
+        className={`${triggerClass} w-full min-w-0 h-11 px-3 flex flex-row flex-nowrap items-center justify-between gap-1.5 text-left cursor-pointer`}
       >
-        <input
-          type="text"
-          readOnly
-          value={displayValue}
-          placeholder={placeholder}
-          name={name}
-          className="flex-1 bg-transparent outline-none cursor-pointer text-inherit placeholder-inherit pointer-events-none truncate"
-        />
-        <CalendarIcon className="w-5 h-5 text-current flex-shrink-0 ml-2 opacity-70" />
-      </div>
+        <span
+          className={`flex-1 min-w-0 truncate whitespace-nowrap leading-tight ${compact ? 'text-xs' : 'text-sm'} ${displayValue ? '' : 'opacity-60'}`}
+        >
+          {displayValue || resolvedPlaceholder}
+        </span>
+        {showIcon && (
+          <CalendarIcon
+            className={`flex-shrink-0 pointer-events-none opacity-70 ${compact ? 'w-4 h-4' : 'w-5 h-5'}`}
+            aria-hidden
+          />
+        )}
+      </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-[999] w-72">
-          {/* Header */}
+        <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-[999] w-72 text-gray-900">
           <div className="flex items-center justify-between mb-4">
             <button type="button" onClick={handlePrevMonth} className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg">
               <ChevronLeft className="w-5 h-5" />
@@ -144,7 +174,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
             </button>
           </div>
 
-          {/* Days Header */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {dayNames.map((d, i) => (
               <div key={i} className="text-center text-xs font-semibold text-blue-600 h-8 flex items-center justify-center">
@@ -153,10 +182,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, placeholder = 
             ))}
           </div>
 
-          {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-1 mb-2">
-            {days}
-          </div>
+          <div className="grid grid-cols-7 gap-1 mb-2">{days}</div>
         </div>
       )}
     </div>

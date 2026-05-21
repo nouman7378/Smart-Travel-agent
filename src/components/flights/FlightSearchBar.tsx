@@ -204,29 +204,29 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch, prefilledSe
           </div>
 
           {/* Dates and Passengers Row */}
-          <div className="lg:col-span-2 grid grid-cols-2 gap-4">
-            {/* Depart Date */}
-            <div>
+          <div className={`lg:col-span-2 grid gap-4 min-w-0 ${tripType === 'round-trip' ? 'grid-cols-2' : 'grid-cols-1'}`}>
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-blue-100 mb-2">Departure</label>
               <DatePicker
+                compact
                 name="departDate"
                 value={formData.departDate}
                 onChange={handleInputChange}
                 minDate={todayStr}
-                className="w-full px-4 py-3 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-white placeholder-blue-200/60 transition-all duration-200"
+                className="w-full min-w-0 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 text-white"
               />
             </div>
 
-            {/* Return Date - Only show for round-trip */}
             {tripType === 'round-trip' && (
-              <div>
+              <div className="min-w-0">
                 <label className="block text-sm font-medium text-blue-100 mb-2">Return</label>
                 <DatePicker
+                  compact
                   name="returnDate"
                   value={formData.returnDate}
                   onChange={handleInputChange}
                   minDate={formData.departDate || todayStr}
-                  className="w-full px-4 py-3 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-white placeholder-blue-200/60 transition-all duration-200"
+                  className="w-full min-w-0 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 text-white"
                 />
               </div>
             )}

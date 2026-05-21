@@ -6,20 +6,42 @@ import DatePicker from './common/DatePicker';
 import downloadBg from '../assets/download.png';
 
 
+export interface HeroSearchFormData {
+  from: string;
+  to: string;
+  checkIn: string;
+  checkOut: string;
+  passengers: number;
+  rooms: number;
+}
+
 interface HeroProps {
   className?: string;
   hideTag?: boolean;
   smallTitle?: boolean;
   hideStats?: boolean;
+  /** On /hotels: no overlap offset; search stays on same page */
+  embedded?: boolean;
+  /** When set, Search updates parent instead of navigating away (hotels tab) */
+  onSearch?: (tab: SearchTab, data: HeroSearchFormData) => void;
 }
 
 type SearchTab = 'flights' | 'hotels' | 'cars' | 'packages';
+
+const HERO_DATE_CLASS =
+  'w-full min-w-0 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 text-white placeholder-blue-200/60';
+
+/** Match DatePicker compact height (h-11) for hotel text inputs & selects */
+const HERO_FIELD_CLASS =
+  'w-full h-11 min-h-[44px] px-3 sm:px-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm text-white placeholder-blue-200/60 transition-all duration-200';
 
 const Hero: React.FC<HeroProps> = ({
   className = '',
   hideTag = false,
   smallTitle = false,
-  hideStats = false
+  hideStats = false,
+  embedded = false,
+  onSearch,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,12 +92,16 @@ const Hero: React.FC<HeroProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Search submitted:', { activeTab, formData });
 
-    // Navigate based on active tab.
-    // For flights, send the user to the dedicated /flights page which
-    // uses the real backend API integration instead of the legacy
-    // /search/flights demo with hardcoded data.
+    if (activeTab === 'hotels' && onSearch) {
+      onSearch(activeTab, { ...formData });
+      const el = document.getElementById('hotel-results');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+
     if (activeTab === 'flights') {
       navigate('/flights', {
         state: {
@@ -86,13 +112,12 @@ const Hero: React.FC<HeroProps> = ({
           passengers: formData.passengers,
         },
       });
+    } else if (activeTab === 'hotels') {
+      navigate('/hotels');
+    } else if (activeTab === 'cars') {
+      navigate('/cars');
     } else {
-      const routes: Record<Exclude<SearchTab, 'flights'>, string> = {
-        hotels: '/search/hotels',
-        cars: '/search/cars',
-        packages: '/packages',
-      };
-      navigate(routes[activeTab as Exclude<SearchTab, 'flights'>]);
+      navigate('/packages');
     }
   };
 
@@ -119,7 +144,11 @@ const Hero: React.FC<HeroProps> = ({
       </div>
 
       <div className={`relative container mx-auto px-4 sm:px-4 lg:px-4 ${className.includes('!min-h-fit') ? 'py-0' : 'py-4'}`}>
-        <div className="max-w-6xl mx-auto relative z-20 translate-y-16 md:translate-y-24 -mb-16 md:-mb-24">
+        <div
+          className={`max-w-6xl mx-auto relative z-20 ${
+            embedded ? 'pb-2' : 'translate-y-16 md:translate-y-24 -mb-16 md:-mb-24'
+          }`}
+        >
 
           {/* Search Container */}
           <div className="bg-blue-950 rounded-2xl shadow-2xl overflow-visible border border-blue-800/40 p-1">
@@ -156,8 +185,8 @@ const Hero: React.FC<HeroProps> = ({
             {/* Search Form */}
             <form onSubmit={handleSubmit} className="p-4 sm:p-6 lg:p-8">
               {activeTab === 'flights' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
-                  <div className="lg:col-span-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                  <div className="min-w-0">
                     <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">From</label>
                     <div className="relative">
                       <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><MapPin className="inline w-5 h-5" /></span>
@@ -171,7 +200,7 @@ const Hero: React.FC<HeroProps> = ({
                       />
                     </div>
                   </div>
-                  <div className="lg:col-span-2">
+                  <div className="min-w-0">
                     <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">To</label>
                     <div className="relative">
                       <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><Target className="inline w-5 h-5" /></span>
@@ -185,70 +214,76 @@ const Hero: React.FC<HeroProps> = ({
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-2 lg:col-span-1">
-                    <div>
-                      <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">Departure</label>
-                      <DatePicker
-                        name="checkIn"
-                        value={formData.checkIn}
-                        onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">Return</label>
-                      <DatePicker
-                        name="checkOut"
-                        value={formData.checkOut}
-                        onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
-                      />
-                    </div>
+                  <div className="min-w-0">
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Departure</label>
+                    <DatePicker
+                      compact
+                      name="checkIn"
+                      value={formData.checkIn}
+                      onChange={handleInputChange}
+                      className={HERO_DATE_CLASS}
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Return</label>
+                    <DatePicker
+                      compact
+                      name="checkOut"
+                      value={formData.checkOut}
+                      onChange={handleInputChange}
+                      minDate={formData.checkIn || undefined}
+                      className={HERO_DATE_CLASS}
+                    />
                   </div>
                 </div>
               )}
 
               {activeTab === 'hotels' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                  <div>
+                  <div className="min-w-0">
                     <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Destination</label>
                     <div className="relative">
-                      <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-blue-300 text-sm sm:text-base"><Building className="inline w-5 h-5" /></span>
+                      <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-blue-300 pointer-events-none z-10">
+                        <Building className="w-5 h-5" />
+                      </span>
                       <input
                         type="text"
                         name="to"
                         value={formData.to}
                         onChange={handleInputChange}
                         placeholder="City, hotel, or landmark"
-                        className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white placeholder-blue-200/60 transition-all duration-200"
+                        className={`${HERO_FIELD_CLASS} pl-10 sm:pl-12`}
                       />
                     </div>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Check-in</label>
                     <DatePicker
+                      compact
                       name="checkIn"
                       value={formData.checkIn}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
+                      className={HERO_DATE_CLASS}
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Check-out</label>
                     <DatePicker
+                      compact
                       name="checkOut"
                       value={formData.checkOut}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
+                      minDate={formData.checkIn || undefined}
+                      className={HERO_DATE_CLASS}
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Rooms & Guests</label>
                     <select
                       name="rooms"
                       value={formData.rooms}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base text-white transition-all duration-200"
+                      className={HERO_FIELD_CLASS}
                     >
                       {[1, 2, 3, 4, 5].map((num) => (
                         <option key={num} value={num} className="bg-blue-950 text-white">
@@ -290,22 +325,25 @@ const Hero: React.FC<HeroProps> = ({
                       />
                     </div>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">From</label>
                     <DatePicker
+                      compact
                       name="checkIn"
                       value={formData.checkIn}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
+                      className={HERO_DATE_CLASS}
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <label className="block text-xs sm:text-sm font-medium text-blue-100 mb-2 sm:mb-3">To</label>
                     <DatePicker
+                      compact
                       name="checkOut"
                       value={formData.checkOut}
                       onChange={handleInputChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
+                      minDate={formData.checkIn || undefined}
+                      className={HERO_DATE_CLASS}
                     />
                   </div>
                 </div>
@@ -331,16 +369,19 @@ const Hero: React.FC<HeroProps> = ({
                     <label className="block text-sm font-medium text-blue-100 mb-2 sm:mb-3">Travel Dates</label>
                     <div className="grid grid-cols-2 gap-3 sm:gap-4">
                       <DatePicker
+                        compact
                         name="checkIn"
                         value={formData.checkIn}
                         onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
+                        className={HERO_DATE_CLASS}
                       />
                       <DatePicker
+                        compact
                         name="checkOut"
                         value={formData.checkOut}
                         onChange={handleInputChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-4 bg-blue-950/40 backdrop-blur-md border border-blue-400 rounded-lg focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent text-xs sm:text-sm text-white placeholder-blue-200/60 transition-all duration-200"
+                        minDate={formData.checkIn || undefined}
+                        className={HERO_DATE_CLASS}
                       />
                     </div>
                   </div>

@@ -128,14 +128,15 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
       <FilterSection title="Price Range" sectionKey="price">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span>${filters.priceRange[0]}</span>
-            <span>${filters.priceRange[1]}</span>
+            <span>PKR {filters.priceRange[0].toLocaleString()}</span>
+            <span>PKR {filters.priceRange[1].toLocaleString()}</span>
           </div>
           <div className="relative">
             <input
               type="range"
               min="0"
-              max="1000"
+              max="500000"
+              step="1000"
               value={filters.priceRange[0]}
               onChange={(e) => handlePriceChange(Number(e.target.value), filters.priceRange[1])}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
@@ -143,7 +144,8 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             <input
               type="range"
               min="0"
-              max="1000"
+              max="500000"
+              step="1000"
               value={filters.priceRange[1]}
               onChange={(e) => handlePriceChange(filters.priceRange[0], Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 mt-2"

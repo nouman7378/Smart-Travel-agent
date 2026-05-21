@@ -35,10 +35,14 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ initialFilters }) => {
     let packages = [...allPackages];
 
     // Apply filters
-    if (filters.destination) {
-      packages = packages.filter((pkg) =>
-        pkg.hotel.location.toLowerCase().includes(filters.destination.toLowerCase()) ||
-        pkg.hotel.name.toLowerCase().includes(filters.destination.toLowerCase())
+    if (filters.destination.trim()) {
+      const q = filters.destination.toLowerCase().trim();
+      packages = packages.filter(
+        (pkg) =>
+          (pkg.destination || '').toLowerCase().includes(q) ||
+          (pkg.title || '').toLowerCase().includes(q) ||
+          pkg.hotel.location.toLowerCase().includes(q) ||
+          pkg.hotel.name.toLowerCase().includes(q)
       );
     }
 
@@ -74,6 +78,22 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ initialFilters }) => {
 
     return packages;
   }, [filters, currentSort, allPackages]);
+
+  const availablePackageTypes = useMemo(
+    () =>
+      [...new Set(allPackages.map((p) => p.packageType).filter(Boolean))] as string[],
+    [allPackages]
+  );
+
+  const priceMax = useMemo(() => {
+    if (allPackages.length === 0) return 500000;
+    const max = Math.max(...allPackages.map((p) => p.price));
+    return Math.ceil(max / 5000) * 5000 || 500000;
+  }, [allPackages]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, currentSort]);
   
   // Effect to fetch packages - declared after useMemo
   useEffect(() => {
@@ -90,7 +110,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ initialFilters }) => {
           const transformedPackages: TravelPackage[] = data.packages.map((pkg: any) => ({
             id: pkg.id,
             title: pkg.title,
-            destination: pkg.destination,
+            destination: pkg.destination || pkg.hotel?.location || '',
             price: pkg.price,
             originalPrice: pkg.originalPrice,
             pricePer: 'person' as const,
@@ -188,7 +208,12 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ initialFilters }) => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
-            <PackageSearchFilters filters={filters} onFiltersChange={setFilters} />
+            <PackageSearchFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              availablePackageTypes={availablePackageTypes}
+              priceMax={priceMax}
+            />
           </aside>
 
           {/* Results Section */}

@@ -24,7 +24,7 @@ import { FlightResult } from '../components/FlightResultCard';
 import { CarResult } from '../components/CarResultCard';
 import RoomSelectionModal from '../components/RoomSelectionModal';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
+import { API_PREFIX, getMediaUrl } from '../config/env.config';
 
 interface SearchResultsPageProps {
   searchType?: 'hotels' | 'flights' | 'cars';
@@ -65,12 +65,53 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
   const [showRoomModal, setShowRoomModal] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState<{id: number, name: string, location: string} | null>(null);
 
-  // Fetch hotels from API
+  const [apiCars, setApiCars] = useState<CarResult[]>([]);
+
   useEffect(() => {
     if (currentSearchType === 'hotels') {
       fetchHotels();
+    } else if (currentSearchType === 'cars') {
+      fetchCars();
     }
   }, [currentSearchType, locationParam]);
+
+  const fetchCars = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_PREFIX}/cars/`);
+      const data = await response.json();
+      if (data.success) {
+        const transformed: CarResult[] = data.cars.map((car: Record<string, unknown>) => ({
+          id: car.id as number,
+          model: String(car.model),
+          type: String(car.type_display || car.type),
+          image:
+            getMediaUrl(car.car_image_url as string) ||
+            'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
+          company: String(car.company),
+          price: Number(car.price_per_day),
+          originalPrice: car.original_price ? Number(car.original_price) : undefined,
+          currency: 'PKR',
+          pricePer: 'day' as const,
+          pickup: { location: locationParam || 'Pick-up', date: '—', time: '10:00' },
+          dropoff: { location: locationParam || 'Drop-off', date: '—', time: '10:00' },
+          features: (car.features as string[]) || [],
+          transmission: car.transmission === 'automatic' ? 'Automatic' : 'Manual',
+          seats: Number(car.seats) || 5,
+          rating: car.rating ? Number(car.rating) : undefined,
+          reviewCount: Number(car.review_count) || 0,
+        }));
+        setApiCars(transformed);
+      } else {
+        setError(data.message || 'Failed to fetch cars');
+      }
+    } catch {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleViewDeal = (hotel: HotelResult) => {
     setSelectedHotel({
@@ -97,7 +138,7 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
         params.append('location', locationParam);
       }
       
-      const response = await fetch(`${API_BASE_URL}/hotels/?${params.toString()}`);
+      const response = await fetch(`${API_PREFIX}/hotels/?${params.toString()}`);
       const data = await response.json();
       
       if (data.success) {
@@ -111,7 +152,8 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
             'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80',
             'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80',
           ];
-          const fallbackImage = hotel.image_url || placeholderImages[hotel.id % placeholderImages.length];
+          const fallbackImage =
+            getMediaUrl(hotel.image_url) || placeholderImages[hotel.id % placeholderImages.length];
           
           return {
             id: hotel.id,
@@ -148,60 +190,7 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
   // with real API-backed flows (e.g., dedicated Flights and Cars pages).
   const sampleFlights: FlightResult[] = initialResults?.flights || [];
   
-  const sampleCars: CarResult[] = initialResults?.cars || [
-    {
-      id: 1,
-      model: 'Toyota Camry',
-      type: 'Mid-size',
-      image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
-      company: 'Hertz',
-      price: 12000,
-      originalPrice: 15000,
-      currency: 'PKR',
-      pricePer: 'day',
-      pickup: {
-        location: 'Paris CDG Airport',
-        date: 'Mon, Dec 15',
-        time: '10:00',
-      },
-      dropoff: {
-        location: 'Paris CDG Airport',
-        date: 'Fri, Dec 19',
-        time: '10:00',
-      },
-      features: ['GPS', 'Bluetooth', 'USB Charger'],
-      transmission: 'Automatic',
-      seats: 5,
-      rating: 4.5,
-      reviewCount: 234,
-    },
-    {
-      id: 2,
-      model: 'BMW 3 Series',
-      type: 'Luxury',
-      image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
-      company: 'Avis',
-      price: 25000,
-      originalPrice: 30000,
-      currency: 'PKR',
-      pricePer: 'day',
-      pickup: {
-        location: 'New York JFK Airport',
-        date: 'Mon, Dec 15',
-        time: '12:00',
-      },
-      dropoff: {
-        location: 'New York JFK Airport',
-        date: 'Thu, Dec 18',
-        time: '12:00',
-      },
-      features: ['GPS', 'Leather Seats', 'Sunroof'],
-      transmission: 'Automatic',
-      seats: 5,
-      rating: 4.8,
-      reviewCount: 456,
-    },
-  ];
+  const sampleCars: CarResult[] = initialResults?.cars || apiCars;
 
   // Filter and sort results
   const filteredAndSortedResults = useMemo(() => {
@@ -266,7 +255,11 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
     });
 
     return results;
-  }, [currentSearchType, filters, currentSort, sampleHotels, sampleFlights, sampleCars]);
+  }, [currentSearchType, filters, currentSort, apiHotels, sampleFlights, sampleCars]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, currentSort]);
 
   // Pagination
   const itemsPerPage = 10;

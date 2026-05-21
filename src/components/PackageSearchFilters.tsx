@@ -31,18 +31,30 @@ export interface PackageFilters {
 interface PackageSearchFiltersProps {
   filters: PackageFilters;
   onFiltersChange: (filters: PackageFilters) => void;
+  /** Package types present in loaded catalog (dynamic checkboxes) */
+  availablePackageTypes?: string[];
+  priceMax?: number;
   className?: string;
 }
+
+const DEFAULT_PACKAGE_TYPES = [
+  'Beach', 'City Break', 'Adventure', 'Romantic', 'Family', 'Luxury', 'Cultural', 'Wellness',
+];
 
 const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
   filters,
   onFiltersChange,
+  availablePackageTypes,
+  priceMax = 500000,
   className = '',
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<string[]>(['search', 'price']);
 
-  const packageTypes = ['Beach', 'City Break', 'Adventure', 'Romantic', 'Family', 'Luxury'];
+  const packageTypes =
+    availablePackageTypes && availablePackageTypes.length > 0
+      ? availablePackageTypes
+      : DEFAULT_PACKAGE_TYPES;
 
   const updateFilters = (newFilters: Partial<PackageFilters>) => {
     const updated = { ...filters, ...newFilters };
@@ -111,21 +123,22 @@ const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-2">Check-in</label>
               <DatePicker
+                compact
                 value={filters.checkIn}
                 onChange={(e) => updateFilters({ checkIn: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-2">Check-out</label>
               <DatePicker
+                compact
                 value={filters.checkOut}
                 onChange={(e) => updateFilters({ checkOut: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                minDate={filters.checkIn || undefined}
               />
             </div>
           </div>
@@ -159,7 +172,10 @@ const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
               </select>
             </div>
           </div>
-          <button className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+          <button
+            type="button"
+            className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+          >
             Search Packages
           </button>
         </div>
@@ -169,27 +185,39 @@ const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
       <FilterSection title="Price Range" sectionKey="price">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span>${filters.priceRange[0]}</span>
-            <span>${filters.priceRange[1]}</span>
+            <span>PKR {filters.priceRange[0].toLocaleString()}</span>
+            <span>PKR {filters.priceRange[1].toLocaleString()}</span>
           </div>
           <div className="relative">
             <input
               type="range"
-              min="0"
-              max="5000"
-              value={filters.priceRange[0]}
+              min={0}
+              max={priceMax}
+              step={5000}
+              value={Math.min(filters.priceRange[0], priceMax)}
               onChange={(e) =>
-                updateFilters({ priceRange: [Number(e.target.value), filters.priceRange[1]] })
+                updateFilters({
+                  priceRange: [
+                    Math.min(Number(e.target.value), filters.priceRange[1]),
+                    filters.priceRange[1],
+                  ],
+                })
               }
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
             />
             <input
               type="range"
-              min="0"
-              max="5000"
-              value={filters.priceRange[1]}
+              min={0}
+              max={priceMax}
+              step={5000}
+              value={Math.min(filters.priceRange[1], priceMax)}
               onChange={(e) =>
-                updateFilters({ priceRange: [filters.priceRange[0], Number(e.target.value)] })
+                updateFilters({
+                  priceRange: [
+                    filters.priceRange[0],
+                    Math.max(Number(e.target.value), filters.priceRange[0]),
+                  ],
+                })
               }
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 mt-2"
             />
@@ -250,7 +278,7 @@ const PackageSearchFilters: React.FC<PackageSearchFiltersProps> = ({
               checkOut: '',
               adults: 2,
               children: 0,
-              priceRange: [0, 5000],
+              priceRange: [0, priceMax],
               starRating: [],
               packageType: [],
             };

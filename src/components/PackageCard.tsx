@@ -18,6 +18,8 @@ import { getMediaUrl } from '../config/env.config';
 
 export interface TravelPackage {
   id: number;
+  title?: string;
+  destination?: string;
   hotel: {
     name: string;
     location: string;

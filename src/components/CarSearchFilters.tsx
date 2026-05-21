@@ -12,6 +12,7 @@
 
 import React, { useState } from 'react';
 import DatePicker from './common/DatePicker';
+import TimeSelect from './common/TimeSelect';
 
 export interface CarFilters {
   pickupLocation: string;
@@ -28,19 +29,27 @@ export interface CarFilters {
 interface CarSearchFiltersProps {
   filters: CarFilters;
   onFiltersChange: (filters: CarFilters) => void;
+  /** Car types from loaded catalog */
+  availableCarTypes?: string[];
+  /** Rental companies from loaded catalog */
+  availableCompanies?: string[];
+  priceMax?: number;
   className?: string;
 }
 
 const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
   filters,
   onFiltersChange,
+  availableCarTypes = [],
+  availableCompanies = [],
+  priceMax = 100000,
   className = '',
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<string[]>(['search', 'price']);
 
-  const carTypes = ['Economy', 'Compact', 'Mid-size', 'Full-size', 'SUV', 'Luxury', 'Convertible'];
-  const companies = ['Hertz', 'Avis', 'Enterprise', 'Budget', 'Alamo', 'National', 'Thrifty'];
+  const carTypes = availableCarTypes.length > 0 ? availableCarTypes : ['Compact', 'Mid-size', 'SUV', 'Luxury'];
+  const companies = availableCompanies;
 
   const updateFilters = (newFilters: Partial<CarFilters>) => {
     const updated = { ...filters, ...newFilters };
@@ -123,45 +132,45 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-2">Pick-up Date</label>
               <DatePicker
+                compact
                 value={filters.pickupDate}
                 onChange={(e) => updateFilters({ pickupDate: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-2">Pick-up Time</label>
-              <input
-                type="time"
+              <TimeSelect
                 value={filters.pickupTime}
-                onChange={(e) => updateFilters({ pickupTime: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:!hidden [&::-webkit-calendar-picker-indicator]:!appearance-none [&::-webkit-calendar-picker-indicator]:!w-0 [&::-webkit-calendar-picker-indicator]:!h-0 [&::-webkit-calendar-picker-indicator]:!p-0 [&::-webkit-calendar-picker-indicator]:!opacity-0 [&::-webkit-calendar-picker-indicator]:!absolute"
+                onChange={(v) => updateFilters({ pickupTime: v })}
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-2">Drop-off Date</label>
               <DatePicker
+                compact
                 value={filters.dropoffDate}
                 onChange={(e) => updateFilters({ dropoffDate: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                minDate={filters.pickupDate || undefined}
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-2">Drop-off Time</label>
-              <input
-                type="time"
+              <TimeSelect
                 value={filters.dropoffTime}
-                onChange={(e) => updateFilters({ dropoffTime: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 [&::-webkit-calendar-picker-indicator]:!hidden [&::-webkit-calendar-picker-indicator]:!appearance-none [&::-webkit-calendar-picker-indicator]:!w-0 [&::-webkit-calendar-picker-indicator]:!h-0 [&::-webkit-calendar-picker-indicator]:!p-0 [&::-webkit-calendar-picker-indicator]:!opacity-0 [&::-webkit-calendar-picker-indicator]:!absolute"
+                onChange={(v) => updateFilters({ dropoffTime: v })}
               />
             </div>
           </div>
-          <button className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+          <button
+            type="button"
+            className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+          >
             Search Cars
           </button>
         </div>
@@ -177,10 +186,10 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
           <div className="relative">
             <input
               type="range"
-              min="0"
-              max="100000"
-              step="1000"
-              value={filters.priceRange[0]}
+              min={0}
+              max={priceMax}
+              step={1000}
+              value={Math.min(filters.priceRange[0], priceMax)}
               onChange={(e) =>
                 updateFilters({ priceRange: [Number(e.target.value), filters.priceRange[1]] })
               }
@@ -188,10 +197,10 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
             />
             <input
               type="range"
-              min="0"
-              max="100000"
-              step="1000"
-              value={filters.priceRange[1]}
+              min={0}
+              max={priceMax}
+              step={1000}
+              value={Math.min(filters.priceRange[1], priceMax)}
               onChange={(e) =>
                 updateFilters({ priceRange: [filters.priceRange[0], Number(e.target.value)] })
               }
@@ -221,6 +230,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
       </FilterSection>
 
       {/* Rental Company */}
+      {companies.length > 0 && (
       <FilterSection title="Rental Company" sectionKey="companies">
         <div className="space-y-2">
           {companies.map((company) => (
@@ -238,6 +248,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
           ))}
         </div>
       </FilterSection>
+      )}
 
       {/* Clear Filters */}
       <div className="pt-4">
@@ -251,7 +262,7 @@ const CarSearchFilters: React.FC<CarSearchFiltersProps> = ({
               dropoffDate: '',
               dropoffTime: '10:00',
               carType: [],
-              priceRange: [0, 100000],
+              priceRange: [0, priceMax],
               companies: [],
             };
             onFiltersChange(resetFilters);

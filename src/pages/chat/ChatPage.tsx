@@ -18,7 +18,7 @@ const ChatPage: React.FC = () => {
 
   const defaultWelcomeMessage: Message = {
     id: '1',
-    content: "👋 Hi! I'm your TravelHub AI Assistant.\n\nI'm here to help you plan the perfect trip! Tell me:\n• Your budget range\n• Travel dates or duration\n• Preferred destination (or type: beach, city, mountain, etc.)\n• Number of travelers\n\nAnd I'll provide personalized recommendations just for you! ✈️",
+    content: "Hey! 👋 I'm your SmartTravel buddy.\n\nChat like you would with a friend — say hi, ask random travel stuff, or get serious about planning. When we've got listings in the catalog, I'll pull real hotels, cars, and packages; if not, we'll still figure something out together.\n\nTry: where you want to go, budget in PKR, or just \"I need a beach vibe this month\" ✈️",
     isBot: true,
     timestamp: new Date(),
     messageType: 'text',

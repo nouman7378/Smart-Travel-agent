@@ -34,7 +34,24 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
   const filteredAndSortedCars = useMemo(() => {
     let cars = [...allCars];
 
-    // Apply filters
+    if (filters.pickupLocation.trim()) {
+      const q = filters.pickupLocation.toLowerCase().trim();
+      cars = cars.filter(
+        (car) =>
+          car.company.toLowerCase().includes(q) ||
+          car.model.toLowerCase().includes(q)
+      );
+    }
+
+    if (filters.dropoffLocation.trim()) {
+      const q = filters.dropoffLocation.toLowerCase().trim();
+      cars = cars.filter(
+        (car) =>
+          car.company.toLowerCase().includes(q) ||
+          car.model.toLowerCase().includes(q)
+      );
+    }
+
     if (filters.carType.length > 0) {
       cars = cars.filter((car) => filters.carType.includes(car.type));
     }
@@ -65,6 +82,26 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
 
     return cars;
   }, [filters, currentSort, allCars]);
+
+  const availableCarTypes = useMemo(
+    () => [...new Set(allCars.map((c) => c.type).filter(Boolean))],
+    [allCars]
+  );
+
+  const availableCompanies = useMemo(
+    () => [...new Set(allCars.map((c) => c.company).filter(Boolean))].sort(),
+    [allCars]
+  );
+
+  const priceMax = useMemo(() => {
+    if (allCars.length === 0) return 100000;
+    const max = Math.max(...allCars.map((c) => c.price));
+    return Math.ceil(max / 1000) * 1000 || 100000;
+  }, [allCars]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, currentSort]);
   
   // Effect to fetch cars - declared after useMemo
   useEffect(() => {
@@ -168,7 +205,13 @@ const CarRentalPage: React.FC<CarRentalPageProps> = ({ initialFilters }) => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
-            <CarSearchFilters filters={filters} onFiltersChange={setFilters} />
+            <CarSearchFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              availableCarTypes={availableCarTypes}
+              availableCompanies={availableCompanies}
+              priceMax={priceMax}
+            />
           </aside>
 
           {/* Results Section */}
