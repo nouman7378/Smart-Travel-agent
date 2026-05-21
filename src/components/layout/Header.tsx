@@ -17,12 +17,24 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, updateUser } = useAuth();
   const { itemCount } = useBooking();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isShopTravelOpen, setIsShopTravelOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [isEditingFullName, setIsEditingFullName] = useState(false);
+  const [tempUsername, setTempUsername] = useState('');
+  const [tempFullName, setTempFullName] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setTempUsername(user.username || '');
+      setTempFullName(user.full_name || user.username || '');
+    }
+  }, [user, isProfileMenuOpen]);
 
   const profileMenuRef = useRef<HTMLDivElement | null>(null);
   const shopTravelRef = useRef<HTMLDivElement | null>(null);
@@ -43,6 +55,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
     { name: 'Cars', href: '/cars', icon: <Car className="w-5 h-5 text-emerald-600" />, desc: 'Premium car rentals & hire' },
     { name: 'Packages', href: '/packages', icon: <Palmtree className="w-5 h-5 text-amber-600" />, desc: 'Save big bundling flight + hotel' },
     { name: 'AI Chat', href: '/chat', icon: <Bot className="w-5 h-5 text-purple-600" />, desc: 'Plan with smart AI chatbot' },
+    { name: 'Booking', href: '/booking/demo', icon: <Ticket className="w-5 h-5 text-cyan-600" />, desc: 'Manage your cart items and book' },
     { name: 'Reviews', href: '/community', icon: <Star className="w-5 h-5 text-rose-600" />, desc: 'Real stories & traveler reviews' },
   ];
 
@@ -121,7 +134,14 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     ${isActive ? 'text-white font-medium' : 'text-blue-100 hover:text-white'}
                   `}
                 >
-                  <span>{item.name}</span>
+                  <span className="flex items-center space-x-1.5">
+                    <span>{item.name}</span>
+                    {item.name === 'Booking' && isAuthenticated && itemCount > 0 && (
+                      <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-black leading-none shadow-sm shadow-red-500/20">
+                        {itemCount}
+                      </span>
+                    )}
+                  </span>
                   {/* Underline indicator */}
                   <span
                     className={`absolute -bottom-1.5 left-0 right-0 h-[2.5px] rounded-full bg-white transition-transform duration-200 origin-left
@@ -201,22 +221,114 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                             {user?.full_name || user?.username || 'Traveler'}
                           </h4>
                           <p className="text-[11px] text-gray-500 font-semibold tracking-wide truncate mt-0.5">{user?.email}</p>
-                        </div>
-
-                        {/* Sleek Theme-Border Fields - No Icons */}
+                        </div>                        {/* Sleek Theme-Border Fields - No Icons */}
                         <div className="space-y-3 pb-4 border-b border-gray-100">
                           {/* Username */}
-                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2">
-                            <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Username</p>
-                            <p className="text-xs font-bold text-gray-950 truncate mt-0.5">{user?.username || '-'}</p>
+                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2 relative group/field">
+                            <div className="flex items-center justify-between">
+                              <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Username</p>
+                              {!isEditingUsername ? (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setTempUsername(user?.username || '');
+                                    setIsEditingUsername(true);
+                                  }}
+                                  className="text-[9px] font-black text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wider"
+                                >
+                                  Edit
+                                </button>
+                              ) : (
+                                <div className="flex space-x-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (tempUsername.trim()) {
+                                        updateUser({ username: tempUsername.trim() });
+                                      }
+                                      setIsEditingUsername(false);
+                                    }}
+                                    className="text-[9px] font-black text-emerald-600 hover:text-emerald-800 transition-colors uppercase tracking-wider"
+                                  >
+                                    Save
+                                  </button>
+                                  <span className="text-gray-300 text-[9px] font-bold">|</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsEditingUsername(false)}
+                                    className="text-[9px] font-black text-gray-500 hover:text-gray-700 transition-colors uppercase tracking-wider"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            {!isEditingUsername ? (
+                              <p className="text-xs font-bold text-gray-955 truncate mt-0.5">{user?.username || '-'}</p>
+                            ) : (
+                              <input
+                                type="text"
+                                value={tempUsername}
+                                onChange={(e) => setTempUsername(e.target.value)}
+                                className="w-full text-xs font-bold text-gray-955 bg-white border border-blue-300 rounded px-2 py-1 mt-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                autoFocus
+                              />
+                            )}
                           </div>
 
                           {/* Full Name */}
-                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2">
-                            <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Full Name</p>
-                            <p className="text-xs font-bold text-gray-955 truncate mt-0.5">
-                              {user?.full_name || user?.username || '-'}
-                            </p>
+                          <div className="bg-blue-50/20 border border-blue-200 rounded-lg px-3.5 py-2 relative group/field">
+                            <div className="flex items-center justify-between">
+                              <p className="text-[9px] uppercase tracking-wider font-extrabold text-blue-600">Full Name</p>
+                              {!isEditingFullName ? (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setTempFullName(user?.full_name || user?.username || '');
+                                    setIsEditingFullName(true);
+                                  }}
+                                  className="text-[9px] font-black text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wider"
+                                >
+                                  Edit
+                                </button>
+                              ) : (
+                                <div className="flex space-x-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (tempFullName.trim()) {
+                                        updateUser({ full_name: tempFullName.trim() });
+                                      }
+                                      setIsEditingFullName(false);
+                                    }}
+                                    className="text-[9px] font-black text-emerald-600 hover:text-emerald-800 transition-colors uppercase tracking-wider"
+                                  >
+                                    Save
+                                  </button>
+                                  <span className="text-gray-300 text-[9px] font-bold">|</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => setIsEditingFullName(false)}
+                                    className="text-[9px] font-black text-gray-500 hover:text-gray-700 transition-colors uppercase tracking-wider"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                            {!isEditingFullName ? (
+                              <p className="text-xs font-bold text-gray-955 truncate mt-0.5">
+                                {user?.full_name || user?.username || '-'}
+                              </p>
+                            ) : (
+                              <input
+                                type="text"
+                                value={tempFullName}
+                                onChange={(e) => setTempFullName(e.target.value)}
+                                className="w-full text-xs font-bold text-gray-955 bg-white border border-blue-300 rounded px-2 py-1 mt-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                autoFocus
+                              />
+                            )}
                           </div>
 
                           {/* Email Address */}
@@ -248,7 +360,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                             onClick={() => {
                               logout();
                               setIsProfileMenuOpen(false);
-                              navigate('/login');
+                              window.location.href = '/login';
                             }}
                             className="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/50 font-black rounded-lg text-xs tracking-wider transition-all flex items-center justify-center space-x-2 shadow-sm active:scale-98"
                           >

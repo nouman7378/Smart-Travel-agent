@@ -29,7 +29,7 @@ const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ className = '' }) => {
           <Outlet />
         </PageTransition>
       </main>
-      {!isAuthPage && <Footer />}
+      {!isAuthPage && !isChatPage && <Footer />}
     </div>
   );
 };

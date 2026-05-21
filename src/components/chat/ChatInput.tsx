@@ -97,11 +97,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   ];
 
   return (
-    <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className="p-4 bg-transparent"
-    >
+    <div className="p-4 bg-transparent">
       <form 
         onSubmit={handleSubmit} 
         className="w-full max-w-none flex items-center gap-2 bg-white p-2 rounded-lg border-2 border-blue-200 shadow-sm focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-50/50 transition-all duration-200"
@@ -129,27 +125,21 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
         {/* Text Input */}
         <div className="flex-1 relative">
-          <textarea
+          <input
+            type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
+              if (e.key === 'Enter') {
                 e.preventDefault();
                 handleSubmit(e);
               }
             }}
             placeholder={placeholder}
             disabled={disabled}
-            rows={1}
-            className="w-full px-3 py-2 bg-transparent focus:outline-none resize-none placeholder-gray-400 disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:text-base"
-            style={{ 
-              minHeight: '44px', 
-              maxHeight: '120px',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none'
-            }}
+            className="w-full px-3 py-2.5 bg-transparent focus:outline-none placeholder-gray-400 disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:text-base h-11"
           />
         </div>
 
@@ -192,7 +182,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         className="hidden"
         disabled={disabled}
       />
-    </motion.div>
+    </div>
   );
 };
 

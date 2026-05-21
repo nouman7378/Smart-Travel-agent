@@ -8,41 +8,62 @@ import TypingIndicator from '../../components/chat/TypingIndicator';
 import SuggestedPrompts from '../../components/chat/SuggestedPrompts';
 import PageLayout from '../../components/PageLayout';
 import { chatService, ConversationContext } from '../../services/chatService';
+import { useAuth } from '../../contexts/AuthContext';
 import { Banknote, Calendar, Lightbulb, MapPin, Plane, Users } from 'lucide-react';
 
 
 const ChatPage: React.FC = () => {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: "👋 Hi! I'm your TravelHub AI Assistant.\n\nI'm here to help you plan the perfect trip! Tell me:\n• Your budget range\n• Travel dates or duration\n• Preferred destination (or type: beach, city, mountain, etc.)\n• Number of travelers\n\nAnd I'll provide personalized recommendations just for you! ✈️",
-      isBot: true,
-      timestamp: new Date(),
-      messageType: 'text',
-      quickReplies: [
-        'Plan a trip',
-        'Budget travel',
-        'Top destinations',
-        'Find packages',
-      ],
-    },
-  ]);
+  const { user } = useAuth();
+
+  const defaultWelcomeMessage: Message = {
+    id: '1',
+    content: "👋 Hi! I'm your TravelHub AI Assistant.\n\nI'm here to help you plan the perfect trip! Tell me:\n• Your budget range\n• Travel dates or duration\n• Preferred destination (or type: beach, city, mountain, etc.)\n• Number of travelers\n\nAnd I'll provide personalized recommendations just for you! ✈️",
+    isBot: true,
+    timestamp: new Date(),
+    messageType: 'text',
+    quickReplies: [
+      'Plan a trip',
+      'Budget travel',
+      'Top destinations',
+      'Find packages',
+    ],
+  };
+
+  const [messages, setMessages] = useState<Message[]>([defaultWelcomeMessage]);
   const [isTyping, setIsTyping] = useState(false);
   const [currentQuickReplies, setCurrentQuickReplies] = useState<string[]>([]);
   const [conversationContext, setConversationContext] = useState<ConversationContext>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  // Load conversation context on mount
+  // Load chat history & conversation context when component mounts or active user changes
   useEffect(() => {
+    const userChatKey = user ? `travelhub_chat_messages_${user.username || user.email || 'guest'}` : 'travelhub_chat_messages_guest';
+    const savedMessages = localStorage.getItem(userChatKey);
+    if (savedMessages) {
+      try {
+        const parsed = JSON.parse(savedMessages);
+        // Map string timestamps back to Date objects
+        const messagesWithDates = parsed.map((m: any) => ({
+          ...m,
+          timestamp: m.timestamp ? new Date(m.timestamp) : new Date(),
+        }));
+        setMessages(messagesWithDates);
+      } catch (error) {
+        console.error('Error loading saved chat history:', error);
+      }
+    } else {
+      setMessages([defaultWelcomeMessage]);
+    }
+
     const savedContext = localStorage.getItem('travelhub_chat_context');
     if (savedContext) {
       try {
@@ -53,7 +74,15 @@ const ChatPage: React.FC = () => {
         console.error('Error loading chat context:', error);
       }
     }
-  }, []);
+  }, [user]);
+
+  // Auto-persist messages on user/history changes
+  useEffect(() => {
+    if (messages.length > 1 || (messages.length === 1 && messages[0].id !== '1')) {
+      const userChatKey = user ? `travelhub_chat_messages_${user.username || user.email || 'guest'}` : 'travelhub_chat_messages_guest';
+      localStorage.setItem(userChatKey, JSON.stringify(messages));
+    }
+  }, [messages, user]);
 
   const handleSendMessage = async (
     content: string,
@@ -192,25 +221,12 @@ const ChatPage: React.FC = () => {
     chatService.resetContext();
     setConversationContext({});
     localStorage.removeItem('travelhub_chat_context');
-    setMessages([
-      {
-        id: '1',
-        content: "👋 Hi! I'm your TravelHub AI Assistant.\n\nI'm here to help you plan the perfect trip! Tell me:\n• Your budget range\n• Travel dates or duration\n• Preferred destination (or type: beach, city, mountain, etc.)\n• Number of travelers\n\nAnd I'll provide personalized recommendations just for you! ✈️",
-        isBot: true,
-        timestamp: new Date(),
-        messageType: 'text',
-        quickReplies: [
-          'Plan a trip',
-          'Budget travel',
-          'Top destinations',
-          'Find packages',
-        ],
-      },
-    ]);
+    const userChatKey = user ? `travelhub_chat_messages_${user.username || user.email || 'guest'}` : 'travelhub_chat_messages_guest';
+    localStorage.removeItem(userChatKey);
+    setMessages([defaultWelcomeMessage]);
     setCurrentQuickReplies([]);
-    // Scroll to top smoothly
     setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      scrollToBottom();
     }, 100);
   };
 
@@ -221,9 +237,36 @@ const ChatPage: React.FC = () => {
 
   return (
     <PageLayout skipHeaderFooter={true}>
-      <div className="bg-white flex flex-col min-h-[calc(100vh-200px)]">
-        {/* Messages Section */}
-        <div className="flex-1 py-12">
+      <div className="bg-gray-50 flex flex-col h-[calc(100vh-80px)] overflow-hidden">
+        {/* Sleek Sub-Header with Back and Clear controls */}
+        <div className="bg-white border-b border-gray-200 px-4 py-3.5 sm:px-6 flex items-center justify-between shadow-sm relative z-10">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center space-x-2 text-sm text-gray-600 hover:text-blue-600 transition-all duration-150 font-bold active:scale-95"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Back</span>
+          </button>
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-black text-gray-950 uppercase tracking-widest">AI Travel Assistant</span>
+          </div>
+          <button
+            onClick={handleResetConversation}
+            className="flex items-center space-x-1.5 px-3 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-100 rounded-lg text-xs font-black text-rose-600 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+            title="Clear Chat History"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <span>Clear Chat</span>
+          </button>
+        </div>
+
+        {/* Messages Section - Scrollable container */}
+        <div className="flex-1 overflow-y-auto py-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
@@ -253,16 +296,16 @@ const ChatPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Chat Input Section - Relative to page flow, above footer */}
-        <div className="sticky bottom-0 bg-white/90 backdrop-blur-md py-6 border-t border-gray-50">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Chat Input Section - Stationary at bottom of container */}
+        <div className="bg-white border-t border-gray-200 py-4 px-4 sm:px-6 shadow-lg shadow-gray-200/50">
+          <div className="max-w-6xl mx-auto">
             <ChatInput
               onSendMessage={handleSendMessage}
               onSendLocation={handleLocationShare}
               disabled={isTyping}
               placeholder="Message AI Assistant..."
             />
-            <p className="text-[10px] text-gray-400 text-center mt-3">
+            <p className="text-[10px] text-gray-400 text-center mt-2 font-medium">
               TravelHub AI can make mistakes. Check important info.
             </p>
           </div>
