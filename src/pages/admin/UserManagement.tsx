@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { AdminUser, UserRole, UserStatus } from '@/types/admin';
@@ -241,16 +242,18 @@ const UserManagement: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">User Management</h1>
-            <p className="text-sm sm:text-base text-gray-600 mt-1">Manage users, agents, and administrators</p>
-          </div>
-          <button className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm sm:text-base">
-            Add User
-          </button>
-        </div>
+        <AdminPageHeader
+          title="User management"
+          description="Manage travelers, agents, and administrators."
+          action={
+            <button
+              type="button"
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm"
+            >
+              Add user
+            </button>
+          }
+        />
 
         {/* Error Message */}
         {error && (

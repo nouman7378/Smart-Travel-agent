@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { Payment, PaymentStatus } from '@/types/admin';
@@ -194,13 +195,11 @@ const PaymentsRevenue: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Payments & Revenue</h1>
-            <p className="text-sm sm:text-base text-gray-600 mt-1">Track payments and revenue analytics</p>
-          </div>
-          <div className="flex items-center space-x-1 sm:space-x-2 bg-white rounded-lg border border-gray-200 p-1 w-full sm:w-auto flex-wrap">
+        <AdminPageHeader
+          title="Payments & revenue"
+          description="Track payments and revenue analytics."
+          action={
+          <div className="flex items-center gap-1 bg-white rounded-lg border border-slate-200 p-1 flex-wrap">
             {(['today', '7days', '30days', 'all'] as const).map((filter) => (
               <button
                 key={filter}
@@ -221,7 +220,8 @@ const PaymentsRevenue: React.FC = () => {
               </button>
             ))}
           </div>
-        </div>
+          }
+        />
 
         {/* Revenue Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

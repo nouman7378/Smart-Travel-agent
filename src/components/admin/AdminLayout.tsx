@@ -1,121 +1,74 @@
 /**
- * AdminLayout Component
- * 
- * Main layout component for the Admin Dashboard with sidebar navigation
+ * Admin layout — sidebar navigation + top bar with dynamic page title.
  */
 
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import {
+  LayoutDashboard,
+  Users,
+  Package,
+  Building2,
+  Car,
+  ClipboardList,
+  CreditCard,
+  BarChart3,
+  Settings,
+  LogOut,
+  Menu,
+  PanelLeftClose,
+  PanelLeft,
+  ExternalLink,
+} from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-interface NavItem {
-  name: string;
-  path: string;
-  icon: React.ReactNode;
-  badge?: number;
-}
+const PAGE_TITLES: Record<string, string> = {
+  '/admin': 'Overview',
+  '/admin/users': 'Users',
+  '/admin/packages': 'Packages',
+  '/admin/hotels': 'Hotels',
+  '/admin/cars': 'Cars',
+  '/admin/bookings': 'Bookings',
+  '/admin/payments': 'Payments',
+  '/admin/reports': 'Reports',
+  '/admin/settings': 'Settings',
+  '/admin/analytics': 'Chat Analytics',
+  '/admin/query-trends': 'Query Trends',
+  '/admin/model-performance': 'Model Performance',
+  '/admin/training-data': 'Training Data',
+};
+
+const navItems = [
+  { name: 'Overview', path: '/admin', icon: LayoutDashboard },
+  { name: 'Users', path: '/admin/users', icon: Users },
+  { name: 'Packages', path: '/admin/packages', icon: Package },
+  { name: 'Hotels', path: '/admin/hotels', icon: Building2 },
+  { name: 'Cars', path: '/admin/cars', icon: Car },
+  { name: 'Bookings', path: '/admin/bookings', icon: ClipboardList },
+  { name: 'Payments', path: '/admin/payments', icon: CreditCard },
+  { name: 'Reports', path: '/admin/reports', icon: BarChart3 },
+  { name: 'Settings', path: '/admin/settings', icon: Settings },
+];
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Closed by default on mobile
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const navigation: NavItem[] = [
-    {
-      name: 'Overview',
-      path: '/admin',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Users',
-      path: '/admin/users',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Packages',
-      path: '/admin/packages',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Hotels',
-      path: '/admin/hotels',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Cars',
-      path: '/admin/cars',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V4m0 0h14a2 2 0 012 2v8a2 2 0 01-2 2h-2.972a2 2 0 00-1.682.9l-.812 1.086a2 2 0 01-1.682.9H8m0 0H4m16 0v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2m16 0V4m-8-2v4m0 0H4" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Bookings',
-      path: '/admin/bookings',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-        </svg>
-      ),
-      badge: 12,
-    },
-    {
-      name: 'Payments',
-      path: '/admin/payments',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Reports',
-      path: '/admin/reports',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Settings',
-      path: '/admin/settings',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      ),
-    },
-  ];
+  const pageTitle =
+    PAGE_TITLES[location.pathname] ??
+    Object.entries(PAGE_TITLES).find(([path]) =>
+      path !== '/admin' && location.pathname.startsWith(path)
+    )?.[1] ??
+    'Admin';
 
   const isActive = (path: string) => {
-    if (path === '/admin') {
-      return location.pathname === '/admin';
-    }
+    if (path === '/admin') return location.pathname === '/admin';
     return location.pathname.startsWith(path);
   };
 
@@ -124,163 +77,106 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     navigate('/');
   };
 
+  const userInitial =
+    user?.full_name?.charAt(0)?.toUpperCase() ||
+    user?.username?.charAt(0)?.toUpperCase() ||
+    'A';
+
+  const displayName = user?.full_name || user?.username || 'Admin';
+
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Mobile Overlay */}
+    <div className="min-h-screen bg-slate-100 flex">
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
+          aria-hidden
         />
       )}
 
-      {/* Sidebar */}
       <aside
-        className={`
-          ${sidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full lg:translate-x-0'}
-          ${sidebarOpen ? 'lg:w-64' : 'lg:w-20'}
-          bg-zinc-950 border-r border-zinc-900 fixed h-screen transition-all duration-300 z-50 lg:z-30
-        `}
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-950 border-r border-slate-800 transition-all duration-300 ${
+          sidebarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full lg:w-[72px] lg:translate-x-0'
+        }`}
       >
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="h-16 flex items-center justify-between px-4 border-b border-zinc-900">
-            {sidebarOpen ? (
-              <Link to="/admin" className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                  </svg>
-                </div>
-                <span className="text-lg font-bold text-white tracking-wide">
-                  Travel<span className="text-blue-500">Hub</span>
+        <div className={`flex flex-col h-full overflow-hidden ${sidebarOpen ? 'w-64' : 'w-[72px]'}`}>
+          <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800 shrink-0">
+            <Link to="/admin" className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
+                <span className="text-white font-bold text-sm">T</span>
+              </div>
+              {sidebarOpen && (
+                <span className="text-white font-semibold truncate">
+                  Travel<span className="text-blue-400">Hub</span>
                 </span>
-              </Link>
-            ) : (
-              <Link to="/admin" className="flex items-center justify-center mx-auto">
-                <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20 transition-all hover:scale-105">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                  </svg>
-                </div>
-              </Link>
-            )}
+              )}
+            </Link>
             <button
+              type="button"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="hidden lg:block p-1.5 rounded-lg hover:bg-zinc-900 text-zinc-400 transition-colors"
+              className="hidden lg:flex p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+              aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
             >
-              <svg
-                className="w-5 h-5 text-zinc-400 hover:text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={sidebarOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
-                />
-              </svg>
-            </button>
-            {/* Mobile Close Button */}
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-lg hover:bg-zinc-900 text-zinc-400 transition-colors"
-            >
-              <svg
-                className="w-5 h-5 text-zinc-400 hover:text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              {sidebarOpen ? <PanelLeftClose className="w-5 h-5" /> : <PanelLeft className="w-5 h-5" />}
             </button>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto py-4">
-            <div className="px-2 space-y-1">
-              {navigation.map((item) => {
-                const active = isActive(item.path);
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`flex items-center ${sidebarOpen ? 'justify-start px-4' : 'justify-center px-2'
-                      } py-3 rounded-lg transition-all duration-200 ${active
-                        ? 'bg-gradient-to-r from-blue-600/10 to-transparent text-white font-medium border-l-2 border-blue-500 rounded-none'
-                        : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
-                      }`}
-                    title={!sidebarOpen ? item.name : undefined}
-                  >
-                    <span className={active ? 'text-blue-500' : 'text-zinc-500 group-hover:text-zinc-300'}>
-                      {item.icon}
-                    </span>
-                    {sidebarOpen && (
-                      <>
-                        <span className="ml-3 flex-1">{item.name}</span>
-                        {item.badge && (
-                          <span className="ml-2 bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-                            {item.badge}
-                          </span>
-                        )}
-                      </>
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
+          <nav className="flex-1 overflow-y-auto py-4 px-2">
+            {navItems.map((item) => {
+              const active = isActive(item.path);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  title={!sidebarOpen ? item.name : undefined}
+                  onClick={() => {
+                    if (window.innerWidth < 1024) setSidebarOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg mb-0.5 transition-colors ${
+                    active
+                      ? 'bg-blue-600 text-white'
+                      : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                  } ${!sidebarOpen ? 'justify-center px-2' : ''}`}
+                >
+                  <Icon className="w-5 h-5 shrink-0" />
+                  {sidebarOpen && <span className="font-medium text-sm">{item.name}</span>}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* User Section */}
-          <div className="border-t border-zinc-900 p-4">
-            <div className={`flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
-              {sidebarOpen ? (
-                <>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-semibold text-sm">
-                        {user?.full_name?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || 'A'}
-                      </span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white truncate">
-                        {user?.full_name || user?.username || 'Admin'}
-                      </p>
-                      <p className="text-xs text-zinc-500 truncate">{user?.email}</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-900 rounded-lg transition-colors"
-                    title="Logout"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>
-                  </button>
-                </>
-              ) : (
+          <div className="border-t border-slate-800 p-3 shrink-0 space-y-2">
+            <Link
+              to="/"
+              className={`flex items-center gap-2 text-slate-400 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-slate-800 ${
+                !sidebarOpen ? 'justify-center px-2' : ''
+              }`}
+              title="View site"
+            >
+              <ExternalLink className="w-4 h-4 shrink-0" />
+              {sidebarOpen && <span>View site</span>}
+            </Link>
+            <div
+              className={`flex items-center gap-3 px-2 py-2 ${!sidebarOpen ? 'justify-center' : ''}`}
+            >
+              <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+                <span className="text-white text-sm font-semibold">{userInitial}</span>
+              </div>
+              {sidebarOpen && (
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">{displayName}</p>
+                  <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+                </div>
+              )}
+              {sidebarOpen && (
                 <button
+                  type="button"
                   onClick={handleLogout}
-                  className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-900 rounded-lg transition-colors"
+                  className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg"
                   title="Logout"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
+                  <LogOut className="w-4 h-4" />
                 </button>
               )}
             </div>
@@ -288,40 +184,26 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className={`flex-1 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'} transition-all duration-300`}>
-        {/* Top Bar */}
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
-          <div className="flex items-center space-x-3 sm:space-x-4">
-            {/* Mobile Menu Button */}
+      <div
+        className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${
+          sidebarOpen ? 'lg:ml-64' : 'lg:ml-[72px]'
+        }`}
+      >
+        <header className="sticky top-0 z-30 h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6">
+          <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg lg:hidden"
+              aria-label="Toggle menu"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <Menu className="w-5 h-5" />
             </button>
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            {/* Notifications */}
-            <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            <h1 className="text-lg font-semibold text-slate-900">{pageTitle}</h1>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="p-4 sm:p-6">{children}</main>
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

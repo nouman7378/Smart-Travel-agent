@@ -73,6 +73,9 @@ export interface DashboardStats {
   totalUsers: number;
   activeTravelers: number;
   totalTrips: number;
+  totalPackages?: number;
+  totalHotels?: number;
+  totalCars?: number;
   ongoingBookings: number;
   completedTrips: number;
   monthlyRevenue: number;

@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 
@@ -709,22 +710,19 @@ const HotelManagement: React.FC = () => {
           </div>
         )}
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Hotel Management</h1>
-            <p className="text-sm sm:text-base text-gray-600 mt-1">Manage hotels in the system</p>
-          </div>
-          <button
-            onClick={openCreateModal}
-            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2 text-sm sm:text-base"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            <span>Add Hotel</span>
-          </button>
-        </div>
+        <AdminPageHeader
+          title="Hotel management"
+          description="Manage hotels and rooms in the system."
+          action={
+            <button
+              type="button"
+              onClick={openCreateModal}
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm"
+            >
+              Add hotel
+            </button>
+          }
+        />
 
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">

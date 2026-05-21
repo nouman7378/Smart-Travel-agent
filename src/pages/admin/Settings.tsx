@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { SystemSettings } from '@/types/admin';
 
 const Settings: React.FC = () => {
@@ -71,20 +72,20 @@ const Settings: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Settings</h1>
-            <p className="text-sm sm:text-base text-gray-600 mt-1">Manage platform settings and configuration</p>
-          </div>
+        <AdminPageHeader
+          title="Settings"
+          description="Platform configuration and preferences."
+          action={
           <button
+            type="button"
             onClick={handleSave}
             disabled={saving}
-            className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+            className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm disabled:opacity-50"
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Saving...' : 'Save changes'}
           </button>
-        </div>
+          }
+        />
 
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100">

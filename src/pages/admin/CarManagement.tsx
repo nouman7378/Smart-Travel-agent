@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { X } from 'lucide-react';
@@ -242,13 +243,21 @@ const CarManagement: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Car Management</h1>
-          <button onClick={openCreateModal} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Add Car</button>
-        </div>
+      <AdminPageHeader
+        title="Car management"
+        description="Add and edit rental cars shown on the site."
+        action={
+          <button
+            type="button"
+            onClick={openCreateModal}
+            className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm"
+          >
+            Add car
+          </button>
+        }
+      />
 
-        {error && <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">{error}</div>}
+      {error && <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">{error}</div>}
 
         <DataTable columns={columns} data={cars} loading={loading} emptyMessage="No cars found. Create your first car!" />
 
@@ -347,7 +356,6 @@ const CarManagement: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
     </AdminLayout>
   );
 };

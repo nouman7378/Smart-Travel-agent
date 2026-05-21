@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { AdminBooking, BookingStatus, PaymentStatus } from '@/types/admin';
@@ -238,13 +239,10 @@ const BookingManagement: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Booking Management</h1>
-            <p className="text-sm sm:text-base text-gray-600 mt-1">View and manage all bookings</p>
-          </div>
-        </div>
+        <AdminPageHeader
+          title="Booking management"
+          description="View and manage all customer bookings."
+        />
 
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">

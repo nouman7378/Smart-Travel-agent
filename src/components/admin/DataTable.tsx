@@ -1,7 +1,5 @@
 /**
- * DataTable Component
- * 
- * Reusable data table component for admin pages
+ * Data table for admin pages
  */
 
 import React from 'react';
@@ -30,10 +28,10 @@ function DataTable<T extends { id: string | number }>({
 }: DataTableProps<T>) {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-12">
+      <div className="bg-white rounded-xl border border-slate-200 p-12">
         <div className="flex flex-col items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-gray-600">Loading data...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-slate-200 border-t-blue-600 mb-4" />
+          <p className="text-slate-500">Loading...</p>
         </div>
       </div>
     );
@@ -41,60 +39,40 @@ function DataTable<T extends { id: string | number }>({
 
   if (data.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-12">
-        <div className="flex flex-col items-center justify-center">
-          <svg
-            className="w-16 h-16 text-gray-400 mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-            />
-          </svg>
-          <p className="text-gray-600 text-lg">{emptyMessage}</p>
-        </div>
+      <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+        <p className="text-slate-500">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-      {/* Desktop Table View */}
+    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full min-w-[640px]">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
+          <thead>
+            <tr className="bg-slate-50 border-b border-slate-200">
               {columns.map((column) => (
                 <th
                   key={String(column.key)}
-                  className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"
+                  className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider"
                 >
                   {column.header}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-slate-100">
             {data.map((item) => (
               <tr
                 key={item.id}
                 onClick={() => onRowClick?.(item)}
-                className={`${
-                  onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''
-                } transition-colors`}
+                className={onRowClick ? 'hover:bg-slate-50 cursor-pointer transition-colors' : ''}
               >
                 {columns.map((column) => (
-                  <td key={String(column.key)} className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
-                    <div className="whitespace-normal sm:whitespace-nowrap">
-                      {column.render
-                        ? column.render(item)
-                        : String(item[column.key as keyof T] ?? '')}
-                    </div>
+                  <td key={String(column.key)} className="px-6 py-4 text-sm text-slate-700">
+                    {column.render
+                      ? column.render(item)
+                      : String((item as Record<string, unknown>)[column.key as string] ?? '')}
                   </td>
                 ))}
               </tr>
@@ -103,30 +81,23 @@ function DataTable<T extends { id: string | number }>({
         </table>
       </div>
 
-      {/* Mobile Card View */}
-      <div className="md:hidden divide-y divide-gray-200">
+      <div className="md:hidden divide-y divide-slate-100">
         {data.map((item) => (
           <div
             key={item.id}
             onClick={() => onRowClick?.(item)}
-            className={`p-4 ${
-              onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''
-            } transition-colors`}
+            className={`p-4 space-y-2 ${onRowClick ? 'active:bg-slate-50' : ''}`}
           >
-            <div className="space-y-3">
-              {columns.map((column) => (
-                <div key={String(column.key)} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {column.header}
-                  </span>
-                  <div className="text-sm text-gray-800">
-                    {column.render
-                      ? column.render(item)
-                      : String(item[column.key as keyof T] ?? '')}
-                  </div>
-                </div>
-              ))}
-            </div>
+            {columns.map((column) => (
+              <div key={String(column.key)} className="flex justify-between gap-2 text-sm">
+                <span className="font-medium text-slate-500">{column.header}</span>
+                <span className="text-slate-800 text-right">
+                  {column.render
+                    ? column.render(item)
+                    : String((item as Record<string, unknown>)[column.key as string] ?? '')}
+                </span>
+              </div>
+            ))}
           </div>
         ))}
       </div>

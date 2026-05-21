@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { Report } from '@/types/admin';
 import DatePicker from '@/components/common/DatePicker';
 
@@ -119,11 +120,10 @@ const ReportsAnalytics: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Reports & Analytics</h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1">Generate and download comprehensive reports</p>
-        </div>
+        <AdminPageHeader
+          title="Reports & analytics"
+          description="Generate and download comprehensive reports."
+        />
 
         {/* Generate Report Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
