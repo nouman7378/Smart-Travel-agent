@@ -3,6 +3,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { X } from 'lucide-react';
+import { getMediaUrl } from '@/config/env.config';
 
 
 interface Car {
@@ -18,22 +19,6 @@ interface Car {
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
-
-const getMediaUrl = (url: string | undefined | null): string => {
-  if (!url) return '';
-  let resolvedUrl = url;
-  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-    resolvedUrl = url;
-  } else {
-    const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
-    const relativePath = url.startsWith('/') ? url : `/${url}`;
-    resolvedUrl = `${rootHost}${relativePath}`;
-  }
-  if (resolvedUrl.startsWith('http://res.cloudinary.com')) {
-    resolvedUrl = resolvedUrl.replace('http://', 'https://');
-  }
-  return resolvedUrl;
-};
 
 const getAdminAuthHeader = (): string => {
   const adminCreds = localStorage.getItem('admin_credentials');
@@ -184,6 +169,9 @@ const CarManagement: React.FC = () => {
       const res = await fetch(url, fetchOptions);
       const result = await res.json();
       if (result.success) {
+        if (!editingCar && fileInputRef.current?.files?.[0] && !result.car_image_url) {
+          setError('Car saved but image upload may have failed. Edit the car and upload the image again.');
+        }
         resetForm();
         fetchCars();
       } else {
