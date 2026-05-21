@@ -3,8 +3,6 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { X } from 'lucide-react';
-import { getMediaUrl } from '@/config/env.config';
-
 
 interface Car {
   id: number;
@@ -19,6 +17,16 @@ interface Car {
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
+
+const resolveImageSrc = (url: string | undefined | null): string => {
+  if (!url) return '';
+  if (url.startsWith('data:') || url.startsWith('https://') || url.startsWith('http://')) {
+    return url;
+  }
+  const rootHost = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+  const relativePath = url.startsWith('/') ? url : `/${url}`;
+  return `${rootHost}${relativePath}`;
+};
 
 const getAdminAuthHeader = (): string => {
   const adminCreds = localStorage.getItem('admin_credentials');
@@ -169,8 +177,8 @@ const CarManagement: React.FC = () => {
       const res = await fetch(url, fetchOptions);
       const result = await res.json();
       if (result.success) {
-        if (!editingCar && fileInputRef.current?.files?.[0] && !result.car_image_url) {
-          setError('Car saved but image upload may have failed. Edit the car and upload the image again.');
+        if (result.message && result.message.includes('S3')) {
+          setError(result.message);
         }
         resetForm();
         fetchCars();
@@ -203,7 +211,7 @@ const CarManagement: React.FC = () => {
     { header: 'Car', key: 'model', render: (car: Car) => (
       <div className="flex items-center">
         <div className="w-12 h-12 bg-gray-200 rounded mr-3 overflow-hidden">
-          {car.car_image_url ? <img src={getMediaUrl(car.car_image_url)} alt={car.model} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-gray-100">—</div>}
+          {car.car_image_url ? <img src={resolveImageSrc(car.car_image_url)} alt={car.model} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-gray-100">—</div>}
         </div>
         <div>
           <p className="font-medium text-gray-800">{car.model}</p>
@@ -310,11 +318,12 @@ const CarManagement: React.FC = () => {
                     <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="block w-full text-sm text-gray-500" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Or Enter Image URL</label>
-                    <input type="text" name="car_image_url" value={formData.car_image_url} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., https://images.unsplash.com/..." />
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Or paste image URL</label>
+                    <input type="text" name="car_image_url" value={formData.car_image_url} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="https://... (use if S3 upload fails)" />
+                    <p className="text-xs text-gray-500 mt-1">If file upload fails, paste a direct image link here and save.</p>
                   </div>
                 </div>
-                {imagePreview && <img src={getMediaUrl(imagePreview)} alt="preview" className="mt-2 w-40 h-24 object-cover rounded" />}
+                {imagePreview && <img src={resolveImageSrc(imagePreview)} alt="preview" className="mt-2 w-40 h-24 object-cover rounded" />}
 
                 <div className="flex items-center">
                   <input type="checkbox" name="is_available" checked={(formData as any).is_available} onChange={handleInputChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded" />
