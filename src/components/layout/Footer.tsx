@@ -55,14 +55,14 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
       { name: 'Cars', href: '/cars' },
       { name: 'Packages', href: '/packages' },
       { name: 'Deals', href: '/deals' },
-      { name: 'Itinerary Builder', href: '/itinerary/builder' },
+       // { name: 'Itinerary Builder', href: '/itinerary/builder' }, // Removed itinerary builder
     ],
     Explore: [
-      { name: 'France Travel Guide', href: '/explore/france-travel-guide' },
-      { name: 'Hotels in France', href: '/explore/hotels-france' },
-      { name: 'Domestic Flights', href: '/explore/domestic-flights' },
-      { name: 'Car Hire in France', href: '/explore/car-hire-france' },
-      { name: 'All Accommodation Types', href: '/explore/accommodation-types' },
+      { name: 'Pakistan Travel Guide', href: '/explore/pakistan-travel-guide' },
+      { name: 'Hotels in Pakistan', href: '/hotels?country=pakistan' },
+      { name: 'Domestic Flights', href: '/flights?country=pakistan' },
+      { name: 'Car Hire in Pakistan', href: '/cars?country=pakistan' },
+      { name: 'All Accommodation Types', href: '/accommodation?country=pakistan' },
       { name: 'Rewards with One Key', href: '/explore/rewards' },
     ],
   };

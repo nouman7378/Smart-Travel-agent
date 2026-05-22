@@ -111,8 +111,7 @@ import HotelManagement from './pages/admin/HotelManagement';
 import CarManagement from './pages/admin/CarManagement';
 import BookingManagement from './pages/admin/BookingManagement';
 import PaymentsRevenue from './pages/admin/PaymentsRevenue';
-import ReportsAnalytics from './pages/admin/ReportsAnalytics';
-import Settings from './pages/admin/Settings';
+// ReportsAnalytics removed from admin dashboard
 
 // Booking Pages
 import BookingDemoPage from './pages/booking/BookingDemoPage';
@@ -247,8 +246,8 @@ const App: React.FC = () => {
                 <Route path="cars" element={<CarManagement />} />
                 <Route path="bookings" element={<BookingManagement />} />
                 <Route path="payments" element={<PaymentsRevenue />} />
-                <Route path="reports" element={<ReportsAnalytics />} />
-                <Route path="settings" element={<Settings />} />
+                {/* Reports route removed from admin dashboard */}
+                {/* Settings route removed from admin dashboard */}
                 <Route path="analytics" element={<ChatAnalytics />} />
                 <Route path="query-trends" element={<UserQueryTrends />} />
                 <Route path="trends" element={<UserQueryTrends />} />

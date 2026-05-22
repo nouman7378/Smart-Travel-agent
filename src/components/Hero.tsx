@@ -414,15 +414,7 @@ const Hero: React.FC<HeroProps> = ({
                   Search
                 </motion.button>
 
-                {/* AI Assistant Button */}
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.03, y: -1 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-5 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base border border-violet-500/25"
-                >
-                  Ask AI Assistant
-                </motion.button>
+                {/* Ask AI Assistant button removed per request */}
               </div>
             </form>
           </div>

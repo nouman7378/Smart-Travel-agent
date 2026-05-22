@@ -181,6 +181,52 @@ const FooterNew: React.FC<FooterNewProps> = ({ className = '' }) => {
                 </Link>
               </li>
             </ul>
+            {/* Pakistan-specific quick links */}
+            <div className="mt-6">
+              <h4 className="text-sm font-semibold text-white mb-3">Explore Pakistan</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    to="/resources/pakistan-travel-guide"
+                    className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                  >
+                    Pakistan Travel Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/hotels?country=pakistan"
+                    className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                  >
+                    Hotels in Pakistan
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/flights?country=pakistan"
+                    className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                  >
+                    Domestic Flights
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/cars?country=pakistan"
+                    className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                  >
+                    Car Hire in Pakistan
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/accommodation?country=pakistan"
+                    className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                  >
+                    All Accommodation Types
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* Company Section */}

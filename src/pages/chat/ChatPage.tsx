@@ -237,7 +237,7 @@ const ChatPage: React.FC = () => {
 
   return (
     <PageLayout skipHeaderFooter={true}>
-      <div className="bg-gray-50 flex flex-col h-[calc(100vh-80px)] overflow-hidden">
+      <div className="bg-gray-50 flex flex-col h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] overflow-hidden">
         {/* Sleek Sub-Header with Back and Clear controls */}
         <div className="bg-white border-b border-gray-200 px-4 py-3.5 sm:px-6 flex items-center justify-between shadow-sm relative z-10">
           <button
@@ -266,7 +266,7 @@ const ChatPage: React.FC = () => {
         </div>
 
         {/* Messages Section - Scrollable container */}
-        <div className="flex-1 overflow-y-auto py-8">
+        <div className="flex-1 overflow-y-auto pt-8 pb-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />

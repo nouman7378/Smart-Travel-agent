@@ -34,8 +34,6 @@ const PAGE_TITLES: Record<string, string> = {
   '/admin/cars': 'Cars',
   '/admin/bookings': 'Bookings',
   '/admin/payments': 'Payments',
-  '/admin/reports': 'Reports',
-  '/admin/settings': 'Settings',
   '/admin/analytics': 'Chat Analytics',
   '/admin/query-trends': 'Query Trends',
   '/admin/model-performance': 'Model Performance',
@@ -50,8 +48,8 @@ const navItems = [
   { name: 'Cars', path: '/admin/cars', icon: Car },
   { name: 'Bookings', path: '/admin/bookings', icon: ClipboardList },
   { name: 'Payments', path: '/admin/payments', icon: CreditCard },
-  { name: 'Reports', path: '/admin/reports', icon: BarChart3 },
-  { name: 'Settings', path: '/admin/settings', icon: Settings },
+  // Reports removed from admin sidebar
+  // Settings removed from admin sidebar
 ];
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
