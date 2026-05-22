@@ -421,6 +421,8 @@ const HotelManagement: React.FC = () => {
       Object.entries(roomFormData).forEach(([key, value]) => {
         if (Array.isArray(value)) {
           formDataToSend.append(key, JSON.stringify(value));
+        } else if (key === 'is_featured') {
+          formDataToSend.append(key, String(value));
         } else {
           formDataToSend.append(key, value !== undefined && value !== null ? value.toString() : '');
         }
@@ -1377,7 +1379,7 @@ const HotelManagement: React.FC = () => {
                     }))}
                     className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                   />
-                  <label className="text-sm text-gray-700">Featured (show on hotel page)</label>
+                  <label className="text-sm text-gray-700">Featured (show on hotel detail page)</label>
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">

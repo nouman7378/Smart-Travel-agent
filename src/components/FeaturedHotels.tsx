@@ -16,25 +16,13 @@ interface Hotel {
   discount?: number;
 }
 
-interface Room {
-  id: number;
-  roomType: string;
-  description: string;
-  image: string;
-  pricePerNight: number;
-  originalPrice?: number;
-  discount?: number;
-  maxGuests: number;
-  amenities: string[];
-}
-
 interface FeaturedHotelsProps {
   className?: string;
 }
 
 const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [featuredRoomsByHotel, setFeaturedRoomsByHotel] = useState<Record<number, Room[]>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,9 +47,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
           'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80',
         ];
 
-        const mappedHotels: Hotel[] = (data.hotels || [])
-          .filter((hotel: any) => hotel.is_featured)
-          .map((hotel: any) => {
+        const mappedHotels: Hotel[] = (data.hotels || []).map((hotel: any) => {
           const rating = Number(hotel.rating) || 0;
           const stars = Number(hotel.stars) || 3;
           const price = Math.max(18000, Math.round(rating * 800 + stars * 2500));
@@ -79,45 +65,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
             originalPrice,
             discount: Math.max(1, Math.round(((originalPrice - price) / originalPrice) * 100)),
           };
-          });
+        });
 
         setHotels(mappedHotels);
-
-        const roomResults = await Promise.all(
-          mappedHotels.map(async (hotel) => {
-            try {
-              const roomResponse = await fetch(`${API_PREFIX}/hotels/${hotel.id}/rooms/?featured=true`);
-              const roomData = await roomResponse.json();
-
-              if (!roomData.success) {
-                return [hotel.id, [] as Room[]] as const;
-              }
-
-              const mappedRooms: Room[] = (roomData.rooms || []).map((room: any) => {
-                const pricePerNight = Number(room.price_per_night) || 0;
-                const originalPrice = room.original_price ? Number(room.original_price) : undefined;
-
-                return {
-                  id: room.id,
-                  roomType: room.room_type,
-                  description: room.description,
-                  image: getMediaUrl(room.room_image_url) || placeholderImages[room.id % placeholderImages.length],
-                  pricePerNight,
-                  originalPrice,
-                  discount: room.discount_percentage ? Number(room.discount_percentage) : undefined,
-                  maxGuests: Number(room.max_guests) || 2,
-                  amenities: Array.isArray(room.amenities) ? room.amenities : [],
-                };
-              });
-
-              return [hotel.id, mappedRooms] as const;
-            } catch {
-              return [hotel.id, [] as Room[]] as const;
-            }
-          })
-        );
-
-        setFeaturedRoomsByHotel(Object.fromEntries(roomResults));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load featured hotels');
       } finally {
@@ -128,27 +78,57 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
     fetchFeaturedHotels();
   }, []);
 
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [hotels.length]);
+
+  const hotelsPerView = 3;
+  const maxIndex = Math.max(0, hotels.length - hotelsPerView);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+  };
+
+  const visibleHotels = hotels.slice(currentIndex, currentIndex + hotelsPerView);
+
   return (
     <section className={`py-12 md:py-16 bg-gray-50 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between mb-8 gap-4">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900">Featured Hotels</h2>
-            <p className="mt-1 text-gray-600">Featured hotels with their featured rooms displayed underneath</p>
+        <div className="flex items-center justify-between mb-8 gap-4">
+          <h2 className="text-3xl font-bold text-gray-900">Featured Hotels</h2>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={prevSlide}
+              disabled={loading || hotels.length <= hotelsPerView}
+              className="p-2 rounded-full border border-gray-300 hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              aria-label="Previous hotels"
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={nextSlide}
+              disabled={loading || hotels.length <= hotelsPerView}
+              className="p-2 rounded-full border border-gray-300 hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              aria-label="Next hotels"
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
         {loading && (
-          <div className="space-y-8">
-            {[0, 1].map((index) => (
-              <div key={index} className="rounded-2xl bg-white p-6 animate-pulse">
-                <div className="h-10 w-64 rounded-lg bg-gray-100 mb-4" />
-                <div className="h-56 rounded-xl bg-gray-100 mb-4" />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {[0, 1, 2].map((roomIndex) => (
-                    <div key={roomIndex} className="h-40 rounded-xl bg-gray-100" />
-                  ))}
-                </div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[0, 1, 2].map((index) => (
+              <div key={index} className="h-[420px] rounded-xl bg-white animate-pulse" />
             ))}
           </div>
         )}
@@ -166,21 +146,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
         )}
 
         {!loading && !error && hotels.length > 0 && (
-          <div className="space-y-10">
-            {hotels.map((hotel) => (
-              <div key={hotel.id} className="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 shadow-sm">
-                <HotelCard hotel={hotel} />
-                <div className="mt-6">
-                  <div className="flex items-center justify-between mb-4 gap-3">
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-900">Featured Rooms</h3>
-                      <p className="text-sm text-gray-600">Featured rooms available at {hotel.name}</p>
-                    </div>
-                  </div>
-
-                  <HotelRooms hotelName={hotel.name} rooms={featuredRoomsByHotel[hotel.id] || []} />
-                </div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {visibleHotels.map((hotel) => (
+              <HotelCard key={hotel.id} hotel={hotel} />
             ))}
           </div>
         )}
@@ -286,70 +254,6 @@ const HotelCard: React.FC<{ hotel: Hotel }> = ({ hotel }) => {
         </div>
       </div>
     </motion.div>
-  );
-};
-
-const HotelRooms: React.FC<{ hotelName: string; rooms: Room[] }> = ({ hotelName, rooms }) => {
-  if (rooms.length === 0) {
-    return (
-      <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center text-gray-600">
-        No featured rooms are available for {hotelName} right now.
-      </div>
-    );
-  }
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {rooms.map((room) => (
-        <motion.div
-          key={room.id}
-          whileHover={{ y: -3 }}
-          className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md"
-        >
-          <div className="relative h-40 overflow-hidden bg-gray-100">
-            <SafeImage
-              src={room.image}
-              alt={room.roomType}
-              className="h-full w-full object-cover"
-            />
-            {room.discount && (
-              <div className="absolute top-3 left-3 rounded-lg bg-gray-900 px-3 py-1 text-xs font-medium text-white">
-                Save {room.discount}%
-              </div>
-            )}
-          </div>
-
-          <div className="p-4">
-            <h4 className="text-base font-semibold text-gray-900">{room.roomType}</h4>
-            <p className="mt-1 line-clamp-2 text-sm text-gray-600">{room.description}</p>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              {room.amenities.slice(0, 3).map((amenity) => (
-                <span key={amenity} className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-700">
-                  {amenity}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-4 flex items-end justify-between gap-3 border-t border-gray-100 pt-4">
-              <div>
-                {room.originalPrice && (
-                  <div className="text-xs text-gray-400 line-through">PKR {room.originalPrice.toLocaleString()}</div>
-                )}
-                <div className="text-lg font-bold text-gray-900">PKR {room.pricePerNight.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">up to {room.maxGuests} guests</div>
-              </div>
-              <button
-                type="button"
-                className="rounded-lg bg-gray-900 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-gray-800"
-              >
-                View Room
-              </button>
-            </div>
-          </div>
-        </motion.div>
-      ))}
-    </div>
   );
 };
 
