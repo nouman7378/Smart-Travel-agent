@@ -32,8 +32,9 @@ interface BookingItem {
 const BookingDemoPage: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const { items: bookingItems, refreshCart } = useBooking();
+  const { items: bookingItems, refreshCart, removeItemFromBooking } = useBooking();
   const [selectedItems, setSelectedItems] = useState<BookingItem[]>([]);
+  const [removingItemId, setRemovingItemId] = useState<string | null>(null);
   const [guestInfo, setGuestInfo] = useState(() => {
     try {
       const saved = sessionStorage.getItem('bookingDemoGuestInfo');
@@ -131,8 +132,19 @@ const BookingDemoPage: React.FC = () => {
     setSelectedItems(mappedItems);
   }, [bookingItems]);
 
-  const removeFromBooking = (id: string) => {
-    setSelectedItems(selectedItems.filter(item => item.id !== id));
+  const removeFromBooking = async (id: string) => {
+    setRemovingItemId(id);
+    try {
+      if (isAuthenticated) {
+        await removeItemFromBooking(Number(id));
+      }
+      setSelectedItems((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error('Failed to remove booking item:', error);
+      alert('Could not remove the booking item. Please try again.');
+    } finally {
+      setRemovingItemId((current) => (current === id ? null : current));
+    }
   };
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -269,8 +281,12 @@ const BookingDemoPage: React.FC = () => {
                                 <p className="text-lg font-bold text-gray-800 w-28 text-right">
                                   PKR {(item.price * item.quantity).toLocaleString()}
                                 </p>
-                                <button onClick={() => removeFromBooking(item.id)} className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors">
-                                  <Trash2 className="w-5 h-5" />
+                                <button
+                                  onClick={() => removeFromBooking(item.id)}
+                                  disabled={removingItemId === item.id}
+                                  className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  <Trash2 className={`w-5 h-5 ${removingItemId === item.id ? 'animate-pulse' : ''}`} />
                                 </button>
                               </div>
                             </div>

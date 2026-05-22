@@ -98,3 +98,23 @@ export async function addBookingItem(payload: AddBookingItemPayload): Promise<Bo
 
   return data.item;
 }
+
+export async function deleteBookingItem(itemId: number): Promise<void> {
+  const response = await fetch(`${API_PREFIX}/bookings/cart/items/${itemId}/delete/`, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: {
+      ...getUserIdHeader(),
+    },
+  });
+
+  const data = await parseJson<{ success: boolean; message?: string; cart?: Partial<BookingCart> }>(response);
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.message || 'Failed to remove booking item.');
+  }
+
+  if (!data.cart) {
+    throw new Error('Failed to remove booking item.');
+  }
+}

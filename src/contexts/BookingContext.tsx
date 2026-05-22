@@ -4,6 +4,7 @@ import {
   addBookingItem,
   AddBookingItemPayload,
   BookingCartItem,
+  deleteBookingItem,
   getBookingCart,
 } from '../services/bookingService';
 
@@ -14,6 +15,7 @@ interface BookingContextType {
   isLoading: boolean;
   refreshCart: () => Promise<void>;
   addItemToBooking: (payload: AddBookingItemPayload) => Promise<void>;
+  removeItemFromBooking: (itemId: number) => Promise<void>;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
@@ -99,6 +101,18 @@ export const BookingProvider: React.FC<BookingProviderProps> = ({ children }) =>
     [isAuthenticated, refreshCart, items]
   );
 
+  const removeItemFromBooking = useCallback(
+    async (itemId: number) => {
+      if (!isAuthenticated) {
+        throw new Error('Please sign in to manage booking items.');
+      }
+
+      await deleteBookingItem(itemId);
+      await refreshCart();
+    },
+    [isAuthenticated, refreshCart]
+  );
+
   useEffect(() => {
     void refreshCart();
   }, [refreshCart]);
@@ -111,8 +125,9 @@ export const BookingProvider: React.FC<BookingProviderProps> = ({ children }) =>
       isLoading,
       refreshCart,
       addItemToBooking,
+      removeItemFromBooking,
     }),
-    [items, itemCount, subtotal, isLoading, refreshCart, addItemToBooking]
+    [items, itemCount, subtotal, isLoading, refreshCart, addItemToBooking, removeItemFromBooking]
   );
 
   return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;
