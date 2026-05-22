@@ -45,8 +45,6 @@ const Hero: React.FC<HeroProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Determine active tab based on current route
   const getActiveTabFromRoute = (pathname: string): SearchTab => {
     if (pathname === '/hotels' || pathname.startsWith('/hotels')) return 'hotels';
     if (pathname === '/cars' || pathname.startsWith('/cars')) return 'cars';
@@ -56,6 +54,7 @@ const Hero: React.FC<HeroProps> = ({
   };
 
   const [activeTab, setActiveTab] = useState<SearchTab>(() => getActiveTabFromRoute(location.pathname));
+
   const [formData, setFormData] = useState({
     from: '',
     to: '',
@@ -133,8 +132,8 @@ const Hero: React.FC<HeroProps> = ({
               backgroundImage: `url(${downloadBg})`,
             }}
           ></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-blue-950 via-blue-900/70 to-blue-800/40 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-600/20 via-transparent to-white"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-950 via-blue-950/80 to-blue-900/45 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950/40 via-transparent to-blue-950/70"></div>
         </div>
 
         {/* Floating Elements */}
@@ -430,16 +429,26 @@ const Hero: React.FC<HeroProps> = ({
 
           {/* Quick Stats */}
           {!hideStats && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+            <div
+              className={`grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-6 md:mt-8 ${
+                embedded
+                  ? 'rounded-2xl border border-white/10 bg-blue-950/55 backdrop-blur-xl px-4 py-4 md:px-6 md:py-5 shadow-2xl shadow-blue-950/35'
+                  : 'mt-12'
+              }`}
+            >
               {[
                 { number: '50K+', label: 'Happy Travelers' },
                 { number: '100+', label: 'Destinations' },
                 { number: '24/7', label: 'AI Support' },
                 { number: <span className="flex items-center justify-center gap-1">5 <Star className="w-5 h-5 fill-current" /></span>, label: 'Rated Service' }
               ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>
-                  <div className="text-sm text-white/70">{stat.label}</div>
+                <div key={index} className="text-center px-1 md:px-2">
+                  <div className="text-3xl md:text-5xl font-black text-white leading-none mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]">
+                    {stat.number}
+                  </div>
+                  <div className="text-[11px] md:text-sm uppercase tracking-[0.2em] text-blue-100/90 font-semibold">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </div>

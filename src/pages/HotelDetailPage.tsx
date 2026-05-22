@@ -9,12 +9,14 @@
  * - Hotel Gallery
  * - Hotel Info
  * - Booking Panel
+ * - Featured Rooms
  * - Reviews Section
  * - Nearby Hotels
  * - Footer
  */
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
@@ -44,6 +46,18 @@ interface HotelData {
   image_url: string;
 }
 
+interface FeaturedRoom {
+  id: number;
+  room_type: string;
+  description: string;
+  price_per_night: number;
+  original_price?: number | null;
+  max_guests: number;
+  room_image_url: string;
+  amenities: string[];
+  discount_percentage: number;
+}
+
 const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -53,7 +67,9 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showRoomModal, setShowRoomModal] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
+  const [featuredRooms, setFeaturedRooms] = useState<FeaturedRoom[]>([]);
   
   // Fetch hotel data from API
   useEffect(() => {
@@ -99,6 +115,21 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
           image: room.room_image_url || '',
         }));
         setRooms(transformedRooms);
+
+        const transformedFeaturedRooms: FeaturedRoom[] = data.rooms
+          .filter((room: any) => room.is_featured)
+          .map((room: any) => ({
+            id: room.id,
+            room_type: room.room_type,
+            description: room.description,
+            price_per_night: room.price_per_night,
+            original_price: room.original_price,
+            max_guests: room.max_guests,
+            room_image_url: room.room_image_url || '',
+            amenities: room.amenities || [],
+            discount_percentage: room.discount_percentage || 0,
+          }));
+        setFeaturedRooms(transformedFeaturedRooms);
       }
     } catch (err) {
       console.error('Error fetching rooms:', err);
@@ -402,6 +433,22 @@ const HotelDetailPage: React.FC<HotelDetailPageProps> = () => {
     navigate(`/hotel/${nearbyHotelId}`);
   };
 
+  const featuredRoomCards = featuredRooms.length > 0
+    ? featuredRooms
+    : rooms.slice(0, 3).map((room) => ({
+        id: room.id,
+        room_type: room.name,
+        description: room.description,
+        price_per_night: room.price,
+        original_price: room.originalPrice ?? null,
+        max_guests: room.maxGuests,
+        room_image_url: room.image || '',
+        amenities: room.amenities,
+        discount_percentage: room.originalPrice
+          ? Math.max(0, Math.round(((room.originalPrice - room.price) / room.originalPrice) * 100))
+          : 0,
+      }));
+
   const averageRating =
     reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
     
@@ -476,6 +523,87 @@ Book your stay today and discover why ${hotel.name} is the preferred choice for 
           </div>
         </div>
 
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6 gap-4">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Rooms</h2>
+              <p className="text-gray-600 mt-1">Highlighted rooms for this hotel</p>
+            </div>
+          </div>
+
+          {featuredRoomCards.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {featuredRoomCards.map((room) => (
+                <motion.div
+                  key={room.id}
+                  whileHover={{ y: -4 }}
+                  className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="relative h-44 overflow-hidden bg-gray-100">
+                    {room.room_image_url ? (
+                      <img
+                        src={getMediaUrl(room.room_image_url)}
+                        alt={room.room_type}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        No image available
+                      </div>
+                    )}
+                    {room.discount_percentage > 0 && (
+                      <div className="absolute top-3 left-3 bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                        Save {room.discount_percentage}%
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">{room.room_type}</h3>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">{room.description}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {room.amenities.slice(0, 3).map((amenity) => (
+                        <span key={amenity} className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
+                          {amenity}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div>
+                        {room.original_price ? (
+                          <div className="text-sm text-gray-400 line-through">PKR {room.original_price.toLocaleString()}</div>
+                        ) : null}
+                        <div className="text-2xl font-bold text-gray-900">PKR {room.price_per_night.toLocaleString()}</div>
+                        <div className="text-xs text-gray-500">per night • up to {room.max_guests} guests</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedRoomId(room.id);
+                          setShowRoomModal(true);
+                        }}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
+                      >
+                        View Room
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-600">
+              No featured rooms are available for this hotel yet.
+            </div>
+          )}
+        </section>
+
         {/* Reviews Section */}
         <ReviewsSection
           reviews={reviews}
@@ -504,6 +632,7 @@ Book your stay today and discover why ${hotel.name} is the preferred choice for 
             location: hotel.location,
           }}
           onBookRoom={handleBookRoom}
+          initialRoomId={selectedRoomId}
         />
       )}
     </div>

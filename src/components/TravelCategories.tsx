@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 interface Category {
@@ -16,6 +17,8 @@ interface TravelCategoriesProps {
 }
 
 const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) => {
+  const navigate = useNavigate();
+
   const categories: Category[] = [
     {
       id: 1,
@@ -89,48 +92,6 @@ const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) =
       hoverGradient: 'from-purple-600 to-violet-600',
       iconColor: 'text-white',
     },
-    {
-      id: 5,
-      name: 'Cruises',
-      icon: (
-        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-          />
-        </svg>
-      ),
-      description: 'Luxury cruise experiences',
-      gradient: 'from-indigo-500 to-blue-500',
-      hoverGradient: 'from-indigo-600 to-blue-600',
-      iconColor: 'text-white',
-    },
-    {
-      id: 6,
-      name: 'Activities',
-      icon: (
-        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      ),
-      description: 'Things to do & experiences',
-      gradient: 'from-pink-500 to-rose-500',
-      hoverGradient: 'from-pink-600 to-rose-600',
-      iconColor: 'text-white',
-    },
   ];
 
   const containerVariants = {
@@ -181,14 +142,16 @@ const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) =
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6"
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
         >
           {categories.map((category) => (
             <motion.button
               key={category.id}
+              type="button"
+              onClick={() => navigate(`/${category.name.toLowerCase()}`)}
               variants={itemVariants}
               whileHover="hover"
-              className={`group relative p-4 md:p-6 rounded-lg bg-gradient-to-br ${category.gradient} shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden`}
+              className={`group relative p-4 md:p-6 rounded-lg bg-gradient-to-br ${category.gradient} shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer`}
             >
               {/* Background Pattern */}
               <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-300"></div>
@@ -254,22 +217,6 @@ const TravelCategories: React.FC<TravelCategoriesProps> = ({ className = '' }) =
           ))}
         </motion.div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="text-center mt-4"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-3 bg-gray-900 hover:bg-black text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-          >
-            Explore All Categories
-          </motion.button>
-        </motion.div>
       </div>
     </section>
   );

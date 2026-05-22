@@ -35,6 +35,7 @@ interface RoomSelectionModalProps {
     location: string;
   };
   onBookRoom: (roomId: number) => void;
+  initialRoomId?: number | null;
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-travel.fly.dev/api';
@@ -60,6 +61,7 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
   onClose,
   hotel,
   onBookRoom,
+  initialRoomId = null,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -71,11 +73,13 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(2);
+  const [selectedRoomId, setSelectedRoomId] = useState<number | null>(initialRoomId);
 
   // Fetch rooms when modal opens
   useEffect(() => {
     if (isOpen) {
       fetchRooms();
+      setSelectedRoomId(initialRoomId);
       // Set default dates
       const today = new Date();
       const tomorrow = new Date(today);
@@ -84,7 +88,7 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
       setCheckIn(today.toISOString().split('T')[0]);
       setCheckOut(tomorrow.toISOString().split('T')[0]);
     }
-  }, [isOpen, hotel.id]);
+  }, [isOpen, hotel.id, initialRoomId]);
 
   const fetchRooms = async () => {
     setLoading(true);
@@ -269,7 +273,11 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
                       key={room.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      className={`border rounded-lg p-4 transition-shadow ${
+                        selectedRoomId === room.id
+                          ? 'border-blue-600 bg-blue-50 shadow-md'
+                          : 'border-gray-200 hover:shadow-md'
+                      }`}
                     >
                       <div className="flex flex-col md:flex-row gap-4">
                         {/* Room Image */}
@@ -294,6 +302,11 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
                           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                             <div>
                               <h3 className="text-lg font-semibold text-gray-900">{room.room_type}</h3>
+                              {selectedRoomId === room.id && (
+                                <div className="mt-1 inline-flex items-center rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                                  Selected from featured rooms
+                                </div>
+                              )}
                               <p className="text-gray-600 text-sm mt-1">{room.description}</p>
                               
                               {/* Amenities */}
@@ -343,6 +356,13 @@ const RoomSelectionModal: React.FC<RoomSelectionModalProps> = ({
                                 <div className="text-sm text-gray-600">
                                   {room.available_rooms} room{room.available_rooms !== 1 ? 's' : ''} available
                                 </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedRoomId(room.id)}
+                                  className="px-4 py-2 border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors"
+                                >
+                                  Highlight
+                                </button>
                                 <AddToBookingButton
                                   onAdd={() => handleBookRoom(room)}
                                   disabled={!checkIn || !checkOut || nights <= 0}

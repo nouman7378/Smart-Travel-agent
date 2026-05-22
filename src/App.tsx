@@ -130,7 +130,7 @@ const App: React.FC = () => {
                         <Routes>
             <Route element={<LayoutWrapper />}>
           {/* Home Page */}
-              <Route path="/" element={<HotelsPage />} />
+              <Route path="/" element={<HomePage />} />
 
           {/* Search Results Pages */}
               <Route path="/search/hotels" element={<SearchResultsPage searchType="hotels" />} />

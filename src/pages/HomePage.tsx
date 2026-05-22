@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section - Main Search */}
-      <Hero />
+      <Hero embedded className="!min-h-fit pt-6 md:pt-8" />
 
       {/* Popular Destinations Section */}
       <PopularDestinations />
@@ -34,6 +34,7 @@ const HomePage: React.FC = () => {
 
       {/* Featured Hotels Section */}
       <FeaturedHotels />
+
     </div>
   );
 };

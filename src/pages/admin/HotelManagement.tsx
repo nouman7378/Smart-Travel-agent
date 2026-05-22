@@ -21,6 +21,7 @@ interface Hotel {
   distance_from_center: number;
   image_url: string;
   is_active: boolean;
+  is_featured: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -36,6 +37,7 @@ interface Room {
   room_image_url: string;
   amenities: string[];
   is_active: boolean;
+  is_featured: boolean;
   discount_percentage: number;
   created_at: string;
   updated_at: string;
@@ -91,6 +93,7 @@ const HotelManagement: React.FC = () => {
     room_image_url: '',
     amenities: [] as string[],
     is_active: true,
+    is_featured: false,
   });
   const [selectedRoomImage, setSelectedRoomImage] = useState<File | null>(null);
   const [roomImagePreview, setRoomImagePreview] = useState<string | null>(null);
@@ -106,6 +109,7 @@ const HotelManagement: React.FC = () => {
     review_count: 0,
     distance_from_center: 0,
     is_active: true,
+    is_featured: false,
     image_url: '',
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -214,6 +218,7 @@ const HotelManagement: React.FC = () => {
       review_count: 0,
       distance_from_center: 0,
       is_active: true,
+      is_featured: false,
       image_url: '',
     });
     setSelectedImage(null);
@@ -241,6 +246,7 @@ const HotelManagement: React.FC = () => {
       review_count: hotel.review_count,
       distance_from_center: hotel.distance_from_center,
       is_active: hotel.is_active,
+      is_featured: hotel.is_featured,
       image_url: hotel.image_url || '',
     });
     setImagePreview(hotel.image_url);
@@ -282,6 +288,7 @@ const HotelManagement: React.FC = () => {
       formDataToSend.append('rating', formData.rating.toString());
       formDataToSend.append('review_count', formData.review_count.toString());
       formDataToSend.append('distance_from_center', formData.distance_from_center.toString());
+      formDataToSend.append('is_featured', formData.is_featured.toString());
       formDataToSend.append('image_url', formData.image_url);
       
       if (isEditing) {
@@ -497,6 +504,7 @@ const HotelManagement: React.FC = () => {
         room_image_url: room.room_image_url,
         amenities: room.amenities,
         is_active: room.is_active,
+        is_featured: room.is_featured,
       });
       // Set image preview if room has an image
       if (room.room_image_url) {
@@ -519,6 +527,7 @@ const HotelManagement: React.FC = () => {
         room_image_url: '',
         amenities: [],
         is_active: true,
+        is_featured: false,
       });
       setRoomImagePreview(null);
       setSelectedRoomImage(null);
@@ -1006,6 +1015,17 @@ const HotelManagement: React.FC = () => {
                   </div>
                 )}
 
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    name="is_featured"
+                    checked={formData.is_featured}
+                    onChange={handleInputChange}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label className="text-sm text-gray-700">Featured (show on landing page)</label>
+                </div>
+
                 <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
                   <button
                     type="button"
@@ -1344,6 +1364,20 @@ const HotelManagement: React.FC = () => {
                     className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                   />
                   <label className="text-sm text-gray-700">Active (visible to users)</label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    name="is_featured"
+                    checked={roomFormData.is_featured}
+                    onChange={(e) => setRoomFormData(prev => ({
+                      ...prev,
+                      is_featured: e.target.checked
+                    }))}
+                    className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                  />
+                  <label className="text-sm text-gray-700">Featured (show on hotel page)</label>
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
