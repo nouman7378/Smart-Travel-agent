@@ -36,7 +36,6 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [featuredRoomsByHotel, setFeaturedRoomsByHotel] = useState<Record<number, Room[]>>({});
   const [loading, setLoading] = useState(true);
-  const [roomsLoading, setRoomsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,7 +59,9 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
           'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80',
         ];
 
-        const mappedHotels: Hotel[] = (data.hotels || []).map((hotel: any) => {
+        const mappedHotels: Hotel[] = (data.hotels || [])
+          .filter((hotel: any) => hotel.is_featured)
+          .map((hotel: any) => {
           const rating = Number(hotel.rating) || 0;
           const stars = Number(hotel.stars) || 3;
           const price = Math.max(18000, Math.round(rating * 800 + stars * 2500));
@@ -78,7 +79,7 @@ const FeaturedHotels: React.FC<FeaturedHotelsProps> = ({ className = '' }) => {
             originalPrice,
             discount: Math.max(1, Math.round(((originalPrice - price) / originalPrice) * 100)),
           };
-        });
+          });
 
         setHotels(mappedHotels);
 
