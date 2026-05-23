@@ -78,25 +78,34 @@ class ChatService {
    * to the local heuristic implementation so the UI still works.
    */
   async processMessage(userMessage: string): Promise<ChatResponse> {
-    // Try backend AI API first
+    const lowerMessage = userMessage.toLowerCase().trim();
+    
+    // 1. Update context based on user message locally first
+    this.extractContext(userMessage);
+    const missingInfo = this.getMissingInfo();
+
+    // 2. Try backend AI API first (Gemini 2.0 endpoint)
     const backendResponse = await this.callBackend(userMessage);
     if (backendResponse) {
-      this.context = backendResponse.context || {};
+      // Merge frontend context with any backend context so we don't forget history
+      this.context = { ...this.context, ...(backendResponse.context || {}) };
       if (backendResponse.sessionId) {
         this.sessionId = backendResponse.sessionId;
       }
+      
+      // Inject the local context and UI states so the Chat UI can render correctly
+      backendResponse.context = this.context;
+      
+      if (!backendResponse.quickReplies || backendResponse.quickReplies.length === 0) {
+        backendResponse.quickReplies = missingInfo.length > 0 ? this.getQuickReplySuggestions(missingInfo[0]) : [];
+      }
+      
+      backendResponse.needsFollowUp = missingInfo.length > 0;
+      
       return backendResponse;
     }
 
-    // Fallback: existing frontend-only heuristic logic
-    const lowerMessage = userMessage.toLowerCase().trim();
-
-    // Update context based on user message
-    this.extractContext(userMessage);
-
-    // Determine what information is missing
-    const missingInfo = this.getMissingInfo();
-
+    // 3. Fallback: existing frontend-only heuristic logic if backend fails
     // If we have enough info, provide recommendations
     if (missingInfo.length === 0 && this.context.intent) {
       return this.generateRecommendations();
@@ -112,7 +121,7 @@ class ChatService {
    */
   private async callBackend(userMessage: string): Promise<ChatResponse | null> {
     try {
-      // Direct call to new RAG ChatView at /api/chat/
+      // Direct call to new RAG ChatView at /api/chat/ (Gemini 2.0)
       const response = await fetch(`${API_PREFIX}/chat/`, {
         method: 'POST',
         headers: {
@@ -133,7 +142,7 @@ class ChatService {
       }
 
       const payload: ChatResponse = {
-        message: data.answer,
+        message: data.answer || "Sorry, I couldn't process that.",
         quickReplies: [],
         needsFollowUp: false,
         context: {},
