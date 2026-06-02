@@ -35,24 +35,32 @@ const FlightsPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950">
-      <div className="absolute inset-0 -z-10">
-        <div
-          className="absolute inset-0 bg-cover bg-center scale-110"
-          style={{ backgroundImage: `url(${downloadBg})` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/25 via-slate-950/10 to-slate-950/20" />
-      </div>
+    <div className="min-h-screen bg-white">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center transform scale-110"
+              style={{ backgroundImage: `url(${downloadBg})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-950 via-blue-950/80 to-blue-900/45 mix-blend-multiply" />
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-950/40 via-transparent to-blue-950/70" />
+          </div>
 
-      <header className="pt-8 pb-4 bg-slate-950/35 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-extrabold text-white">Find Flights</h1>
-          <p className="text-white/80">Search flights and view results.</p>
+          <div className="absolute left-10 w-20 h-20 bg-blue-300/20 rounded-full blur-xl" />
+          <div className="absolute bottom-20 right-20 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl" />
+          <div className="absolute top-40 right-40 w-16 h-16 bg-blue-300/30 rounded-full blur-lg" />
         </div>
-      </header>
 
-      <main className="relative overflow-hidden pt-4 pb-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <header className="relative pt-8 pb-4 bg-transparent">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-extrabold text-white">Find Flights</h1>
+            <p className="text-white/80">Search flights and view results.</p>
+          </div>
+        </header>
+
+        <main className="relative overflow-hidden pt-4 pb-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <FlightSearchBar onSearch={handleSearch} />
 
           {!showResults && !isLoading && !error && (
@@ -84,8 +92,9 @@ const FlightsPage: React.FC = () => {
               </div>
             </div>
           )}
-        </div>
-      </main>
+          </div>
+        </main>
+      </section>
     </div>
   );
 };
