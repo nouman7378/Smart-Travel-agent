@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import CityAutocomplete, { City } from './CityAutocomplete';
 import { Plane, Target } from 'lucide-react';
 import DatePicker from '../common/DatePicker';
+import { extractAirportCode } from '../../services/flightService';
 
 
 type TripType = 'round-trip' | 'one-way' | 'multi-city';
@@ -49,6 +50,7 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch, prefilledSe
     passengers: 1,
     class: 'economy',
   });
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Listen to prefilled search changes from parent cards
   React.useEffect(() => {
@@ -73,13 +75,17 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch, prefilledSe
       const searchData = {
         from: prefilledSearch.from.display,
         fromIataCode: prefilledSearch.from.iataCode,
+        departure_airport_code: prefilledSearch.from.iataCode,
         fromCity: null,
         to: prefilledSearch.to.display,
         toIataCode: prefilledSearch.to.iataCode,
+        destination_airport_code: prefilledSearch.to.iataCode,
         toCity: null,
         departDate: prefilledSearch.departDate,
+        travel_date: prefilledSearch.departDate,
         returnDate: prefilledSearch.returnDate,
         passengers: formData.passengers,
+        number_of_passengers: formData.passengers,
         class: formData.class,
         tripType,
       };
@@ -131,15 +137,45 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch, prefilledSe
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
+    // Ensure we have IATA codes. If user typed free text, try to extract a 3-letter code.
+    let fromIata = fromLocation.iataCode || '';
+    let toIata = toLocation.iataCode || '';
+
+    if (!fromIata && fromLocation.display) {
+      const ex = extractAirportCode(fromLocation.display || '');
+      if (/^[A-Z]{3}$/.test(ex)) fromIata = ex;
+    }
+    if (!toIata && toLocation.display) {
+      const ex = extractAirportCode(toLocation.display || '');
+      if (/^[A-Z]{3}$/.test(ex)) toIata = ex;
+    }
+
+    if (!fromIata) {
+      setFormError('Please select a departure airport from the suggestions (or enter a valid IATA code).');
+      return;
+    }
+    if (!toIata) {
+      setFormError('Please select a destination airport from the suggestions (or enter a valid IATA code).');
+      return;
+    }
 
     const searchData = {
       from: fromLocation.display,
-      fromIataCode: fromLocation.iataCode,
+      fromIataCode: fromIata,
+      departure_airport_code: fromIata,
       fromCity: fromLocation.city,
       to: toLocation.display,
-      toIataCode: toLocation.iataCode,
+      toIataCode: toIata,
+      destination_airport_code: toIata,
       toCity: toLocation.city,
-      ...formData,
+      // map date + passengers to backend names as well
+      departDate: formData.departDate,
+      travel_date: formData.departDate,
+      passengers: formData.passengers,
+      number_of_passengers: formData.passengers,
+      class: formData.class,
       tripType,
     };
 
@@ -176,6 +212,9 @@ const FlightSearchBar: React.FC<FlightSearchBarProps> = ({ onSearch, prefilledSe
 
       {/* Search Form */}
       <form onSubmit={handleSubmit} className="p-6 overflow-visible">
+        {formError && (
+          <div className="mb-4 text-sm text-red-400">{formError}</div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 overflow-visible">
           {/* From */}
           <div className="lg:col-span-2">

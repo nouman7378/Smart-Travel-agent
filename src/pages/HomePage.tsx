@@ -19,6 +19,7 @@ import Hero from '../components/Hero';
 import PopularDestinations from '../components/PopularDestinations';
 import TravelCategories from '../components/TravelCategories';
 import FeaturedHotels from '../components/FeaturedHotels';
+import downloadBg from '../assets/download.png';
 
 const HomePage: React.FC = () => {
   return (
@@ -26,14 +27,24 @@ const HomePage: React.FC = () => {
       {/* Hero Section - Main Search */}
       <Hero embedded className="!min-h-fit pt-6 md:pt-8" />
 
-      {/* Popular Destinations Section */}
-      <PopularDestinations />
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <div
+            className="absolute inset-0 bg-cover bg-center scale-110"
+            style={{ backgroundImage: `url(${downloadBg})` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-white/25 to-white/90" />
+        </div>
 
-      {/* Travel Categories Section */}
-      <TravelCategories />
+        {/* Popular Destinations Section */}
+        <PopularDestinations />
 
-      {/* Featured Hotels Section */}
-      <FeaturedHotels />
+        {/* Travel Categories Section */}
+        <TravelCategories />
+
+        {/* Featured Hotels Section */}
+        <FeaturedHotels />
+      </div>
 
     </div>
   );
