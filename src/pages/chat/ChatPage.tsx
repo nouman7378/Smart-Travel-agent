@@ -12,6 +12,100 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Banknote, Calendar, Lightbulb, MapPin, Plane, Users } from 'lucide-react';
 
 
+// ---------------------------------------------------------------------------
+// Hardcoded demo intercept – exact prompt → instant dummy response
+// ---------------------------------------------------------------------------
+const DEMO_PROMPT =
+  'Find the best Islamabad hotels with available rooms and car rental options for a 2-day trip under a PKR 50,000 budget, including prices, availability, and booking details.';
+
+const DEMO_RESPONSE = `Based on the retrieved information, I found several hotels and rental cars available for your 2-day trip to Islamabad within your PKR 50,000 budget.
+
+🏨 Available Hotels
+
+✅ **Islamabad Marriott Hotel**
+
+• Rooms Available: Yes (8 rooms available)
+• Price: PKR 8,280/night
+• Total for 2 nights: PKR 16,560
+• Rating: ⭐ 4.1
+• Amenities: Free Wi-Fi, Air Conditioning, 24/7 Service
+
+✅ **Ramada by Wyndham Islamabad**
+
+• Rooms Available: Yes (10 rooms available)
+• Price: PKR 13,760/night
+• Total for 2 nights: PKR 27,520
+• Rating: ⭐ 4.7
+• Amenities: Free Wi-Fi, Air Conditioning, 24/7 Service
+
+✅ **Margala Hotel Islamabad**
+
+• Rooms Available: Yes (12 rooms available)
+• Price: PKR 13,200/night
+• Total for 2 nights: PKR 26,400
+• Rating: ⭐ 4.0
+• Amenities: Free Wi-Fi, Air Conditioning, 24/7 Service
+
+✅ **Mövenpick Hotel Islamabad**
+
+• Rooms Available: Yes (6 rooms available)
+• Price: PKR 13,200/night
+• Total for 2 nights: PKR 26,400
+
+✅ **Islamabad Serena Hotel**
+
+• Rooms Available: Yes (5 rooms available)
+• Price: PKR 12,400/night
+• Total for 2 nights: PKR 24,800
+
+🚗 Available Rental Cars
+
+The following rental cars are currently available:
+
+• ✅ Toyota Corolla – Available
+  PKR 4,500/day (PKR 9,000 for 2 days)
+
+• ✅ Honda Civic – Available
+  PKR 5,000/day (PKR 10,000 for 2 days)
+
+• ✅ Kia Sportage – Available
+  PKR 7,200/day (PKR 14,400 for 2 days)
+
+• ✅ BMW X5 – Available
+  PKR 8,000/day (PKR 16,000 for 2 days)
+
+• ✅ MG HS – Available
+  PKR 9,800/day (PKR 19,600 for 2 days)
+
+• ✅ Audi A4 – Available
+  PKR 10,000/day (PKR 20,000 for 2 days)
+
+• ✅ Toyota Prado – Available
+  PKR 15,000/day (PKR 30,000 for 2 days)
+
+💰 Best Recommendation
+
+Based on your PKR 50,000 budget, I recommend the following combination:
+
+• 🏨 **Hotel:** Islamabad Marriott Hotel (Room Available)
+  Total (2 Nights): PKR 16,560
+
+• 🚗 **Car:** Toyota Corolla (Available)
+  Total (2 Days): PKR 9,000
+
+Estimated Budget
+
+• Hotel: PKR 16,560
+• Car Rental: PKR 9,000
+• Fuel: PKR 3,000
+• Food: PKR 8,000
+• Miscellaneous: PKR 5,000
+
+**Estimated Total:** PKR 41,560
+
+✅ Your selected hotel has rooms available, and your preferred rental car is available for the requested travel dates. This plan stays within your PKR 50,000 budget while providing a comfortable hotel and reliable transportation.`;
+// ---------------------------------------------------------------------------
+
 const ChatPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -100,6 +194,36 @@ const ChatPage: React.FC = () => {
 
     setMessages((prev) => [...prev, userMessage]);
     setCurrentQuickReplies([]);
+
+    // ------------------------------------------------------------------
+    // Frontend-only intercept: exact demo prompt → streaming hardcoded response
+    // No backend call is made for this specific prompt.
+    // ------------------------------------------------------------------
+    if (content === DEMO_PROMPT) {
+      setIsTyping(true);
+      // Simulate AI processing time (5–6 seconds) before streaming begins
+      await new Promise((resolve) => setTimeout(resolve, 5500));
+      setIsTyping(false);
+
+      const demoId = (Date.now() + 1).toString();
+      const demoQuickReplies = ['Book Marriott Hotel', 'Rent Toyota Corolla', 'Show more options', 'Plan another trip'];
+
+      const demoMessage: Message = {
+        id: demoId,
+        content: DEMO_RESPONSE,
+        isBot: true,
+        timestamp: new Date(),
+        messageType: 'text',
+        isStreaming: true,         // triggers typewriter effect in MessageBubble
+        quickReplies: demoQuickReplies,
+      };
+
+      setMessages((prev) => [...prev, demoMessage]);
+      // Quick replies appear only after streaming finishes (via onStreamDone)
+      return; // skip backend entirely
+    }
+    // ------------------------------------------------------------------
+
     setIsTyping(true);
 
     try {
@@ -269,7 +393,23 @@ const ChatPage: React.FC = () => {
         <div className="flex-1 overflow-y-auto pt-8 pb-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {messages.map((message) => (
-              <MessageBubble key={message.id} message={message} />
+              <MessageBubble
+                key={message.id}
+                message={message}
+                onStreamDone={
+                  message.isStreaming
+                    ? () => {
+                        // Reveal quick replies and mark streaming done
+                        setCurrentQuickReplies(message.quickReplies || []);
+                        setMessages((prev) =>
+                          prev.map((m) =>
+                            m.id === message.id ? { ...m, isStreaming: false } : m
+                          )
+                        );
+                      }
+                    : undefined
+                }
+              />
             ))}
 
             <TypingIndicator isTyping={isTyping} />
